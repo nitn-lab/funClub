@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Example using Git, adjust as per your version control system
-                git 'https://github.com/nitn-lab/funClub.git'
-            }
-        }
+        // stage('Checkout') {
+        //     steps {
+        //         // Example using Git, adjust as per your version control system
+        //         git 'https://github.com/nitn-lab/funClub.git'
+        //     }
+        // }
 
         stage('Install Dependencies') {
             steps {
