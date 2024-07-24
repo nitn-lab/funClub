@@ -16,7 +16,7 @@ pipeline {
                 // tool name: 'NodeJS 12.x', type: 'org.jenkinsci.plugins.tools.ToolInstallation'
 
                 // npm install
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
