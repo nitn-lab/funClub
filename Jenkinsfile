@@ -20,6 +20,28 @@ pipeline {
             }
         }
 
+        stage('Run Build') {
+            steps {
+                // Use Node.js installation configured in Jenkins
+                // Replace '12.x' with your Node.js version if necessary
+                // tool name: 'NodeJS 12.x', type: 'org.jenkinsci.plugins.tools.ToolInstallation'
+
+                // npm install
+                bat 'npm run build'
+            }
+        }
+
+        stage('serve') {
+            steps {
+                // Use Node.js installation configured in Jenkins
+                // Replace '12.x' with your Node.js version if necessary
+                // tool name: 'NodeJS 12.x', type: 'org.jenkinsci.plugins.tools.ToolInstallation'
+
+                // npm install
+                bat 'npm run serve'
+            }
+        }
+
         // Add more stages as needed, e.g., for testing, building, deploying
     }
 
