@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import React from 'react';
+import styled from "@emotion/styled";
+import React from "react";
 // import { Typography } from './Typography';
 
 const StyledSidebarHeader = styled.div`
@@ -16,19 +16,17 @@ const StyledSidebarHeader = styled.div`
 `;
 
 const StyledLogo = styled.div`
-  width: 35px;
-  min-width: 35px;
-  height: 35px;
-  min-height: 35px;
+  width: 45px;
+  min-width: 45px;
+  height: 45px;
+  min-height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  
   color: white;
-  font-size: 24px;
-  font-weight: 700;
-  background-color: #009fdb;
-  background: linear-gradient(45deg, rgb(21 87 205) 0%, rgb(90 225 255) 100%);
+  
+ 
 
   ${(props) =>
     props.rtl
@@ -43,15 +41,22 @@ const StyledLogo = styled.div`
 `;
 
 export const SidebarHeader = ({ children, rtl, ...rest }) => {
-    return (
-      <StyledSidebarHeader {...rest}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <StyledLogo rtl={rtl}>P</StyledLogo>
-          {/* <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
+  return (
+    <StyledSidebarHeader {...rest}>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <StyledLogo rtl={rtl}>
+          <div className="avatar">
+            <div className="rounded-full ">
+              <img src="https://images.pexels.com/photos/2318543/pexels-photo-2318543.jpeg?auto=compress&cs=tinysrgb&w=600" />
+            </div>
+          </div>
+          
+        </StyledLogo>
+        {/* <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
             Pro Sidebar
           </Typography> */}
-        </div>
-      </StyledSidebarHeader>
-    );
-  };
-  
+          <h2 className="text-black">Name</h2>
+      </div>
+    </StyledSidebarHeader>
+  );
+};
