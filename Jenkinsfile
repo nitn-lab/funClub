@@ -15,8 +15,8 @@ pipeline {
                 // Replace '12.x' with your Node.js version if necessary
                 // tool name: 'NodeJS 12.x', type: 'org.jenkinsci.plugins.tools.ToolInstallation'
 
-                npm install
-                // sh 'npm install'
+                // npm install
+                sh 'npm install'
             }
         }
 
