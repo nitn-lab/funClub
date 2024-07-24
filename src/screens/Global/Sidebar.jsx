@@ -1,14 +1,40 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Box, Typography } from "@mui/material";
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem, SubMenu, useProSidebar } from "react-pro-sidebar";
 import { SidebarHeader } from "../../components/SideBarHeader";
-function Sidebarr() {
+import { useNavigate } from "react-router-dom";
+
+import HomeIcon from '@mui/icons-material/Home';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import PaidIcon from '@mui/icons-material/Paid';
+import LightbulbIcon from '@mui/icons-material/Lightbulb';
+import HelpIcon from '@mui/icons-material/Help';
+import SettingsIcon from '@mui/icons-material/Settings';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SecurityIcon from '@mui/icons-material/Security';
+import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
+import CollectionsIcon from '@mui/icons-material/Collections';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+
+
+function  Sidebarr(props) {
   const Theme = "light" | "dark";
 
   const [collapsed, setCollapsed] = React.useState(false);
   const [toggled, setToggled] = React.useState(false);
   const [hasImage, setHasImage] = React.useState(false);
   const [theme, setTheme] = React.useState("light");
+ 
+
+  const handleClick = () => {
+    const data = "chats"
+    props.sendData(data)
+  }
+
+
 
   const themes = {
     light: {
@@ -59,26 +85,28 @@ function Sidebarr() {
   return (
     <div
       style={{
-        display: "flex",
-        height: "100%",
+        display : "flex",
         direction: "ltr",
+        height : "100vh"
       }}
     >
       <Sidebar
         collapsed={collapsed}
         toggled={toggled}
         onBackdropClick={() => setToggled(false)}
-        breakPoint="md"
+        
         backgroundColor={hexToRgba(
           themes[theme].sidebar.backgroundColor,
           hasImage ? 0.9 : 1
         )}
         rootStyles={{
           color: themes[theme].sidebar.color,
+          
         }}
       >
-        <SidebarHeader style={{ marginBottom: "24px", marginTop: "16px" }} />
-        <div style={{ flex: 1, marginBottom: "32px" }}>
+     
+        <SidebarHeader style={{ marginTop: "16px" }} />
+        <div style={{ flex: 1, marginBottom: "2px" }}>
           {/* <div style={{ padding: "0 24px", marginBottom: "8px" }}>
             <Typography
               variant="body2"
@@ -135,23 +163,24 @@ function Sidebarr() {
           </div>
            */}
           <Menu>
-            <MenuItem> Home </MenuItem>
-            <MenuItem> Live </MenuItem>
-            <MenuItem> Nearby </MenuItem>
-            <MenuItem> Feeds </MenuItem>
-            <MenuItem> Suggestion </MenuItem>
-            <MenuItem> Chats </MenuItem>
-            <MenuItem> Subscription details </MenuItem>
-            <MenuItem> Collections </MenuItem>
-            <MenuItem> My Profile </MenuItem>
-            <MenuItem> Platform Privacy Policy </MenuItem>
-            <MenuItem> Terms & Condition </MenuItem>
-            <MenuItem> Settings </MenuItem>
-            <MenuItem> Help & Support </MenuItem>
-            <MenuItem> Sign Out </MenuItem>
+            <MenuItem icon={<HomeIcon />}> Home </MenuItem>
+            <MenuItem icon={<VideocamIcon />}> Live </MenuItem>
+            <MenuItem icon={<LocationOnIcon />}> Nearby </MenuItem>
+            <MenuItem icon={<GridViewRoundedIcon />}> Feeds </MenuItem>
+            <MenuItem icon={<LightbulbIcon />}> Suggestion </MenuItem>
+            <MenuItem icon={<QuestionAnswerIcon />} onClick = {handleClick}> Chats </MenuItem>
+            <MenuItem icon={<PaidIcon />}> Subscription details </MenuItem>
+            <MenuItem icon={<CollectionsIcon />}> Collections </MenuItem>
+            <MenuItem icon={<AccountCircleIcon />}> My Profile </MenuItem>
+            <MenuItem icon={<SecurityIcon/>}> Platform Privacy Policy </MenuItem>
+            <MenuItem icon={<AssignmentIcon />}> Terms & Condition </MenuItem>
+            <MenuItem icon={<SettingsIcon />}> Settings </MenuItem>
+            <MenuItem icon={<HelpIcon />}> Help & Support </MenuItem>
+            <MenuItem icon={<LogoutIcon />}> Sign Out </MenuItem>
           </Menu>
         </div>
       </Sidebar>
+      
     </div>
   );
 }

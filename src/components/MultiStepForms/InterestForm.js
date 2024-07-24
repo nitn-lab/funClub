@@ -1,55 +1,52 @@
-import React from 'react'
+import React, { useState } from "react";
+import intrests from "./Interests";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const InterestForm = () => {
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleClick = (index) => {
+    setSelectedItems((previousSelectedItems) => {
+      if (previousSelectedItems.includes(index)) {
+        return previousSelectedItems.filter((item) => item !== index);
+      } else {
+        return [...previousSelectedItems, index];
+      }
+    });
+  };
   return (
-    <div className="w-full h-full bg-white px-10 py-20  border-2 border-gray">
-    <h1 className="text-5xl font-bold">Interest Details!</h1>
-    <p className="font-medium text-lg text-gray-500 mt-4">
-      Please fill your Interest Details!
-    </p>
-    <div className="mt-8 ">
-      <div>
-        <label className="text-lg font-medium">Ethicity</label>
-        <input
-          className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-          placeholder="Enter Ethicity"
-        />
-      </div>
-      <div className="mt-8 ">
-        <label className="text-lg font-medium">Sexual Orientation</label>
-        <input
-          className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-          placeholder="Enter your sexual orientation"
-        //   type="password"
-        />
-      </div>
-      <div className="mt-8 ">
-        <label className="text-lg font-medium">Excercise</label>
-        <input
-          className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-          placeholder="yes / no"
-        //   type="password"
-        />
-      </div>
-      <div className="mt-8 ">
-        <label className="text-lg font-medium">Drinking</label>
-        <input
-          className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-          placeholder="yes / no"
-        //   type="password"
-        />
-      </div>
-      <div className="mt-8 ">
-        <label className="text-lg font-medium">Smoking</label>
-        <input
-          className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-          placeholder="yes / no"
-        //   type="password"
-        />
+    <div className="w-full  lg:px-4 py-10 text-white">
+      <h1 className="text-5xl font-bold">Interest Details!</h1>
+      <p className="font-medium text-lg text-gray-500 mt-4">
+        Please Choose your Interests!!
+      </p>
+      <div className="intrests mt-8 flex flex-wrap">
+        {intrests &&
+          intrests.map((intrest, index) => {
+            return (
+              <div
+                className=" w-fit shadow-xl cursor-pointer m-1.5"
+                key={index}
+                onClick={() => handleClick(index)}
+                
+              >
+                <div className="flex border-2 border-white py-1 px-2 rounded-full items-center gap-2" >
+                <CheckCircleIcon style={{
+                  display: selectedItems.includes(index)
+                    ? "block"
+                    : "none",
+                  
+                }} />
+                <h2 className=" font-semibold">
+                  {intrest.type}
+                </h2>
+                </div>
+              </div>
+            );
+          })}
       </div>
     </div>
-  </div>
-  )
-}
+  );
+};
 
-export default InterestForm
+export default InterestForm;

@@ -1,38 +1,80 @@
-.App {
-  text-align: center;
+@media (max-width : 1380px) and (min-width : 1029px){
+      .intrest-card{
+            width: 18rem;
+      }
+  }
+
+@media (max-width : 1290px) and (min-width : 1150px){
+    .intrest-card{
+          width: 20rem;
+    }
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+@media  (max-width : 1150px) and (min-width : 990px){
+    .intrest-card{
+          width: 17rem;
+    }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@media   (max-width : 990px) and (min-width : 802px){
+    .intrests{
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .intrest-card{
+        width: 20rem;
+  }
+  .video-carousel{
+      width: 700px;
+  }
+  .caller-profile{
+      height: 130px;
+      width: 130px;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+@media (max-width : 802px){
+      .intrests{
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+      .intrest-card{
+            width: 100%;
+      }
+}
+@media  (max-width : 802px) and (min-width : 700px){
+   
+   
+  .video-carousel{
+      width: 600px;
+  }
+  .caller-profile{
+      height: 125px;
+      width: 125px;
+  }
+  
 }
 
-.App-link {
-  color: #61dafb;
-}
+@media  (max-width : 700px) and (min-width : 560px){
+      .video-carousel{
+            width: 500px;
+        }
+        .caller-profile{
+            height: 90px;
+            width: 90px;
+        }
+    
+  }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  @media (max-width : 560px){
+    .caller-profile{
+        height: 90px;
+        width: 90px;
+    }
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
+
+ 
+
+ 
+  
+  
