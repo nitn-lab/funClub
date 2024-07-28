@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import intrests from "./Interests";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-const InterestForm = () => {
+const InterestForm = ({ onInputChange }) => {
   const [selectedItems, setSelectedItems] = useState([]);
+
+  useEffect(() => {
+    onInputChange({ selectedInterests: selectedItems });
+  }, [selectedItems, onInputChange]);
 
   const handleClick = (index) => {
     setSelectedItems((previousSelectedItems) => {
@@ -14,32 +18,33 @@ const InterestForm = () => {
       }
     });
   };
+
   return (
-    <div className="w-full  lg:px-4 py-10 text-white">
-      <h1 className="text-5xl font-bold">Interest Details!</h1>
-      <p className="font-medium text-lg text-gray-500 mt-4">
+    <div className="w-full py-5 text-white">
+      <h1 className="text-4xl font-bold xs:text-3xl">Interest Details!</h1>
+      <p className="font-medium text-lg text-gray-200 mt-4 md:mt-2">
         Please Choose your Interests!!
       </p>
-      <div className="intrests mt-8 flex flex-wrap">
+      <div className="mt-5 md:mt-3 flex flex-wrap">
         {intrests &&
-          intrests.map((intrest, index) => {
+          intrests.map((interest, index) => {
             return (
               <div
-                className=" w-fit shadow-xl cursor-pointer m-1.5"
+                className="w-fit cursor-pointer m-2 xs:m-1.5"
                 key={index}
                 onClick={() => handleClick(index)}
-                
               >
-                <div className="flex border-2 border-white py-1 px-2 rounded-full items-center gap-2" >
-                <CheckCircleIcon style={{
-                  display: selectedItems.includes(index)
-                    ? "block"
-                    : "none",
-                  
-                }} />
-                <h2 className=" font-semibold">
-                  {intrest.type}
-                </h2>
+                <div className="flex border-2 border-white py-1 px-2 rounded-full items-center gap-2">
+                  <CheckCircleIcon
+                    style={{
+                      display: selectedItems.includes(index)
+                        ? "block"
+                        : "none",
+                    }}
+                  />
+                  <h2 className="font-semibold">
+                    {interest.type}
+                  </h2>
                 </div>
               </div>
             );

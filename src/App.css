@@ -1,29 +1,11 @@
-@media (max-width : 1380px) and (min-width : 1029px){
-      .intrest-card{
-            width: 18rem;
-      }
-  }
 
-@media (max-width : 1290px) and (min-width : 1150px){
-    .intrest-card{
-          width: 20rem;
-    }
-}
 
-@media  (max-width : 1150px) and (min-width : 990px){
-    .intrest-card{
-          width: 17rem;
-    }
-}
+
+
+
+
 
 @media   (max-width : 990px) and (min-width : 802px){
-    .intrests{
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .intrest-card{
-        width: 20rem;
-  }
   .video-carousel{
       width: 700px;
   }
@@ -33,15 +15,6 @@
   }
 }
 
-@media (max-width : 802px){
-      .intrests{
-            display: grid;
-            grid-template-columns: repeat(1, minmax(0, 1fr));
-      }
-      .intrest-card{
-            width: 100%;
-      }
-}
 @media  (max-width : 802px) and (min-width : 700px){
    
    
@@ -71,7 +44,12 @@
         height: 90px;
         width: 90px;
     }
+    .signup{
+        height: 78%;
+    }
   }
+
+
 
  
 

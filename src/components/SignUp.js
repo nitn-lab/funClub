@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Calendar } from 'primereact/calendar';
+import Dropdown from './MultiStepForms/Dropdown'
 
 const SignUp = () => {
   const [birthDate, setBirthDate] = useState(null);
@@ -30,15 +31,15 @@ const SignUp = () => {
   };
 
   return (
-    <div className="w-full py-10">
-      <h1 className="text-5xl font-bold text-white">Create Account!</h1>
-      <p className="font-medium text-lg text-gray-200 mt-4">
+    <div className="w-full py-5 text-black">
+      <h1 className="text-4xl font-bold text-white xs:text-3xl">Create Account!</h1>
+      <p className="font-medium text-lg text-gray-200 mt-4 md:mt-2">
         Create your Free Account!
       </p>
-      <div className="flex mt-8 gap-8">
+      <div className="flex mt-5 md:mt-3 gap-8 xs:gap-4">
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
+            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Name"
             type="text"
           />
@@ -46,21 +47,21 @@ const SignUp = () => {
 
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
-            placeholder="Enter your email"
+            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            placeholder="Email"
           />
         </div>
       </div>
-      <div className="flex mt-8 gap-8">
+      <div className="flex mt-5 md:mt-3 gap-8 xs:gap-4">
         <div className="w-1/2">
           <Calendar
             className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
-            placeholder="Select your birthdate"
+            placeholder="Birthdate"
             onChange={handleDateChange}
             value={birthDate}
             showIcon
             dateFormat="dd/mm/yy"
-            inputStyle={{border : "none" , outline : "none"}}
+            inputStyle={{backgroundColor : "white" ,border : "none" , outline : "none", color:"black"}}
             panelStyle={{backgroundColor : "white" , padding: "6px"}}
           />
           {age !== null && (
@@ -68,31 +69,31 @@ const SignUp = () => {
           )}
         </div>
         <div className="w-1/2">
-          <select className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="transgender">Transgender</option>
-            <option value="other">Prefer not to say</option>
-          </select>
+          <Dropdown
+            label=""
+            options={[
+              "Male", "Female", "Transgender", "Prefer not to say"
+            ]}
+          />
         </div>
       </div>
-      <div className="flex mt-8 gap-8">
+      <div className="flex mt-5 md:mt-3 gap-8 xs:gap-4">
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
-            placeholder="Enter your password"
+            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            placeholder="Password"
             type="password"
           />
         </div>
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
-            placeholder="Confirm your password"
+            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            placeholder="Confirm Password"
             type="password"
           />
         </div>
       </div>
-      <div className="mt-8 flex justify-center items-center">
+      <div className="mt-5 md:mt-3 flex justify-center items-center">
         <p className="font-semibold text-base text-white">Already have an account?</p>
         <button
           className="text-violet-500 text-base font-semibold ml-2"
