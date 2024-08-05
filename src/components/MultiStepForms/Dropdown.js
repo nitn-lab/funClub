@@ -30,7 +30,7 @@ const Dropdown = ({ label, options, onSelect }) => {
 
   return (
     <div className="relative inline-block text-left w-full" ref={dropdownRef}>
-      <label className="text-lg font-medium text-white">{label}</label>
+      <label className="text-lg font-medium text-primary-light dark:text-primary-dark">{label}</label>
       <div>
         <button
           type="button"
@@ -50,13 +50,13 @@ const Dropdown = ({ label, options, onSelect }) => {
         </button>
         {isOpen && (
           <div className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5  z-20">
-            <div className="py-1 h-36 xs:h-24 overflow-auto">
+            <div className="py-1 h-24 xs:h-16 overflow-auto">
               {options.map((option, index) => (
                 <button
                   key={index}
                   onClick={() => handleOptionClick(option)}
-                  className={`block px-4 py-2 xs:py-1 text-lg xs:text-sm font-semibold xs:font-normal w-full text-left hover:bg-[#cda5e6]   focus:bg-gray-100 ${
-                    option === selectedOption ? 'bg-[#c493e2]' : 'text-black'
+                  className={`block px-4 py-2 xs:py-1 text-lg xs:text-sm font-semibold xs:font-normal w-full text-left hover:bg-[#d2bfe5]   focus:bg-gray-100 ${
+                    option === selectedOption ? 'bg-[#ac64d8]' : 'text-black'
                   }`}
                 >
                   {option}

@@ -1,8 +1,12 @@
 import React from "react";
 import LoginForm from "../../components/LoginForm";
 import logo from "../../assets/images/FUNCLUB logo.png";
+import Theme from '../../Theme'
+
 
 const Login = () => {
+ 
+  
   return (
     <div className="relative h-screen w-screen">
       <img
@@ -10,15 +14,16 @@ const Login = () => {
         className="w-full h-full object-cover bg-no-repeat"
       />
       <div className="absolute top-0 xs:p-3 p-20 w-full h-full">
-        <div className="flex backdrop-blur-lg rounded-lg bg-white/10 h-full xs:h-[75%] xs:mt-20">
+        <div className="flex backdrop-blur-lg rounded-lg bg-black/10
+        dark:bg-white/10 h-full xs:h-[75%] xs:mt-20">
           <div className="flex items-center justify-center w-1/2 md:w-full h-full ">
             <LoginForm />
           </div>
           <div className="md:hidden relative flex w-1/2 items-center h-full">
-            <div className="flex w-full items-center justify-center text-white">
-              <img src={logo} className="w-44 animate-bounce" />
+            <div className="flex w-full  justify-center text-primary-light dark:text-primary-dark">
+              <img src={logo} className="w-24 animate-pulse mt-10 -mr-5" />
               <div>
-                <h1 className="text-4xl font-bold">FUN CLUB</h1>
+                <h1 className="text-4xl font-bold ">FUN CLUB</h1>
                 <h3 className="text-xl font-semibold mt-2.5 text-center italic">
                   Make Friends, Have Fun
                 </h3>
@@ -26,8 +31,11 @@ const Login = () => {
             </div>
           </div>
         </div>
+        
+        <Theme />
       </div>
     </div>
+
   );
 };
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaImage } from "react-icons/fa6";
 import InputEmoji from "react-input-emoji";
 import ReactScrollToBottom from "react-scroll-to-bottom";
-import logo from "../assets/images/FUNCLUB logo.png";
+import logo from "../../assets/images/FUNCLUB logo.png";
 import { IoMdCall } from "react-icons/io";
 import { FaVideo } from "react-icons/fa";
 import Popup from "./Popup.js";
@@ -39,7 +39,7 @@ const ChatScreen = () => {
     <>
       {receiver ? (
         <div className="chat-screen w-full">
-          <div className="header bg-[#8488d6] text-white px-10 py-3.5 xs:px-5">
+          <div className="header bg-gradient-to-tl from-violet-500 to-pink-500 text-white px-10 py-3.5 xs:px-5">
             <div className="flex justify-between items-center">
               <div className="flex gap-5 items-center xs:gap-3">
                 <div>
@@ -50,11 +50,11 @@ const ChatScreen = () => {
                         : receiver.profile_url
                     }
                     alt="user"
-                    className="rounded-full h-14 w-14 object-cover "
+                    className="rounded-full h-14 w-14 xs:h-12 xs:w-12  object-cover "
                   />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">{receiver.username}</h3>
+                  <h3 className="font-semibold text-lg xs:text-base">{receiver.username}</h3>
                   <h4>Typing...</h4>
                 </div>
               </div>
@@ -70,13 +70,13 @@ const ChatScreen = () => {
               </div>
             </div>
           </div>
-          <ReactScrollToBottom className="chat-body  px-6 xs:px-3 h-[70vh]">
+          <ReactScrollToBottom className="chat-body xs:bg-gradient-to-tr from-violet-500 to-pink-500  px-6 xs:px-3 h-[70vh]">
             <div>
               {messages.map((content, key) => {
                 return (
                   content._id === receiver._id && (
                     <div className="chat chat-end">
-                      <div className="chat-bubble text-white bg-[#9195de] my-1 text-right">
+                      <div className="chat-bubble text-white bg-fuchsia-800 my-1 text-right">
                         {content.text}
                       </div>
                     </div>
@@ -86,7 +86,7 @@ const ChatScreen = () => {
             </div>
           </ReactScrollToBottom>
           <div className="flex items-center px-6 sm:px-2">
-            <div className="bg-[#5c5fa1] text-white p-2 rounded-full cursor-pointer">
+            <div className="bg-fuchsia-800 text-white p-2 rounded-full cursor-pointer">
               <FaImage />
             </div>
           
@@ -102,7 +102,7 @@ const ChatScreen = () => {
              
             
             <button
-              className="py-1 px-3 rounded-lg bg-[#5c5fa1] text-white text-lg font-semibold hover:border-2 hover:border-[#5c5fa1] hover:bg-white hover:text-[#5c5fa1]"
+              className="py-1 px-3 rounded-lg bg-fuchsia-800 text-white text-lg font-semibold hover:border-2 hover:border-fuchsia-800 hover:bg-white hover:text-fuchsia-800"
               onClick={handleSend}
             >
               Send
@@ -112,7 +112,7 @@ const ChatScreen = () => {
       ) : (
         <div className="p-6 sm:hidden">
           <img src={logo} width={300} className="m-auto" alt="logo"/>
-          <h1 className="font-bold text-3xl text-[#e20e70] text-center">
+          <h1 className="font-bold text-3xl text-white text-center">
             Tap to start conversation!!
           </h1>
         </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "../assets/images/FUNCLUB logo.png";
+import logo from "../../assets/images/FUNCLUB logo.png";
 import userData from "./mock-data.json";
 import ChatScreen from "./ChatScreen";
 import 'react-responsive-modal/styles.css';
@@ -23,7 +23,7 @@ const Chats = () => {
   const handleWindow = (user) => {
     localStorage.setItem("receiver", JSON.stringify(user));
     if (window.innerWidth < 768) {
-      navigate(`/chat/${user._id}`);
+      navigate(`/dashboard/chat/${user._id}`);
     }
   };
 
@@ -34,11 +34,11 @@ const Chats = () => {
           <ChatScreen />
         </div>
         <div
-          className=" w-96 bg-[#6f72ba] h-svh
+          className="chats w-[350px] bg-gradient-to-tl from-violet-500 to-pink-500  h-[96vh] rounded-md 
            text-white sm:w-full pb-2 overflow-y-auto"
           id="user-list"
         >
-          <div className="flex gap-2 items-center p-4 bg-[#5c5fa1] ">
+          <div className="flex gap-2 items-center p-4 bg-[#9759e9]">
             <img src={logo} alt="FunClub" className="w-12 " />
             <h2 className="text-xl font-semibold italic">FUNCLUB</h2>
           </div>
@@ -48,7 +48,7 @@ const Chats = () => {
             users.map((user) => {
               return (
                 <div
-                  className="flex gap-8 xs:gap-3 items-center pb-3 hover:bg-[#f43f7a]  transition-all py-3 px-6 cursor-pointer xs:px-2"
+                  className="flex gap-8 xs:gap-3 items-center pb-3 hover:bg-[#9759e9]  transition-all py-3 px-6 cursor-pointer"
                   onClick={() => {
                     setReceiver(user);
                     handleWindow(user);
@@ -69,7 +69,7 @@ const Chats = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-lg">{user.firstname}</h3>
-                    <p className="text-gray-200 xs:hidden">Last seen</p>
+                    <p className="text-gray-200">Last seen</p>
                   </div>
                 </div>
               );

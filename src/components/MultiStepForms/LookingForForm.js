@@ -20,17 +20,17 @@ const LookingForForm = ({ onInputChange, onSkip }) => {
   };
 
   return (
-    <div className="w-full py-5 text-white">
+    <div className="w-full py-5 text-primary-light dark:text-primary-dark">
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold xs:text-3xl">Looking For Details!</h1>
         <button
-          className="w-max active:scale-[.98] acitve:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 px-3 rounded-xl bg-white text-lg font-bold text-black"
+          className="w-max active:scale-[.98] acitve:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 px-3 rounded-xl bg-primary-light dark:bg-primary-dark text-lg font-bold text-primary-dark dark:text-primary-light"
           onClick={onSkip}
         >
           Skip
         </button>
       </div>
-      <p className="font-medium text-lg text-gray-200 mt-4 md:mt-2">
+      <p className="font-medium text-lg mt-4 md:mt-2">
         Please Choose your Looking For!!
       </p>
       <div className="mt-5 md:mt-3 flex flex-wrap">
@@ -42,7 +42,7 @@ const LookingForForm = ({ onInputChange, onSkip }) => {
                 key={index}
                 onClick={() => handleClick(index)}
               >
-                <div className="flex border-2 border-white py-1 px-2 rounded-full items-center gap-2">
+                <div className="flex border-2 border-primary-light dark:border-primary-dark py-1 px-2 rounded-full items-center gap-2">
                   <CheckCircleIcon
                     style={{
                       display: selectedItems.includes(index)
@@ -51,7 +51,9 @@ const LookingForForm = ({ onInputChange, onSkip }) => {
                     }}
                   />
                   <h2 className="font-semibold">
-                    {item.type}
+                   {item.type === "Care" ? <div className="flex items-center gap-x-1">
+                    <img src={item.imageUrl} className="h-5 w-5"/><span>{item.type}</span>
+                   </div> : <h2>{item.type}</h2>}
                   </h2>
                 </div>
               </div>

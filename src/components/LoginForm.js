@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function LoginForm() {
   const navigate = useNavigate();
   return (
-    <div className="w-full h-full text-white px-6 xs:px-3 py-6 ">
+    <div className="w-full h-full text-primary-light dark:text-primary-dark px-6 xs:px-3 py-6 ">
       <h1 className="text-4xl font-semibold text-center">Welcome Back</h1>
       <p className="font-medium text-lg md:text-md mt-4 text-center">
         Welcome back! Please enter your details
@@ -12,14 +12,14 @@ export default function LoginForm() {
       <div className="mt-8 md:mt-6">
         <div>
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white text-black"
+            className="w-full border-2 rounded-lg p-2.5 mt-1  placeholder-black bg-white text-black"
             placeholder="Email"
           />
         </div>
         <div className="mt-5 md:mt-3">
           
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white text-black"
+            className="w-full border-2 rounded-lg p-2.5 mt-1  placeholder-black bg-white text-black"
             placeholder="Password"
             type="password"
           />
@@ -41,7 +41,7 @@ export default function LoginForm() {
         <div className="mt-5  flex flex-col gap-y-4">
           <button
             onClick={() => { navigate("/Dashboard"); }}
-            className="active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 rounded-xl bg-gradient-to-tr from-violet-500 to-pink-500  text-md font-bold"
+            className="active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 rounded-xl bg-main-gradient  text-md font-bold text-primary-dark"
           >
             Sign In
           </button>

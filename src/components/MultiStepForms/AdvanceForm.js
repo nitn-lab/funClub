@@ -4,6 +4,7 @@ import Dropdown from "./Dropdown"; // Ensure the path is correct
 const AdvanceForm = ({ onInputChange }) => {
   const [formData, setFormData] = useState({
     ethnicity: "",
+    country : "",
     exercise: "",
     drinking: "",
     smoking: "",
@@ -34,14 +35,14 @@ const AdvanceForm = ({ onInputChange }) => {
   };
 
   return (
-    <div className="w-full py-5 text-black">
-      <h1 className="text-4xl font-bold text-white xs:text-3xl">Advance Details!</h1>
-      <p className="font-medium text-lg text-gray-200 mt-4 md:mt-2">
+    <div className="w-full py-5 text-primary-light dark:text-primary-dark">
+      <h1 className="text-4xl font-bold text-primary-light dark:text-primary-dark xs:text-3xl">Advance Details!</h1>
+      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-4 md:mt-2">
         Please fill your Advance Details!
       </p>
       <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2">
-          <label className="text-lg font-medium text-white">Ethnicity</label>
+          <label className="text-lg font-medium text-primary-light dark:text-primary-dark">Ethnicity</label>
           <input
             name="ethnicity"
             className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
@@ -50,12 +51,29 @@ const AdvanceForm = ({ onInputChange }) => {
             onChange={handleInputChange}
           />
         </div>
-
         <div className="w-1/2">
           <Dropdown
-            label="Exercise"
-            options={["Everyday", "Often", "Sometimes", "Never"]}
-            onSelect={(selectedOption) => handleDropdownChange('exercise', selectedOption)}
+            label="Country"
+            options={[
+              "United States",
+              "Canada",
+              "Mexico",
+              "United Kingdom",
+              "Australia",
+              "Korea",
+              "India",
+              "France",
+              "Italy",
+              "China",
+              "Russia",
+              "Japan",
+              "Germany",
+              "Belgium",
+              "Netherlands",
+              "Switzerland",
+              "Other",
+            ]}
+            onSelect={(selectedOption) => handleDropdownChange('country', selectedOption)}
           />
         </div>
       </div>
@@ -88,7 +106,14 @@ const AdvanceForm = ({ onInputChange }) => {
           />
         </div>
       </div>
-      <div className="mt-5 md:mt-3">
+      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
+      <div className="w-1/2">
+          <Dropdown
+            label="Exercise"
+            options={["Everyday", "Often", "Sometimes", "Never"]}
+            onSelect={(selectedOption) => handleDropdownChange('exercise', selectedOption)}
+          />
+        </div>
         <div className="w-1/2">
           <Dropdown
             label="Sexual Orientation"
@@ -107,6 +132,7 @@ const AdvanceForm = ({ onInputChange }) => {
             onSelect={(selectedOption) => handleDropdownChange('sexualOrientation', selectedOption)}
           />
         </div>
+        
       </div>
     </div>
   );

@@ -31,16 +31,16 @@ const SignUp = () => {
   };
 
   return (
-    <div className="w-full py-5 text-black">
-      <h1 className="text-4xl font-bold text-white xs:text-3xl">Create Account!</h1>
-      <p className="font-medium text-lg text-gray-200 mt-4 md:mt-2">
+    <div className="w-full py-5  text-primary-light dark:text-primary-dark">
+      <h1 className="text-4xl font-bold text-primary-light dark:text-primary-dark xs:text-3xl">Create Account!</h1>
+      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-4 md:mt-2">
         Create your Free Account!
       </p>
       <div className="flex mt-5 md:mt-3 gap-8 xs:gap-4">
         <div className="w-1/2">
           <input
             className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
-            placeholder="Name"
+            placeholder="Username"
             type="text"
           />
         </div>
@@ -94,7 +94,7 @@ const SignUp = () => {
         </div>
       </div>
       <div className="mt-5 md:mt-3 flex justify-center items-center">
-        <p className="font-semibold text-base text-white">Already have an account?</p>
+        <p className="font-semibold text-base text-primary-light dark:text-primary-dark">Already have an account?</p>
         <button
           className="text-violet-500 text-base font-semibold ml-2"
           onClick={() => navigate("/")}

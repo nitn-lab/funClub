@@ -1,25 +1,34 @@
-import React from 'react'
-import logo from '../../assets/images/FUNCLUB logo.png'
-import ForgetPasswordForm from '../../components/ForgetPasswordForm'
-
+import React from "react";
+import ForgetPasswordForm from "../../components/ForgetPasswordForm";
+import logo from "../../assets/images/FUNCLUB logo.png";
 
 const ForgetPassword = () => {
   return (
-    <div className="flex w-full">
-      <div className=" flex py-20 justify-center w-1/2 md:w-full" style={{height: "100vh"}}>
-        <ForgetPasswordForm />
-      </div>
-      <div className="md:hidden relative flex  w-1/2 items-center justify-center  bg-gradient-to-tr from-violet-500 to-pink-500">
-        <div className="flex w-full h-1/2 bg-white/10 backdrop-blur-lg rounded-full items-center justify-center">
-          <img src={logo} height={250} className="w-64 lg:w-52"/>
-          <div>
-          <h1 className="text-5xl font-bold">FUN CLUB</h1>
-          <h3 className='text-xl font-semibold mt-2.5 text-white text-center italic'>Make Friends, Have Fun</h3>
+    <div className="relative h-screen w-screen">
+      <img
+        src="https://images.pond5.com/pink-neon-heart-sign-reflection-footage-167595258_iconl.jpeg"
+        className="w-full h-full object-cover bg-no-repeat"
+      />
+      <div className="absolute top-0 xs:p-3 p-20 w-full h-full">
+        <div className="flex backdrop-blur-lg rounded-lg bg-white/10 h-full xs:h-[75%] xs:mt-20">
+          <div className="flex items-center justify-center w-1/2 md:w-full h-full ">
+            <ForgetPasswordForm />
+          </div>
+          <div className="md:hidden relative flex w-1/2 items-center h-full">
+            <div className="flex w-full  justify-center text-white">
+              <img src={logo} className="w-24 animate-pulse mt-10 -mr-5" />
+              <div>
+                <h1 className="text-4xl font-bold ">FUN CLUB</h1>
+                <h3 className="text-xl font-semibold mt-2.5 text-center italic">
+                  Make Friends, Have Fun
+                </h3>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default ForgetPassword;

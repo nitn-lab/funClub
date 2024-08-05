@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {useNavigate} from 'react-router-dom'
 import Dropdown from "./Dropdown";
 
 const SelectPrompt = ({ onInputChange }) => {
@@ -40,13 +41,23 @@ const SelectPrompt = ({ onInputChange }) => {
     setSubmittedPrompts((prevPrompts) => [...prevPrompts, prompt]);
   };
 
+  const navigate = useNavigate()
+
   return (
-    <div className="w-full py-5 text-white">
-      <h1 className="text-4xl font-bold xs:text-3xl">Prompts!</h1>
-      <p className="font-medium text-lg text-gray-200 mt-4 md:mt-2">
+    <div className="w-full py-5 text-primary-light dark:text-primary-dark">
+       <div className="flex justify-between items-center">
+        <h1 className="text-4xl font-bold xs:text-3xl">Prompts!</h1>
+        <button
+          className="w-max active:scale-[.98] acitve:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 px-3 rounded-xl bg-primary-light dark:bg-primary-dark text-lg font-bold dark:text-primary-light text-primary-dark"
+          onClick={() => navigate('/Dashboard')}
+        >
+          Skip
+        </button>
+      </div>
+      <p className="font-medium text-lg mt-4 md:mt-2">
         Please select a prompt!
       </p>
-      <div className="mt-2  h-72 md:h-64 overflow-auto">
+      <div className=" scrollable-div mt-2  h-72 md:h-64 overflow-auto">
         <div className="w-full">
           {submittedPrompts.length < 3 && (
             <Dropdown
@@ -84,17 +95,17 @@ const SelectPrompt = ({ onInputChange }) => {
               <>
                 <div className="relative">
                   <textarea
-                    className="w-full p-2 mt-2 text-black relative rounded-lg border-none outline-none bg-white"
+                    className="w-full p-2 mt-2 relative text-primary-light rounded-lg border-2 border-black dark:border-none dark:outline-none bg-primary-dark"
                     rows="3"
                     value={stories[prompt] || ""}
                     onChange={(e) => handleStoryChange(prompt, e.target.value)}
                   ></textarea>
-                  <div className="absolute bottom-2 right-2 text-black text-sm">
+                  <div className="absolute bottom-2 right-2 dark:text-primary-dark text-primary-light text-sm">
                     {charCounts[prompt] || 0}/150
                   </div>
                 </div>
                 <button
-                  className="mt-2 p-2 bg-white text-black rounded-lg font-semibold float-right"
+                  className="mt-2 p-2 bg-primary-light dark:bg-primary-dark text-primary-dark dark:text-primary-light rounded-lg font-semibold float-right"
                   onClick={() => handleSubmit(prompt)}
                 >
                   Submit

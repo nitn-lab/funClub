@@ -1,9 +1,9 @@
-import React, {useEffect} from "react";
-import { Box, Typography } from "@mui/material";
-import { Sidebar, Menu, MenuItem, SubMenu, useProSidebar } from "react-pro-sidebar";
-import { SidebarHeader } from "../../components/SideBarHeader";
-import { useNavigate } from "react-router-dom";
 
+import React from "react";
+import { Box, Typography } from "@mui/material";
+import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
+import { SidebarHeader } from "../../components/SideBarHeader";
+import {  NavLink } from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
@@ -19,35 +19,26 @@ import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 
-
-function  Sidebarr(props) {
+function Sidebarr(props) {
   const Theme = "light" | "dark";
 
-  const [collapsed, setCollapsed] = React.useState(false);
   const [toggled, setToggled] = React.useState(false);
   const [hasImage, setHasImage] = React.useState(false);
   const [theme, setTheme] = React.useState("light");
- 
-
-  const handleClick = () => {
-    const data = "chats"
-    props.sendData(data)
-  }
-
-
 
   const themes = {
     light: {
       sidebar: {
-        backgroundColor: "#ffffff",
-        color: "#607489",
+        backgroundColor: "#000000",
+        color: "#ffffff",
+       
       },
       menu: {
-        menuContent: "#fbfcfd",
-        icon: "#0098e5",
+        menuContent: "#000000",
+        icon: "#000000",
         hover: {
-          backgroundColor: "#c5e4ff",
-          color: "#44596e",
+          backgroundColor: "#c493e2",
+          color: "#ffffff",
         },
         disabled: {
           color: "#9fb6cf",
@@ -74,7 +65,7 @@ function  Sidebarr(props) {
   };
 
   // hex to rgba converter
-  const hexToRgba = (hex: string, alpha: number) => {
+  const hexToRgba = (hex, alpha) => {
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
@@ -85,16 +76,14 @@ function  Sidebarr(props) {
   return (
     <div
       style={{
-        display : "flex",
+        display: "flex",
         direction: "ltr",
-        height : "100vh"
       }}
+      className=" h-[96vh] md:h-[87vh]"
     >
       <Sidebar
-        collapsed={collapsed}
         toggled={toggled}
         onBackdropClick={() => setToggled(false)}
-        
         backgroundColor={hexToRgba(
           themes[theme].sidebar.backgroundColor,
           hasImage ? 0.9 : 1
@@ -103,76 +92,38 @@ function  Sidebarr(props) {
           color: themes[theme].sidebar.color,
           
         }}
+       
       >
-     
-        <SidebarHeader style={{ marginTop: "16px" }} />
+        <SidebarHeader style={{ marginTop: "10px", marginLeft:"10px" }} />
         <div style={{ flex: 1, marginBottom: "2px" }}>
-          {/* <div style={{ padding: "0 24px", marginBottom: "8px" }}>
-            <Typography
-              variant="body2"
-              fontWeight={600}
-              style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: "0.5px", color: 'black'}}
-            >
-              Home
-            </Typography>
-          </div>
-          <div style={{ padding: "0 24px", marginBottom: "8px" }}>
-            <Typography
-              variant="body2"
-              fontWeight={600}
-              style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: "0.5px", color: 'black'}}
-            >
-              Live
-            </Typography>
-          </div>
-          <div style={{ padding: "0 24px", marginBottom: "8px" }}>
-            <Typography
-              variant="body2"
-              fontWeight={600}
-              style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: "0.5px", color: 'black'}}
-            >
-              Nearby
-            </Typography>
-          </div>
-          <div style={{ padding: "0 24px", marginBottom: "8px" }}>
-            <Typography
-              variant="body2"
-              fontWeight={600}
-              style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: "0.5px", color: 'black'}}
-            >
-              Feeds
-            </Typography>
-          </div>
-          <div style={{ padding: "0 24px", marginBottom: "8px" }}>
-            <Typography
-              variant="body2"
-              fontWeight={600}
-              style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: "0.5px", color: 'black'}}
-            >
-              Suggestions
-            </Typography>
-          </div>
-          <div style={{ padding: "0 24px", marginBottom: "8px" }}>
-            <Typography
-              variant="body2"
-              fontWeight={600}
-              style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: "0.5px", color: 'black'}}
-            >
-              Chat
-            </Typography>
-          </div>
-           */}
-          <Menu>
-            <MenuItem icon={<HomeIcon />}> Home </MenuItem>
+          <Menu
+            menuItemStyles={{
+              button: {
+                "&.active": {
+                  backgroundColor: "#c4b678",
+                },
+                "&:hover": {
+                  
+                  color: "black",
+                  marginLeft: "6px",
+                  marginRight: "6px",
+                  borderRadius : "5px"
+                },
+              },
+            }}
+          >
+            <MenuItem component={<NavLink to="/dashboard" end/>} icon={<HomeIcon />}> Home </MenuItem>
             <MenuItem icon={<VideocamIcon />}> Live </MenuItem>
-            <MenuItem icon={<LocationOnIcon />}> Nearby </MenuItem>
+            <MenuItem component={<NavLink to="/dashboard/nearby" end/>} icon={<LocationOnIcon />}> Nearby </MenuItem>
             <MenuItem icon={<GridViewRoundedIcon />}> Feeds </MenuItem>
             <MenuItem icon={<LightbulbIcon />}> Suggestion </MenuItem>
-            <MenuItem icon={<QuestionAnswerIcon />} onClick = {handleClick}> Chats </MenuItem>
+            <MenuItem component={<NavLink to="/dashboard/chats" end/> } icon={<QuestionAnswerIcon />}>
+              Chats <span className="bg-main-gradient text-sm rounded-full px-1 py-0.5 ml-3">11</span>
+            </MenuItem>
             <MenuItem icon={<PaidIcon />}> Subscription details </MenuItem>
             <MenuItem icon={<CollectionsIcon />}> Collections </MenuItem>
             <MenuItem icon={<AccountCircleIcon />}> My Profile </MenuItem>
-            <MenuItem icon={<SecurityIcon/>}> Platform Privacy Policy </MenuItem>
+            <MenuItem icon={<SecurityIcon />}> Platform Privacy Policy </MenuItem>
             <MenuItem icon={<AssignmentIcon />}> Terms & Condition </MenuItem>
             <MenuItem icon={<SettingsIcon />}> Settings </MenuItem>
             <MenuItem icon={<HelpIcon />}> Help & Support </MenuItem>
@@ -180,7 +131,6 @@ function  Sidebarr(props) {
           </Menu>
         </div>
       </Sidebar>
-      
     </div>
   );
 }

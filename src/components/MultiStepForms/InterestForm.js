@@ -20,12 +20,12 @@ const InterestForm = ({ onInputChange }) => {
   };
 
   return (
-    <div className="w-full py-5 text-white">
+    <div className="w-full py-5 text-primary-light dark:text-primary-dark">
       <h1 className="text-4xl font-bold xs:text-3xl">Interest Details!</h1>
-      <p className="font-medium text-lg text-gray-200 mt-4 md:mt-2">
+      <p className="font-medium text-lg mt-4 md:mt-2">
         Please Choose your Interests!!
       </p>
-      <div className="mt-5 md:mt-3 flex flex-wrap">
+      <div className="scrollable-div h-72 md:h-64 mt-5 md:mt-3 flex flex-wrap overflow-auto">
         {intrests &&
           intrests.map((interest, index) => {
             return (
@@ -34,7 +34,7 @@ const InterestForm = ({ onInputChange }) => {
                 key={index}
                 onClick={() => handleClick(index)}
               >
-                <div className="flex border-2 border-white py-1 px-2 rounded-full items-center gap-2">
+                <div className="flex border-2 border-primary-light dark:border-primary-dark py-1 px-2 rounded-full items-center gap-2">
                   <CheckCircleIcon
                     style={{
                       display: selectedItems.includes(index)
