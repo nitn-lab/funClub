@@ -18,9 +18,7 @@ import SecurityIcon from '@mui/icons-material/Security';
 import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import home from "../assests/images/home-button.png";
-import live from "../assets/images/live-tv.png";
-import nearby from "../assets/images/nearby.png";
+
 
 function Sidebarr(props) {
   const Theme = "light" | "dark";
