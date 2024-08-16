@@ -7,7 +7,7 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 const MainLayout = () => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="p-2 md:p-0 bg-main-gradient h-screen flex md:block items-start w-full overflow-hidden">
+    <div className="p-2 md:p-0 bg-main-gradient h-screen xs:h-[93vh] flex md:block items-start w-full">
       <div className="md:flex justify-between my-2 hidden ">
         <button
           className="hidden md:block text-white"

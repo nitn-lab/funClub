@@ -33,7 +33,7 @@ const LookingForForm = ({ onInputChange, onSkip }) => {
       <p className="font-medium text-lg mt-4 md:mt-2">
         Please Choose your Looking For!!
       </p>
-      <div className="mt-5 md:mt-3 flex flex-wrap">
+      <div className="mt-5 md:mt-3 grid grid-cols-4">
         {LookingFor &&
           LookingFor.map((item, index) => {
             return (

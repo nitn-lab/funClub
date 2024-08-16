@@ -18,6 +18,9 @@ import SecurityIcon from '@mui/icons-material/Security';
 import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import home from "../assests/images/home-button.png";
+import live from "../assets/images/live-tv.png";
+import nearby from "../assets/images/nearby.png";
 
 function Sidebarr(props) {
   const Theme = "light" | "dark";
@@ -112,10 +115,10 @@ function Sidebarr(props) {
               },
             }}
           >
-            <MenuItem component={<NavLink to="/dashboard" end/>} icon={<HomeIcon />}> Home </MenuItem>
-            <MenuItem icon={<VideocamIcon />}> Live </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/nearby" end/>} icon={<LocationOnIcon />}> Nearby </MenuItem>
-            <MenuItem icon={<GridViewRoundedIcon />}> Feeds </MenuItem>
+            <MenuItem component={<NavLink to="/dashboard" end/>} icon={<Box component="img" src={home} alt={home}/>}> Home </MenuItem>
+            <MenuItem icon={<Box component="img" src={live} alt={live}/>}> Live </MenuItem>
+            <MenuItem component={<NavLink to="/dashboard/nearby" end/>} icon={<Box component="img" src={nearby} alt={nearby}/>}> Nearby </MenuItem>
+            <MenuItem component={<NavLink to="/dashboard/feeds" end/> } icon={<GridViewRoundedIcon />}> Feeds </MenuItem>
             <MenuItem icon={<LightbulbIcon />}> Suggestion </MenuItem>
             <MenuItem component={<NavLink to="/dashboard/chats" end/> } icon={<QuestionAnswerIcon />}>
               Chats <span className="bg-main-gradient text-sm rounded-full px-1 py-0.5 ml-3">11</span>

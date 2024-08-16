@@ -82,6 +82,12 @@ const VideoCarousel = ({ videos, onSlideChange }) => {
               loop
               className="w-full h-[calc(95vh-184px)] md:h-[60vh] object-cover rounded-lg"
             />
+            <div className="absolute inset-0 flex justify-center items-center">
+              <div className="pulse-button relative">
+                <button className="relative z-10 bg-main-gradient text-white rounded-full w-24 h-24 text-lg">Join Now</button>
+                <span className="absolute inset-0 rounded-full bg-main-gradient opacity-75 animate-pulse"></span>
+              </div>
+            </div>
           </div>
         ))}
       </Slider>

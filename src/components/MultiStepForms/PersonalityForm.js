@@ -4,26 +4,24 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Dropdown from './Dropdown';
 
 const PersonalityForm = ({ onInputChange }) => {
+  // Find the index of the 'INTJ' type in the PersonalityTypes array
+  const defaultTypeIndex = PersonalityTypes.findIndex(type => type.type === "INTJ");
+
   const [formData, setFormData] = useState({
-    personality: "",
-    selectedTypes: []
+    personality: "INTJ",  // Set 'INTJ' as the default personality type
+    selectedType: defaultTypeIndex // Set 'INTJ' as the selected type by default
   });
-  const [hoverIndex, setHoverIndex] = useState(null);
+  const [hoverIndex, setHoverIndex] = useState(null); // For hover effect
 
   useEffect(() => {
     onInputChange(formData);
   }, [formData, onInputChange]);
 
   const handleClick = (index) => {
-    setFormData((prevData) => {
-      const updatedSelectedTypes = prevData.selectedTypes.includes(index)
-        ? prevData.selectedTypes.filter((item) => item !== index)
-        : [...prevData.selectedTypes, index];
-      return {
-        ...prevData,
-        selectedTypes: updatedSelectedTypes
-      };
-    });
+    setFormData((prevData) => ({
+      ...prevData,
+      selectedType: index  // Update the selected type
+    }));
   };
 
   const handleDropdownChange = (name, value) => {
@@ -33,73 +31,91 @@ const PersonalityForm = ({ onInputChange }) => {
     }));
   };
 
-  const getBoxPosition = (index) => {
+  const getHoverBoxPosition = (index) => {
     const totalCols = 4;
     const rowIndex = Math.floor(index / totalCols);
-    const colIndex = index % totalCols;
-    const isLastRow = rowIndex >= Math.floor((PersonalityTypes.length - 1) / totalCols);
+    const totalRows = Math.ceil(PersonalityTypes.length / totalCols);
     
-    let positionClass = "top-8";
+    // Determine if the item is in one of the last two rows
+    const isInLastTwoRows = rowIndex >= totalRows - 2;
 
-    if (isLastRow) {
-      positionClass = "bottom-8";
+    if (isInLastTwoRows) {
+      return "bottom-full mb-0"; // Position the box above the item
+    } else {
+      return "top-full mt-0"; // Position the box below the item
     }
+  };
 
-    if (colIndex === 0 || colIndex === 1) {
-      positionClass += " left-0";
-    } else if (colIndex === 2 || colIndex === 3) {
-      positionClass += " right-0";
+  const getHorizontalPosition = (index) => {
+    const colIndex = index % 4;
+    if (colIndex < 2) {
+      return "left-0 ml-0";
+    } else {
+      return "right-0 mr-0";
     }
-
-    return positionClass;
   };
 
   return (
-    <div className="w-full py-5 text-primary-light dark:text-primary-dark">
+    <div className="w-full py-5 text-primary-light dark:text-primary-dark relative">
       <h1 className="text-4xl font-bold xs:text-3xl">Personality Details!</h1>
       <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-4 md:mt-2">
         Please fill your Personality Type Details!
       </p>
-      <div className="mt-5 md:mt-3 ">
+      <div className="mt-5 md:mt-3">
         <div className="w-1/2">
           <Dropdown
             label="Personality"
             options={["Introvert", "Extrovert", "Ambivert"]}
             onSelect={(selectedOption) => handleDropdownChange('personality', selectedOption)}
+            selectedOption={formData.personality}  // Show the selected option in the dropdown
           />
         </div>
-        <div className="scrollable-div mt-5 w-1/2 md:w-full grid grid-cols-4 gap-3 md:gap-3 h-64 md:h-44 overflow-auto">
-          {PersonalityTypes &&
-            PersonalityTypes.map((item, index) => (
-              <div
-                className="relative w-fit cursor-pointer m-2 xs:m-1.5"
-                key={index}
-                onClick={() => handleClick(index)}
-                onMouseEnter={() => setHoverIndex(index)}
-                onMouseLeave={() => setHoverIndex(null)}
-              >
-                <div className="flex border-2 border-primary-light dark:border-primary-dark py-1 px-2 rounded-full items-center gap-2">
-                  <CheckCircleIcon
-                    style={{
-                      display: formData.selectedTypes.includes(index)
-                        ? "block"
-                        : "none"
-                    }}
-                  />
-                  <h2 className="text-primary-light dark:text-primary-dark font-semibold">
-                    {item.type}
-                  </h2>
-                </div>
-                {hoverIndex === index && (
-                  <div
-                    className={`absolute ${getBoxPosition(index)} w-64 bg-gray-800 text-white p-2 rounded-md shadow-lg z-10`}
-                  >
-                    
-                    <p className="text-base">{item.description}</p>
+
+        {/* Main container with flex layout */}
+        <div className="flex justify-start items-center mt-5 w-full md:w-full h-64 md:h-44 overflow-auto">
+          <div className="grid grid-cols-4 gap-3 md:gap-3">
+            {PersonalityTypes &&
+              PersonalityTypes.map((item, index) => (
+                <div
+                  className="relative w-fit cursor-pointer m-2 xs:m-1.5"
+                  key={index}
+                  onClick={() => handleClick(index)}
+                  onMouseEnter={() => setHoverIndex(index)} // Show box on hover
+                  onMouseLeave={() => setHoverIndex(null)} // Hide box on mouse leave
+                >
+                  <div className={`flex border-2 py-1 px-2 rounded-full items-center gap-2
+                    ${formData.selectedType === index ? 'border-primary-light dark:border-primary-dark' : 'border-gray-400'}`}>
+                    <CheckCircleIcon
+                      style={{
+                        display: formData.selectedType === index ? "block" : "none"
+                      }}
+                    />
+                    <h2 className={`text-primary-light dark:text-primary-dark font-semibold`}>
+                      {item.type}
+                    </h2>
                   </div>
-                )}
-              </div>
-            ))}
+                  
+                  {/* Display the hover box near the hovered item */}
+                  {hoverIndex === index && (
+                    <div
+                      className={`absolute ${getHoverBoxPosition(index)} ${getHorizontalPosition(index)} w-60 bg-main-gradient text-white p-2 rounded-md shadow-lg z-10`}
+                    >
+                      <p className="text-base">{item.description}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+          </div>
+
+          {/* Display the description box next to the selected personality type */}
+          {PersonalityTypes[formData.selectedType] && (
+            <div
+              className="ml-5 flex-1 bg-main-gradient h-fit text-primary-dark p-4 rounded-lg shadow-2xl z-20"
+              style={{ boxShadow: "0 4px 20px purple" }} // Add elevation effect
+            >
+              <p className="text-lg">{PersonalityTypes[formData.selectedType].description}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

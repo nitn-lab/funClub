@@ -8,14 +8,14 @@ const Login = () => {
  
   
   return (
-    <div className="relative h-screen w-screen">
+    <div className="relative h-screen w-screen xs:h-[93vh]">
       <img
         src="https://images.pond5.com/pink-neon-heart-sign-reflection-footage-167595258_iconl.jpeg"
         className="w-full h-full object-cover bg-no-repeat"
       />
       <div className="absolute top-0 xs:p-3 p-20 w-full h-full">
         <div className="flex backdrop-blur-lg rounded-lg bg-black/10
-        dark:bg-white/10 h-full xs:h-[75%] xs:mt-20">
+        dark:bg-white/10 h-full xs:h-[70%]  xs:mt-20">
           <div className="flex items-center justify-center w-1/2 md:w-full h-full ">
             <LoginForm />
           </div>

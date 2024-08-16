@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/FUNCLUB logo.png";
 import userData from "./mock-data.json";
 import ChatScreen from "./ChatScreen";
-import 'react-responsive-modal/styles.css';
+import "react-responsive-modal/styles.css";
 import { useNavigate } from "react-router-dom";
 import Popup from "./Popup";
 
-
-const Chats = () => {
+const Chats = ({ showChatScreen, shouldNavigate }) => {
   const navigate = useNavigate();
   const [receiver, setReceiver] = useState();
   const [users, setUsers] = useState([]);
@@ -15,26 +14,31 @@ const Chats = () => {
 
   const handlePopup = () => {
     setOpen(!open);
-  }
+  };
   useEffect(() => {
     setUsers(userData);
   }, []);
 
   const handleWindow = (user) => {
     localStorage.setItem("receiver", JSON.stringify(user));
+    if(shouldNavigate){
+      navigate('/dashboard/chats')
+    }
     if (window.innerWidth < 768) {
       navigate(`/dashboard/chat/${user._id}`);
     }
   };
 
+  
+
   return (
     <>
       <div className="flex">
-      <div className="sm:hidden w-full">
+       {showChatScreen ? <div className="sm:hidden w-full bg-main-gradient">
           <ChatScreen />
-        </div>
+        </div> : <div className="sm:hidden w-full"></div>}
         <div
-          className="chats w-[350px] bg-gradient-to-tl from-violet-500 to-pink-500  h-[96vh] rounded-md 
+          className="chats scrollable-div w-[350px] bg-gradient-to-tl from-violet-500 to-pink-500  h-[96vh] rounded-md 
            text-white sm:w-full pb-2 overflow-y-auto"
           id="user-list"
         >
@@ -75,10 +79,8 @@ const Chats = () => {
               );
             })}
         </div>
-
-        
       </div>
-      <Popup open={open} handlePopup={handlePopup} logo={logo}/>
+      <Popup open={open} handlePopup={handlePopup} logo={logo} />
     </>
   );
 };

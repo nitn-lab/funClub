@@ -4,7 +4,7 @@ import logo from "../../assets/images/FUNCLUB logo.png";
 
 const ForgetPassword = () => {
   return (
-    <div className="relative h-screen w-screen">
+    <div className="relative h-screen w-screen xs:h-[93vh]">
       <img
         src="https://images.pond5.com/pink-neon-heart-sign-reflection-footage-167595258_iconl.jpeg"
         className="w-full h-full object-cover bg-no-repeat"
