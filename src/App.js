@@ -8,6 +8,8 @@ import Chats from './screens/SidebarComponents/chatScreen/Chats';
 import ChatScreen from './screens/SidebarComponents/chatScreen/ChatScreen';
 import Nearby from './screens/SidebarComponents/NearbyComponent/Nearby';
 import Feeds from './screens/SidebarComponents/Feeds';
+import Live from './screens/SidebarComponents/Live';
+import Profile from './screens/SidebarComponents/Profile';
 import ForgetPassword from './screens/Auth/ForgetPassword';
 import MainLayout from './screens/Auth/MainLayout';
 import VideoCall from './screens/SidebarComponents/chatScreen/VideoCall'
@@ -51,6 +53,14 @@ const router = createBrowserRouter([
       {
         path: "feeds",
         element: <Feeds />,
+      },
+      {
+        path: "live",
+        element: <Live />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
       },
     ],
   },

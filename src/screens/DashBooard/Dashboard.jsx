@@ -5,8 +5,7 @@ import VideoData from "./Videos.json";
 import UserInfo from './RightSidebar/UserInfo';
 import Suggestions from "./RightSidebar/Suggestions";
 import CallerProfile from "./RightSidebar/CallerProfile";
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import Chats from "../SidebarComponents/chatScreen/Chats"; 
 
 const Dashboard = () => {
@@ -63,11 +62,9 @@ const Dashboard = () => {
       {/* Right Sidebar */}
       <div className={`relative w-[250px] h-[96vh] bg-black rounded-lg md:hidden p-2 transition-opacity duration-500 ease-in-out`}>
         {/* Chat Icon */}
-        {isChatOpen ? (
-          <ExpandMoreIcon onClick={toggleChat} className="absolute z-10 text-black bottom-4 right-5 cursor-pointer p-1 bg-white rounded-full" style={{fontSize : "2rem"}}/>
-        ) :  (
-          <ExpandLessIcon onClick={toggleChat} className="absolute z-20 text-black bottom-4 right-5 cursor-pointer p-1 bg-white rounded-full" style={{fontSize : "2rem"}}/>
-        )}
+        
+          <ChatBubbleIcon onClick={toggleChat} className="absolute z-10 text-black bottom-4 right-5 cursor-pointer p-1 bg-white rounded-full" style={{fontSize : "2.5rem"}}/>
+       
 
         {selectedCaller ? (
           <CallerProfile caller={selectedCaller} onClose={handleCloseCallerProfile} />

@@ -39,7 +39,7 @@ const ChatScreen = () => {
     <>
       {receiver ? (
         <div className="chat-screen w-full">
-          <div className="header bg-gradient-to-tl from-violet-500 to-pink-500 text-white px-10 py-3.5 xs:px-5">
+          <div className="header bg-gradient-to-tl from-violet-500 to-pink-500 text-white px-10 py-2.5 xs:px-5">
             <div className="flex justify-between items-center">
               <div className="flex gap-5 items-center xs:gap-3">
                 <div>
@@ -50,7 +50,7 @@ const ChatScreen = () => {
                         : receiver.profile_url
                     }
                     alt="user"
-                    className="rounded-full h-14 w-14 xs:h-12 xs:w-12  object-cover "
+                    className="rounded-full h-12 w-12 xs:h-12 xs:w-12  object-cover "
                   />
                 </div>
                 <div>
@@ -70,7 +70,7 @@ const ChatScreen = () => {
               </div>
             </div>
           </div>
-          <ReactScrollToBottom className="chat-body xs:bg-gradient-to-tr from-violet-500 to-pink-500  px-6 xs:px-3 h-[70vh]">
+          <ReactScrollToBottom className="chat-body xs:bg-gradient-to-tr from-violet-500 to-pink-500  px-6 xs:px-3 h-[calc(100vh-35vh)]">
             <div>
               {messages.map((content, key) => {
                 return (

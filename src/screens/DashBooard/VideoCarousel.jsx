@@ -24,7 +24,7 @@ const VideoCarousel = ({ videos, onSlideChange }) => {
           bottom: '30px',
           left: '50%',
           transform: 'translateX(-50%)',
-          zIndex: 10,
+          
         }}
       >
         <ul style={{ margin: 0, padding: 0, display: 'flex', listStyleType: 'none', justifyContent: "center" }}>
@@ -98,7 +98,7 @@ const VideoCarousel = ({ videos, onSlideChange }) => {
         <ArrowBackIosNewIcon />
       </button>
       <button
-        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white p-2 rounded-full shadow-md z-20 hover:scale-125"
+        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white p-2 rounded-full shadow-md  hover:scale-125"
         onClick={handleNext}
       >
         <ArrowForwardIosIcon />

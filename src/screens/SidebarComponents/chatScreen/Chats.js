@@ -5,12 +5,14 @@ import ChatScreen from "./ChatScreen";
 import "react-responsive-modal/styles.css";
 import { useNavigate } from "react-router-dom";
 import Popup from "./Popup";
+import CloseIcon from "@mui/icons-material/Close";
 
-const Chats = ({ showChatScreen, shouldNavigate }) => {
+const Chats = ({ showChatScreen }) => {
   const navigate = useNavigate();
   const [receiver, setReceiver] = useState();
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
+  const [chatScreen, setChatScreen] = useState(false);
 
   const handlePopup = () => {
     setOpen(!open);
@@ -21,30 +23,38 @@ const Chats = ({ showChatScreen, shouldNavigate }) => {
 
   const handleWindow = (user) => {
     localStorage.setItem("receiver", JSON.stringify(user));
-    if(shouldNavigate){
-      navigate('/dashboard/chats')
-    }
+    setChatScreen(true);
     if (window.innerWidth < 768) {
       navigate(`/dashboard/chat/${user._id}`);
     }
   };
 
-  
-
   return (
     <>
-      <div className="flex">
-       {showChatScreen ? <div className="sm:hidden w-full bg-main-gradient">
-          <ChatScreen />
-        </div> : <div className="sm:hidden w-full"></div>}
+      <div className="flex items-start rounded-md">
+        {!showChatScreen && chatScreen && (
+          <button
+            className="text-white bg-main-gradient text-sm rounded-full p-1 mr-2"
+            onClick={() => setChatScreen(false)}
+          >
+            <CloseIcon />
+          </button>
+        )}
+        {chatScreen ? (
+          <div className="sm:hidden w-full bg-main-gradient z-50 border-r-2 border-gray-400">
+            <ChatScreen />
+          </div>
+        ) : (
+          <div className="sm:hidden w-full"></div>
+        )}
         <div
-          className="chats scrollable-div w-[350px] bg-gradient-to-tl from-violet-500 to-pink-500  h-[96vh] rounded-md 
+          className="chats scrollable-div w-[350px] bg-gradient-to-tl from-violet-500 to-pink-500  h-[96vh]
            text-white sm:w-full pb-2 overflow-y-auto"
           id="user-list"
         >
-          <div className="flex gap-2 items-center p-4 bg-[#9759e9]">
+          <div className="flex gap-2 items-center px-4 py-2.5 bg-[#9759e9]">
             <img src={logo} alt="FunClub" className="w-12 " />
-            <h2 className="text-xl font-semibold italic">FUNCLUB</h2>
+            <h2 className="text-xl font-semibold italic">CHATS</h2>
           </div>
 
           {users &&

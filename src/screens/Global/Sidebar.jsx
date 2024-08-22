@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
@@ -18,6 +17,9 @@ import SecurityIcon from '@mui/icons-material/Security';
 import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import home from '../Global/icons/home-button.png'
+import live from '../Global/icons/live-tv.png'
+import nearby from '../Global/icons/nearby.png'
 
 
 function Sidebarr(props) {
@@ -114,7 +116,7 @@ function Sidebarr(props) {
             }}
           >
             <MenuItem component={<NavLink to="/dashboard" end/>} icon={<Box component="img" src={home} alt={home}/>}> Home </MenuItem>
-            <MenuItem icon={<Box component="img" src={live} alt={live}/>}> Live </MenuItem>
+            <MenuItem component={<NavLink to="/dashboard/live" end/>} icon={<Box component="img" src={live} alt={live}/>}> Live </MenuItem>
             <MenuItem component={<NavLink to="/dashboard/nearby" end/>} icon={<Box component="img" src={nearby} alt={nearby}/>}> Nearby </MenuItem>
             <MenuItem component={<NavLink to="/dashboard/feeds" end/> } icon={<GridViewRoundedIcon />}> Feeds </MenuItem>
             <MenuItem icon={<LightbulbIcon />}> Suggestion </MenuItem>
@@ -123,7 +125,7 @@ function Sidebarr(props) {
             </MenuItem>
             <MenuItem icon={<PaidIcon />}> Subscription details </MenuItem>
             <MenuItem icon={<CollectionsIcon />}> Collections </MenuItem>
-            <MenuItem icon={<AccountCircleIcon />}> My Profile </MenuItem>
+            <MenuItem component={<NavLink to="/dashboard/profile" end/> } icon={<AccountCircleIcon />}> My Profile </MenuItem>
             <MenuItem icon={<SecurityIcon />}> Platform Privacy Policy </MenuItem>
             <MenuItem icon={<AssignmentIcon />}> Terms & Condition </MenuItem>
             <MenuItem icon={<SettingsIcon />}> Settings </MenuItem>
