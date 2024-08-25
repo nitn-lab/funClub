@@ -10,9 +10,9 @@ const Live = () => {
   const renderContent = () => {
     if (activeTab === "popular") {
       return (
-        <div className="grid grid-cols-3 gap-4 w-[60rem]">
+        <div className="grid grid-cols-2 xs:grid-cols-1 gap-4 xs:gap-2 w-[calc(100vw-25vw)] mx-auto">
           {/* First User: Live Ended Overlay */}
-          <div className="relative p-4 rounded-md bg-black">
+          <div className="relative p-4 xs:p-2 rounded-md bg-black">
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#292929] bg-opacity-70 text-white rounded-md">
               
               <p className="text-xl">Live Ended</p>
@@ -33,7 +33,7 @@ const Live = () => {
           </div>
 
           {/* Second User: Join Live Button */}
-          <div className="relative p-4 rounded-md bg-black">
+          <div className="relative p-4 xs:p-2 rounded-md bg-black">
             <div className="absolute inset-0 flex items-center justify-center  bg-[#292929] bg-opacity-70 text-white rounded-md">
               <button className="bg-main-gradient text-white px-4 py-2 rounded-full ">
                Join Live
@@ -57,7 +57,7 @@ const Live = () => {
       );
     } else {
       return (
-        <div className="flex flex-col items-center justify-center h-[80vh] text-white">
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-23vh)] text-white">
           <FaTowerBroadcast className="text-4xl mb-4 animate-ping" />
           <p className="text-xl">Nobody is live near you</p>
         </div>
@@ -66,30 +66,30 @@ const Live = () => {
   };
 
   return (
-    <div className="p-4 scrollable-div overflow-y-auto">
+    <div className="p-4 xs:p-2 scrollable-div overflow-y-auto">
       {/* Tabs and Go Live Button */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex gap-x-3">
+        <div className="flex gap-x-3 xs:gap-x-1">
           <button
-            className={`px-4 py-2 rounded-md flex gap-x-2 items-center ${activeTab === "popular" ? "bg-white text-black" : "bg-black text-white"}`}
+            className={`px-4 xs:px-1 py-2 xs:py-1 rounded-md flex gap-x-2 xs:gap-x-0.5 items-center ${activeTab === "popular" ? "bg-white text-black" : "bg-black text-white"}`}
             onClick={() => setActiveTab("popular")}
           >
             <MdStar /> Popular Streams
           </button>
           <button
-            className={`px-4 py-2 rounded-md flex gap-x-2 items-center ${activeTab === "nearby" ? "bg-white text-black" : "bg-black text-white"}`}
+            className={`px-4 xs:px-1 py-2 xs:py-1 rounded-md flex gap-x-2 xs:gap-x-0.5 items-center ${activeTab === "popular" ? "bg-black text-white" : "bg-white text-black"}`}
             onClick={() => setActiveTab("nearby")}
           >
             <FaUserAlt /> Near You
           </button>
         </div>
-        <button className="bg-black text-white px-4 py-2 rounded-md flex gap-x-2 items-center">
-          <CiStreamOn className='text-xl'/> Go Live
+        <button className="bg-black text-white px-4 xs:px-1 xs:py-1 py-2 rounded-md flex gap-x-2 xs:gap-x-0.5 items-center">
+          <CiStreamOn className='text-xl xs:text-lg'/> Go Live
         </button>
       </div>
 
       {/* Content */}
-      <div className="p-4 rounded-md">
+      <div className="p-4 xs:p-2 rounded-md">
         {renderContent()}
       </div>
     </div>

@@ -89,7 +89,7 @@ const Callers = ({ onCallerSelect }) => {
           </div>
           <div className="absolute bottom-2 right-2 flex items-center bg-lime-500 text-white p-2.5 rounded-full  "></div>
           <div className="h-[50%] w-[100%] absolute right-0 -bottom-[100%] bg-[#1f3d4738] opacity-100 backdrop-blur-sm rounded-md group-hover:bottom-0 duration-700 flex flex-col items-center justify-center">
-            <div className="flex items-center gap-x-3">
+            <div className="flex items-center gap-x-3 xs:gap-x-1">
               <div className=" bg-main-gradient text-white rounded-full px-2 py-1">
                 <ForumIcon style={{ fontSize: "1.25rem" }} />
               </div>

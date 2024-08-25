@@ -52,44 +52,44 @@ const Feeds = () => {
   return (
     <div>
       {/* Tabs */}
-      <div className="flex justify-around mx-auto w-[calc(100vw-30vw)] md:w-[100vw] rounded-md mb-3 mt-1 bg-black text-white py-3">
+      <div className="flex justify-around mx-auto w-[calc(100vw-30vw)] md:w-[100vw] rounded-md xs:rounded-none mb-3 mt-1 bg-black text-white py-3 xs:py-2">
         <button
           className={`${
             activeTab === "all" ? "border-b-2 border-white" : ""
-          } text-lg px-4 py-2  flex items-center gap-x-2`}
+          } text-lg px-4 xs:px-2 py-2  flex items-center gap-x-2 xs:gap-x-0`}
           onClick={() => setActiveTab("all")}
         >
-          <HomeIcon /> All
+          <HomeIcon className="xs:hidden"/> All
         </button>
         <button
           className={`${
             activeTab === "liked" ? "border-b-2 border-white" : ""
-          } text-lg px-4 py-2 gap-x-2 flex items-center`}
+          } text-lg px-4 xs:px-2 py-2 gap-x-2 flex items-center xs:gap-x-0`}
           onClick={() => setActiveTab("liked")}
         >
-          <FavoriteIcon /> Liked
+          <FavoriteIcon className="xs:hidden"/> Liked
         </button>
         <button
           className={`${
             activeTab === "saved" ? "border-b-2 border-white" : ""
-          } text-lg px-4 py-2 gap-x-2 flex items-center`}
+          } text-lg px-4 xs:px-2 py-2 gap-x-2 xs:gap-x-0 flex items-center`}
           onClick={() => setActiveTab("saved")}
         >
-          <BookmarkIcon /> Saved
+          <BookmarkIcon className="xs:hidden"/> Saved
         </button>
         <button
           className={`${
             activeTab === "purchased" ? "border-b-2 border-white" : ""
-          } text-lg px-4 py-2 gap-x-2 flex items-center`}
+          } text-lg px-4 xs:px-2 py-2 gap-x-2 xs:gap-x-0 flex items-center`}
           onClick={() => setActiveTab("purchased")}
         >
-          <ShoppingCartIcon /> Purchased
+          <ShoppingCartIcon className="xs:hidden"/> Purchased
         </button>
       </div>
 
       {/* Feeds Content */}
       <div
-        className="scrollable-div text-white overflow-y-auto mx-auto h-[calc(100vh-18vh)] md:h-[77vh] grid grid-cols-2 gap-x-10 w-[calc(100vw-30vw)] md:w-[98vw]"
+        className="scrollable-div text-white overflow-y-auto mx-auto h-[calc(100vh-18vh)] md:h-[77vh] grid grid-cols-2 xs:gridcols-1 gap-x-10 w-[calc(100vw-30vw)] md:w-[98vw]"
       >
         {renderContent() &&
           renderContent().length > 0 &&

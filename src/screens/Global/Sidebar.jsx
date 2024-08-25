@@ -119,7 +119,7 @@ function Sidebarr(props) {
             <MenuItem component={<NavLink to="/dashboard/live" end/>} icon={<Box component="img" src={live} alt={live}/>}> Live </MenuItem>
             <MenuItem component={<NavLink to="/dashboard/nearby" end/>} icon={<Box component="img" src={nearby} alt={nearby}/>}> Nearby </MenuItem>
             <MenuItem component={<NavLink to="/dashboard/feeds" end/> } icon={<GridViewRoundedIcon />}> Feeds </MenuItem>
-            <MenuItem icon={<LightbulbIcon />}> Suggestion </MenuItem>
+            <MenuItem component={<NavLink to="/dashboard/suggestions" end/> } icon={<LightbulbIcon />}> Suggestions </MenuItem>
             <MenuItem component={<NavLink to="/dashboard/chats" end/> } icon={<QuestionAnswerIcon />}>
               Chats <span className="bg-main-gradient text-sm rounded-full px-1 py-0.5 ml-3">11</span>
             </MenuItem>

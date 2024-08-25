@@ -25,11 +25,16 @@ const Profile = () => {
   });
   const [albums, setAlbums] = useState([]);
 
-  const handlePictureChange = (e) => {
+  const handlePictureChange = (e, type) => {
     const file = e.target.files[0];
-    if (file) {
-      const newAlbum = URL.createObjectURL(file);
-      setAlbums([...albums, newAlbum]);
+    if (file) { 
+      const imageUrl = URL.createObjectURL(file);
+      if(type === "profile"){
+        setProfilePicture(imageUrl);
+      }
+      else if(type === "album"){
+        setAlbums([...albums, imageUrl]);
+      }
     }
   };
 
@@ -37,6 +42,10 @@ const Profile = () => {
     setProfilePicture(null);
     setUsername("User");
   };
+
+  const handleRemovePicture = ()=> {
+    setProfilePicture(null);
+  }
 
   const toggleEdit = (section) => {
     setIsEditing((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -60,23 +69,26 @@ const Profile = () => {
   return (
     <div className="flex flex-col items-center w-[calc(100vw-30vw)] md:w-[98vw] mx-auto">
       {/* Header Section */}
-      <div className="flex justify-between items-center w-full px-5 py-3 bg-black rounded-lg text-white">
+      <div className="flex justify-between items-center w-full px-5 xs:px-3 py-3 bg-black rounded-lg text-white">
         <div className="relative flex items-center gap-x-3">
           <div className="relative">
             {profilePicture ? (
-              <img
+             <div className="relative">
+             <img
                 src={profilePicture}
                 alt="Profile"
                 className="w-14 h-14 rounded-full p-1.5 border-2 border-[#09d271]"
               />
+              <button onClick={handleRemovePicture} className="absolute -top-3 left-0 text-white text-3xl">&times;</button>
+             </div>
             ) : (
               <AccountCircleIcon
                 style={{ fontSize: "3.5rem" }}
-                className="rounded-full text-white"
+                className="rounded-full bg-main-gradient"
               />
             )}
             {/* Plus Icon */}
-            <span className="absolute bottom-0 right-0 bg-main-gradient text-white rounded-full p-0.5 cursor-pointer">
+            <span className="absolute bottom-1 -right-1.5  text-white  cursor-pointer">
               <AddAPhotoIcon
                 fontSize="small"
                 onClick={() => document.getElementById("fileInput").click()}
@@ -87,7 +99,7 @@ const Profile = () => {
               type="file"
               id="fileInput"
               className="hidden"
-              onChange={handlePictureChange}
+              onChange={(e) => handlePictureChange(e, "profile")}
             />
           </div>
           <div>
@@ -109,9 +121,9 @@ const Profile = () => {
       </div>
 
       {/* Main Content Section */}
-      <div className="flex w-full mt-4 mx-auto rounded-md">
+      <div className="flex xs:block w-full mt-4 mx-auto rounded-md">
         {/* Left Sidebar */}
-        <div className="w-3/4 p-6 bg-black text-white shadow scrollable-div overflow-y-auto h-[calc(100vh-20vh)]">
+        <div className="w-3/4 p-6 xs:p-3 bg-black text-white shadow scrollable-div overflow-y-auto h-[calc(100vh-20vh)]">
           {/* About Section */}
           <div>
             <div className="flex items-center justify-between mb-2">
@@ -134,7 +146,7 @@ const Profile = () => {
           {/* Highlighted Stories Section */}
           <div className="my-6">
             <h3 className="text-lg font-semibold">Highlighted stories</h3>
-            <div className="mt-4 grid grid-cols-6 md:grid-cols-4 gap-4">
+            <div className="mt-4 grid grid-cols-5 md:grid-cols-3 gap-6">
               {albums.map((album, index) => (
                 <div
                   key={index}
@@ -157,7 +169,7 @@ const Profile = () => {
                   type="file"
                   id="albumInput"
                   className="hidden"
-                  onChange={handlePictureChange}
+                  onChange={(e) => handlePictureChange(e, "album")}
                 />
               </div>
             </div>
@@ -226,7 +238,7 @@ const Profile = () => {
         </div>
 
         {/* Right Sidebar */}
-        <div className="w-1/4 p-4 text-white bg-black border-l-2 border-gray-600 pr-3 shadow">
+        <div className="w-1/4 p-4 text-white bg-black border-l-2 border-gray-600 pr-3 shadow xs:flex">
           <div className="mb-6">
                <PaidIcon className="text-yellow-400 ml-3" style={{fontSize: "3rem"}}/>
                 <p className="text-base my-2">200 Credits</p>

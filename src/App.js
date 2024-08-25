@@ -9,6 +9,7 @@ import ChatScreen from './screens/SidebarComponents/chatScreen/ChatScreen';
 import Nearby from './screens/SidebarComponents/NearbyComponent/Nearby';
 import Feeds from './screens/SidebarComponents/Feeds';
 import Live from './screens/SidebarComponents/Live';
+import Suggestions from "./screens/SidebarComponents/Suggestions";
 import Profile from './screens/SidebarComponents/Profile';
 import ForgetPassword from './screens/Auth/ForgetPassword';
 import MainLayout from './screens/Auth/MainLayout';
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "suggestions",
+        element: <Suggestions />,
       },
     ],
   },
