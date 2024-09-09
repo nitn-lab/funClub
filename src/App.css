@@ -81,3 +81,19 @@
 .animate-bubble {
   animation: bubble 2s ease-in-out infinite alternate;
 }
+
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100px); /* Start below */
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0); /* End at normal position */
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.8s ease-in-out both; /* Apply the animation */
+}

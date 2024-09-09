@@ -13,7 +13,7 @@ import Suggestions from "./screens/SidebarComponents/Suggestions";
 import Profile from './screens/SidebarComponents/Profile';
 import ForgetPassword from './screens/Auth/ForgetPassword';
 import MainLayout from './screens/Auth/MainLayout';
-import VideoCall from './screens/SidebarComponents/chatScreen/VideoCall'
+
 
 const router = createBrowserRouter([
   {
@@ -68,11 +68,6 @@ const router = createBrowserRouter([
         element: <Suggestions />,
       },
     ],
-  },
-  {
-    path: "/room/:roomId",
-    element: <VideoCall />,
-    errorElement: <NotFound />,
   }
 ]);
 

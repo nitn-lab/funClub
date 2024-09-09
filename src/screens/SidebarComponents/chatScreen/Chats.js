@@ -23,6 +23,7 @@ const Chats = ({ showChatScreen }) => {
 
   const handleWindow = (user) => {
     localStorage.setItem("receiver", JSON.stringify(user));
+   
     setChatScreen(true);
     if (window.innerWidth < 768) {
       navigate(`/dashboard/chat/${user._id}`);

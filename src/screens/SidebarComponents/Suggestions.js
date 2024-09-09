@@ -45,9 +45,7 @@ const Suggestions = () => {
       <div className="flex justify-end mx-6 xs:mx-1 gap-x-2 mb-3">
         <button
           className={`px-3 rounded-md ${
-            filter === "all"
-              ? "bg-violet-500 text-white"
-              : "bg-white text-black"
+            filter === "all" ? "bg-violet-500 text-white" : "bg-white text-black"
           }`}
           onClick={() => setFilter("all")}
         >
@@ -76,33 +74,22 @@ const Suggestions = () => {
       </div>
 
       {/* Nearby Users Grid */}
-      <div className="scrollable-div grid grid-cols-4 sm:grid-cols-2 mx-6 xs:mx-1 my-1 gap-2 xs:gap-1.5 items-center h-[91vh] md:h-[87vh] overflow-auto xs:mt-3">
+      <div className="scrollable-div grid grid-cols-5 gap-4 mx-6 xs:mx-1 my-1 items-center h-[91vh] overflow-auto xs:mt-3">
         {filteredNearby.map((item, index) => (
-          <div
+           <div className="relative">
+           <div
             key={item._id}
-            className={`relative h-64 xs:h-44 cursor-pointer overflow-hidden group rounded-full animate-bubble ${
-              index % 2 === 0 ? "mt-0" : "mt-20"
-            }`} // Adjust the margin based on the index for staggered alignment
+            className={`relative h-56 w-56 xs:h-44 xs:w-44 cursor-pointer overflow-hidden group rounded-full animate-bubble slide-up`} // Added slide-up class
+            style={{ animationDelay: `${index * 0.1}s` }} // Staggered animation
           >
-            <img
-              src={item.profile_url}
-              className="h-full w-full object-cover  rounded-full"
-              alt={item.firstname}
-            />
-            {/* Online/Offline Status Indicator */}
-            <div
-              className={`absolute bottom-10 right-14 w-4 h-4 rounded-full border-2 ${
-                item.isOnline
-                  ? "bg-lime-500 border-lime-500"
-                  : "bg-red-500 border-red-500"
-              }`}
-            />
-            <div
-              className="absolute top-6 xs:top-1 left-16 xs:left-1 flex items-center bg-main-gradient text-white rounded-md px-2 py-1 cursor-pointer"
+          <div
+              className="absolute top-4 left-14 transform -translate-y-1/2 bg-main-gradient text-white rounded-md px-1 cursor-pointer slide-up flex items-center"
+              style={{ animationDelay: `${index * 0.1}s` }}
               onClick={(e) => {
-                e.stopPropagation(); // Prevent triggering the main caller click
-                toggleFollow(item._id); // Toggle follow status
+                e.stopPropagation(); 
+                toggleFollow(item._id); 
               }}
+             
             >
               {item.isFollowing ? (
                 <DoneAllIcon style={{ fontSize: "1rem" }} />
@@ -113,7 +100,20 @@ const Suggestions = () => {
                 {item.isFollowing ? "Following" : "Follow"}
               </span>
             </div>
-
+            <img
+              src={item.profile_url}
+              className="h-full w-full object-cover rounded-full"
+              alt={item.firstname}
+            />
+            {/* Online/Offline Status Indicator */}
+            <div
+              className={`absolute bottom-10 right-10 w-4 h-4 rounded-full border-2 ${
+                item.isOnline
+                  ? "bg-lime-500 border-lime-500"
+                  : "bg-red-500 border-red-500"
+              }`}
+            />
+           
             <div className="h-[50%] w-[100%] absolute right-0 -bottom-[100%] bg-[#1f3d4738] opacity-100 backdrop-blur-sm group-hover:bottom-0 duration-700 flex flex-col items-center justify-center">
               <div className="flex items-center gap-x-3">
                 <div className="bg-main-gradient text-white rounded-full px-2 py-1">
@@ -128,6 +128,9 @@ const Suggestions = () => {
               </div>
             </div>
           </div>
+          
+
+           </div>
         ))}
       </div>
     </>
