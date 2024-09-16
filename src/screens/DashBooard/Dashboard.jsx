@@ -1,79 +1,97 @@
-import React, { useState, Component, useEffect } from "react";
-import DashboardMidSection from "./DashboardMidSection";
-import { Box } from "@mui/material";
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
-import Sidebarr from "../Global/Sidebar";
-import Grid from "@mui/material/Grid";
-import Chats from "../../chatScreen/Chats";
-import CallerData from "./RecentCallsData.json";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import React, { useState, useEffect } from "react";
+import VideoCarousel from "./VideoCarousel";
+import Callers from "./Callers";
+import VideoData from "./Videos.json";
+import UserInfo from './RightSidebar/UserInfo';
+import Suggestions from "./RightSidebar/Suggestions";
+import CallerProfile from "./RightSidebar/CallerProfile";
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import Chats from "../SidebarComponents/chatScreen/Chats"; 
 
 const Dashboard = () => {
-  const [dataFromChlid, setDataFromChild] = useState("");
-  const [callers, setCallers] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [videos, setVideos] = useState([]);
+  const [selectedCaller, setSelectedCaller] = useState(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatClosing, setIsChatClosing] = useState(false); // State to handle chat closing transition
 
   useEffect(() => {
-    setCallers(CallerData);
+    setVideos(VideoData);
   }, []);
 
-  const handleData = (data) => {
-    setDataFromChild(data);
+  const handleSlideChange = (newSlide) => {
+    setCurrentSlide(newSlide);
   };
-  return (
-   <div >
-   <button onClick={() => setOpen(true)} className={` ${open ? "hidden" : "block"}`}>
-        
-        <ArrowCircleRightIcon style={{ fontSize: "1.5rem"}} />
-      </button>
-     <div className="w-full flex items-start">
-      
 
-      <div
-        className={`absolute z-20 items-start gap-3 flex transition-transform duration-300 ${
-          open ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <Sidebarr sendData={handleData} />
-        <button onClick={() => setOpen(false)}>
-          <ArrowCircleLeftIcon style={{ fontSize: "1.5rem" }} />
-        </button>
+  const handleCallerSelect = (caller) => {
+    setSelectedCaller(caller);
+  };
+
+  const handleCloseCallerProfile = () => {
+    setSelectedCaller(null);
+  };
+
+  const toggleChat = () => {
+    if (isChatOpen) {
+      setIsChatClosing(true);
+      setTimeout(() => {
+        setIsChatOpen(false);
+        setIsChatClosing(false);
+      }, 500); // Match this duration with the transition duration
+    } else {
+      setIsChatOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    // Toggle body scroll when chat is open
+    document.body.style.overflow = isChatOpen ? 'hidden' : 'auto';
+  }, [isChatOpen]);
+
+  return (
+    <div className="w-full flex justify-between items-start md:justify-normal md:gap-x-2 md:block">
+      <div className="relative w-[calc(100vw-540px)] md:w-[100vw] h-[96vh] md:h-[87vh] mx-auto">
+        <div>
+          <VideoCarousel videos={videos} onSlideChange={handleSlideChange} />
+        </div>
+        <div>
+          <Callers onCallerSelect={handleCallerSelect} />
+        </div>
       </div>
 
-      {dataFromChlid === "" ? (
-        <div className={` relative h-full ml-10 xs:ml-0 ${open ? "pt-7" : ""}`}>
-          <div>
-            <DashboardMidSection />
+      {/* Right Sidebar */}
+      <div className={`relative w-[250px] h-[96vh] bg-black rounded-lg md:hidden p-2 transition-opacity duration-500 ease-in-out`}>
+        {/* Chat Icon */}
+        
+          <ChatBubbleIcon onClick={toggleChat} className="absolute z-10 text-black bottom-4 right-5 cursor-pointer p-1 bg-white rounded-full" style={{fontSize : "2.5rem"}}/>
+       
+
+        {selectedCaller ? (
+          <CallerProfile caller={selectedCaller} onClose={handleCloseCallerProfile} />
+        ) : (
+          <>
+            {videos.length > 0 && (
+              <>
+                <UserInfo
+                  username={videos[currentSlide].username}
+                  profileImage={videos[currentSlide].profileImage}
+                />
+                <Suggestions />
+              </>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Chat Component */}
+      <div className={`fixed bottom-0 right-4 md:hidden w-[710px] h-[calc(100vh-15vh)] rounded-t-lg transition-transform duration-500 ease-in-out ${isChatOpen ? (isChatClosing ? 'translate-y-full' : 'translate-y-0') : 'translate-y-full'} `}>
+        {(isChatOpen || isChatClosing) && (
+          <div className="h-full ">
+            <Chats showChatScreen={false} shouldNavigate={true}/>
           </div>
-          <div className="flex xs:w-screen justify-center gap-x-5 sm:gap-x-3  mt-6 items-center">
-            {callers &&
-              callers.length > 0 &&
-              callers.map((caller) => {
-                return (
-                  <div className="caller-profile rounded-full  h-40 w-40 cursor-pointer relative overflow-hidden group">
-                    <img
-                      src={caller.profile_url}
-                      className="h-full w-full object-cover rounded-full"
-                    />
-                    <div className="h-[100%] w-[100%] absolute top-0 -right-[100%] bg-[#1f3d4738] opacity-100 backdrop-blur-sm rounded-full group-hover:right-0 duration-700 flex items-center justify-center">
-                      <h2 className="text-white text-lg font-base tracking-wide xs:text-base">
-                        {caller.firstname}
-                      </h2>
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-        </div>
-      ) : (
-        <div style={{ width: "100%" }} className="relative">
-          {dataFromChlid === "chats" && <Chats />}
-        </div>
-      )}
+        )}
+      </div>
     </div>
-   </div>
   );
 };
 

@@ -1,61 +1,56 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+
 export default function LoginForm() {
   const navigate = useNavigate();
   return (
-    // rounded-3xl
-    <div className="w-full h-full  text-white px-10 xxs:px-4 py-10">
-      <h1 className="text-5xl font-semibold">Welcome Back</h1>
-      <p className="font-medium text-lg mt-4">
-        Welcome back! please enter your details
+    <div className="w-full h-full text-primary-light dark:text-primary-dark px-6 xs:px-3 py-6 ">
+      <h1 className="text-4xl font-semibold text-center">Welcome Back</h1>
+      <p className="font-medium text-lg md:text-md mt-4 text-center">
+        Welcome back! Please enter your details
       </p>
-      <div className="mt-8 ">
+      <div className="mt-8 md:mt-6">
         <div>
-          <label className="text-lg font-medium">Email</label>
           <input
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter your email"
+            className="w-full border-2 rounded-lg p-2.5 mt-1  placeholder-black bg-white text-black"
+            placeholder="Email"
           />
         </div>
-        <div className="mt-8 ">
-          <label className="text-lg font-medium">Password</label>
+        <div className="mt-5 md:mt-3">
+          
           <input
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter your password"
+            className="w-full border-2 rounded-lg p-2.5 mt-1  placeholder-black bg-white text-black"
+            placeholder="Password"
             type="password"
           />
         </div>
-        <div className="mt-8 flex justify-between items-center">
+        <div className="mt-5 flex justify-between items-center">
           <div>
-            <input type="checkbox" id="remenber" />
-            <label className="ml-2 font-medium text-base" for="remember">
+            <input type="checkbox" id="remember" className="bg-white"/>
+            <label className="ml-2 font-medium text-base md:text-sm" htmlFor="remember">
               Remember for now
             </label>
           </div>
-          <button className="font-medium text-base text-violet" onClick = {() => {navigate('/forget-password')}}>
+          <button
+            className="font-medium text-base md:text-sm text-violet-500"
+            onClick={() => { navigate('/forget-password'); }}
+          >
             Forget Password?
           </button>
         </div>
-        <div className="mt-8 flex flex-col gap-y-4">
+        <div className="mt-5  flex flex-col gap-y-4">
           <button
-            onClick={() => {
-              navigate("/Dashboard");
-            }}
-            className="active:scale-[.98] acitve:duration-75 hover:scale-[1.01] ease-in-out transition-all py-3 rounded-xl bg-gradient-to-tr from-violet-500 to-pink-500 text-white text-lg font-bold"
+            onClick={() => { navigate("/Dashboard"); }}
+            className="active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 rounded-xl bg-main-gradient  text-md font-bold text-primary-dark"
           >
             Sign In
           </button>
-          {/* <button className="flex rounded-xl py-3 border-2 border-gray-100 items-center justify-center gap-2 active:scale-[.98] acitve:duration-75 hover:scale-[1.01] ease-in-out transition-all">
-            Sign Up
-          </button> */}
         </div>
         <div className="mt-5 flex justify-center items-center">
-          <p className="font-medium text-base">Don't have an account?</p>
+          <p className="font-medium text-base md:text-sm">Don't have an account?</p>
           <button
-            onClick={() => {
-              navigate("/register");
-            }}
-            className="text-violet-500 text-base font-medium ml-2"
+            onClick={() => { navigate("/register"); }}
+            className="text-violet-500 text-base md:text-sm font-medium ml-2"
           >
             Sign up
           </button>

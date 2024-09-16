@@ -1,80 +1,125 @@
-@media (max-width : 1380px) and (min-width : 1029px){
-      .intrest-card{
-            width: 18rem;
-      }
-  }
-
-@media (max-width : 1290px) and (min-width : 1150px){
-    .intrest-card{
-          width: 20rem;
-    }
-}
-
-@media  (max-width : 1150px) and (min-width : 990px){
-    .intrest-card{
-          width: 17rem;
-    }
-}
-
-@media   (max-width : 990px) and (min-width : 802px){
-    .intrests{
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .intrest-card{
-        width: 20rem;
-  }
-  .video-carousel{
-      width: 700px;
-  }
-  .caller-profile{
-      height: 130px;
-      width: 130px;
+@media (max-width: 560px) {
+  .signup {
+    height: 78%;
   }
 }
 
-@media (max-width : 802px){
-      .intrests{
-            display: grid;
-            grid-template-columns: repeat(1, minmax(0, 1fr));
-      }
-      .intrest-card{
-            width: 100%;
-      }
+.active {
+  background-color: white !important;
+  color: black !important;
+  margin: 0 6px 0 6px !important;
+  border-radius: 5px !important;
 }
-@media  (max-width : 802px) and (min-width : 700px){
+
+.ps-sidebar-root {
+  border-right-width: 0px !important;
+}
+
+.ps-sidebar-container {
+  border-radius: 8px;
+  opacity: 0.9;
+}
+
+.pulse-button {
+  position: relative;
+  display: inline-block;
+}
+
+.pulse-button .relative {
+  position: relative;
+  z-index: 10;
+}
+
+.pulse-button span {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.scrollable-div {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.customModal{
+  border-radius: 5px;
+  
+}
+
+/* Blob animation keyframes */
+@keyframes blob {
+  0%, 100%{
+    border-radius: 44% 56% 66% 66% / 45% 45% 55% 55%;
+    transform: translate3d(0, 0, 0) rotateZ(0.01deg);
+  }
+  33%{
+    border-radius: 66% 33% 44% 55% / 33% 22% 77% 66%;
+    transform: translate3d(0, 5px, 0) rotateZ(0.01deg);
+  }
+  50%{
    
-   
-  .video-carousel{
-      width: 600px;
+    transform: translate3d(0, 0, 0) rotateZ(0.01deg);
   }
-  .caller-profile{
-      height: 125px;
-      width: 125px;
+  66%{
+    border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
+    transform: translate3d(0, -3px, 0) rotateZ(0.01deg);
   }
-  
 }
 
-@media  (max-width : 700px) and (min-width : 560px){
-      .video-carousel{
-            width: 500px;
-        }
-        .caller-profile{
-            height: 90px;
-            width: 90px;
-        }
-    
-  }
+/* Apply blob animation */
+.animate-blob {
+  animation: blob 3.5s infinite linear;
+}
 
-  @media (max-width : 560px){
-    .caller-profile{
-        height: 90px;
-        width: 90px;
-    }
-  }
+/* flip */
 
+.flip-container {
+  perspective: 1000px;
+}
+
+.flip-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.9s;
+}
+
+.flip-card.flip {
+  transform: rotateY(180deg);
+}
+
+ .front,
+ .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.front{
+  z-index:2;
+  transform: rotateY(0deg);
+}
+.back{
  
-
- 
-  
-  
+  transform: rotateY(180deg);
+}

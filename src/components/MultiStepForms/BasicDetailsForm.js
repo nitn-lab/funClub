@@ -1,24 +1,55 @@
 import React, { useState, useEffect } from "react";
+import Dropdown from "./Dropdown"; // Ensure the path is correct
 
-const BasicDetailsForm = () => {
+const BasicDetailsForm = ({ onInputChange }) => {
   const [selectedReligion, setSelectedReligion] = useState("");
   const [otherReligion, setOtherReligion] = useState("");
-  const [qualification, setQualification] = useState("");
   const [heightCm, setHeightCm] = useState("");
   const [heightFeet, setHeightFeet] = useState("");
   const [heightInches, setHeightInches] = useState("");
   const [heightUnit, setHeightUnit] = useState("cm"); // Default unit
+  const [formData, setFormData] = useState({
+    religion: "",
+    heightCm: "",
+    heightFeet: "",
+    heightInches: "",
+    heightUnit: "cm",
+    zodiac: "",
+    qualification: "",
+    school: "",
+    college: "",
+    jobTitle: "",
+    organizationUrl: ""
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleReligionChange = (event) => {
-    setSelectedReligion(event.target.value);
-    if (event.target.value !== "Other") {
+  useEffect(() => {
+    onInputChange(formData);
+  }, [formData, onInputChange]);
+
+  const handleReligionChange = (selectedOption) => {
+    setSelectedReligion(selectedOption);
+    setFormData((prevData) => ({
+      ...prevData,
+      religion: selectedOption !== "Other" ? selectedOption : otherReligion
+    }));
+    if (selectedOption !== "Other") {
       setOtherReligion(""); // Clear other religion input if not "Other"
     }
   };
+
+  const handleOtherReligionChange = (event) => {
+    const value = event.target.value;
+    setOtherReligion(value);
+    setFormData((prevData) => ({
+      ...prevData,
+      religion: value
+    }));
+  };
+
   const handleHeightCmChange = (event) => {
     const cmValue = event.target.value;
     setHeightCm(cmValue);
@@ -27,6 +58,13 @@ const BasicDetailsForm = () => {
     const inches = Math.round(totalInches % 12);
     setHeightFeet(feet);
     setHeightInches(inches);
+    setFormData((prevData) => ({
+      ...prevData,
+      heightCm: cmValue,
+      heightFeet: feet,
+      heightInches: inches,
+      heightUnit: "cm"
+    }));
   };
 
   const handleHeightFeetChange = (event) => {
@@ -35,6 +73,12 @@ const BasicDetailsForm = () => {
     const totalInches = parseInt(feetValue) * 12 + parseInt(heightInches);
     const cmValue = totalInches * 2.54;
     setHeightCm(cmValue.toFixed(2));
+    setFormData((prevData) => ({
+      ...prevData,
+      heightFeet: feetValue,
+      heightCm: cmValue.toFixed(2),
+      heightUnit: "ft/in"
+    }));
   };
 
   const handleHeightInchesChange = (event) => {
@@ -43,162 +87,184 @@ const BasicDetailsForm = () => {
     const totalInches = parseInt(heightFeet) * 12 + parseInt(inchesValue);
     const cmValue = totalInches * 2.54;
     setHeightCm(cmValue.toFixed(2));
+    setFormData((prevData) => ({
+      ...prevData,
+      heightInches: inchesValue,
+      heightCm: cmValue.toFixed(2),
+      heightUnit: "ft/in"
+    }));
   };
 
-  const handleHeightUnitChange = (event) => {
-    const newUnit = event.target.value;
-    setHeightUnit(newUnit);
+  const handleHeightUnitChange = (selectedOption) => {
+    setHeightUnit(selectedOption);
+    setFormData((prevData) => ({
+      ...prevData,
+      heightUnit: selectedOption
+    }));
+  };
+
+  const handleDropdownChange = (name, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
   };
 
   return (
-    <div className="w-full py-10 ">
-      <h1 className="text-5xl font-bold text-white">Basic Details!</h1>
-      <p className="font-medium text-lg text-gray-200 mt-4">
+    <div className="w-full py-5 text-primary-light ">
+      <h1 className="text-4xl font-bold text-primary-light dark:text-primary-dark xs:text-3xl">Basic Details!</h1>
+      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-4 md:mt-2">
         Please fill your Basic Details!
       </p>
-      <div className="mt-8 flex gap-8">
+      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2 flex gap-2.5">
-        {heightUnit === "cm" ? (
-          <div className="">
-            <input
-              className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
-              placeholder="Enter your height"
-              value={heightCm}
-              onChange={handleHeightCmChange}
+          {heightUnit === "cm" ? (
+            <div className="">
+              <input
+                className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+                placeholder="Height"
+                value={heightCm}
+                onChange={handleHeightCmChange}
+              />
+            </div>
+          ) : (
+            <div className="flex gap-2.5 xs:gap-1.5">
+              <div>
+                <input
+                  className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+                  placeholder="Feet"
+                  value={heightFeet}
+                  onChange={handleHeightFeetChange}
+                />
+              </div>
+              <div>
+                <input
+                  className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+                  placeholder="Inches"
+                  value={heightInches}
+                  onChange={handleHeightInchesChange}
+                />
+              </div>
+            </div>
+          )}
+          <div className="w-1/2">
+            <Dropdown
+              label=""
+              options={["cm", "ft/in"]}
+              onSelect={handleHeightUnitChange}
             />
           </div>
-        ) : (
-          <div className="flex gap-2.5">
-            <div>
-              <input
-                className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
-                placeholder="Feet"
-                value={heightFeet}
-                onChange={handleHeightFeetChange}
-              />
-            </div>
-            <div>
-              <input
-                className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
-                placeholder="Inches"
-                value={heightInches}
-                onChange={handleHeightInchesChange}
-              />
-            </div>
-          </div>
-        )}
-        <div className="w-1/2">
-          <select
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 text-black"
-            value={heightUnit}
-            onChange={handleHeightUnitChange}
-          >
-            <option value="cm">cm</option>
-            <option value="ft/in">ft/in</option>
-          </select>
-        </div>
         </div>
 
         <div className="w-1/2">
-          <select
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 text-black"
-            value={selectedReligion}
-            onChange={handleReligionChange}
-          >
-            <option value="">Select your religion</option>
-            <option value="Buddhism">Buddhism</option>
-            <option value="Chinese traditional religion">
-              Chinese traditional religion
-            </option>
-            <option value="Christianity">Christianity</option>
-            <option value="Hinduism">Hinduism</option>
-            <option value="Islam">Islam</option>
-            <option value="Jainism">Jainism</option>
-            <option value="Juche">Juche</option>
-            <option value="Judaism">Judaism</option>
-            <option value="Secular">Secular</option>
-            <option value="Shinto">Shinto</option>
-            <option value="Sikhism">Sikhism</option>
-            <option value="Spiritism">Spiritism</option>
-            <option value="Zoroastrianism">Zoroastrianism</option>
-            <option value="primal-indigenous">primal-indigenous</option>
-            <option value="Other">Other</option>
-          </select>
+          <Dropdown
+            label=""
+            options={[
+              "Religion",
+              "Buddhism",
+              "Chinese traditional religion",
+              "Christianity",
+              "Hinduism",
+              "Islam",
+              "Jainism",
+              "Juche",
+              "Judaism",
+              "Secular",
+              "Shinto",
+              "Sikhism",
+              "Spiritism",
+              "Zoroastrianism",
+              "primal-indigenous",
+              "Other"
+            ]}
+            onSelect={handleReligionChange}
+          />
           {selectedReligion === "Other" && (
             <input
-              className="w-full border-2 rounded-lg p-2.5 focus:outline-violet-500 focus:ring-violet-500 placeholder-black mt-3"
-              placeholder="Enter your religion"
+              className="w-full border-2 rounded-lg p-2.5 focus:outline-violet-500 focus:ring-violet-500 placeholder-black mt-3 bg-white"
+              placeholder="Religion"
               value={otherReligion}
-              onChange={(e) => setOtherReligion(e.target.value)}
+              onChange={handleOtherReligionChange}
             />
           )}
         </div>
       </div>
-      <div className="mt-8 flex gap-8">
+      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2">
-          <select className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 text-black">
-            <option value="">Select your Zodiac</option>
-            <option value="aries">Aries ♈</option>
-            <option value="taurus">Taurus ♉</option>
-            <option value="gemini">Gemini ♊</option>
-            <option value="cancer">Cancer ♋</option>
-            <option value="leo">Leo ♌</option>
-            <option value="virgo">Virgo ♍</option>
-            <option value="libra">Libra ♎</option>
-            <option value="scorpio">Scorpio ♏</option>
-            <option value="sagittarius">Sagittarius ♐</option>
-            <option value="capricorn">Capricorn ♑</option>
-            <option value="aquarius">Aquarius ♒</option>
-            <option value="pisces">Pisces ♓</option>
-          </select>
-        </div>
-        <div className="w-1/2">
-          <select
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 text-black"
-            value={qualification}
-            onChange={(e) => setQualification(e.target.value)}
-          >
-            <option value="">Select your qualification</option>
-            <option value="High School">High School</option>
-            <option value="Trade School">Trade School</option>
-            <option value="In College">In College</option>
-            <option value="Bachelor's">Bachelor's</option>
-            <option value="Master's">Master's</option>
-            <option value="PhD">PhD</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="mt-8 flex gap-8">
-        <div className="w-1/2">
-          <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
-            placeholder="Enter your school"
+          <Dropdown
+            label=""
+            options={[
+              "Zodiac",
+              "Leo ♌",
+              "Aries ♈",
+              "Virgo ♍",
+              "Libra ♎",
+              "Taurus ♉",
+              "Gemini ♊",
+              "Cancer ♋",
+              "Pisces ♓",
+              "Scorpio ♏",
+              "Aquarius ♒",
+              "Capricorn ♑",
+              "Sagittarius ♐"
+            ]}
+            onSelect={(selectedOption) => handleDropdownChange('zodiac', selectedOption)}
           />
         </div>
         <div className="w-1/2">
-          <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
-            placeholder="Enter your college"
+          <Dropdown
+            label=""
+            options={[
+              "Qualification",
+              "High School",
+              "Trade School",
+              "In College",
+              "Bachelor's",
+              "Master's",
+              "PhD"
+            ]}
+            onSelect={(selectedOption) => handleDropdownChange('qualification', selectedOption)}
           />
         </div>
       </div>
 
-      <div className="mt-8 flex gap-8">
+      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
-            placeholder="Enter your job title"
+            className="w-full border-2 rounded-lg p-2.5 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            placeholder="School"
+            value={formData.school}
+            onChange={(e) => handleDropdownChange('school', e.target.value)}
           />
         </div>
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black"
-            placeholder="Enter your organization url"
+            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            placeholder="College"
+            value={formData.college}
+            onChange={(e) => handleDropdownChange('college', e.target.value)}
           />
         </div>
       </div>
-    </div>
+
+      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
+        <div className="w-1/2">
+          <input
+            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            placeholder="Job title"
+            value={formData.jobTitle}
+            onChange={(e) => handleDropdownChange('jobTitle', e.target.value)}
+          /></div>
+          <div className="w-1/2">
+          <input
+            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            placeholder="Organization Url"
+            value={formData.organizationUrl}
+            onChange={(e) => handleDropdownChange('organizationUrl', e.target.value)}
+          />
+          </div>
+          </div>
+          </div>
   );
 };
 

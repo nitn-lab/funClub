@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+    --main-gradient : linear-gradient(to top right, #8b5cf6, #ec4899);
+   
+}
+
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 
