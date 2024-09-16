@@ -31,7 +31,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="w-full py-5  text-primary-light dark:text-primary-dark">
+    <div className="w-full py-5  text-primary-light ">
       <h1 className="text-4xl font-bold text-primary-light dark:text-primary-dark xs:text-3xl">Create Account!</h1>
       <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-4 md:mt-2">
         Create your Free Account!
