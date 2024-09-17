@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const Dropdown = ({ label, options, onSelect }) => {
+const Dropdown = ({ label, options, value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(options[0]);
   const dropdownRef = useRef(null);
 
   const handleToggle = () => {
@@ -10,9 +9,8 @@ const Dropdown = ({ label, options, onSelect }) => {
   };
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
+    onChange(option); 
     setIsOpen(false);
-    if (onSelect) onSelect(option); // Notify parent about the selection
   };
 
   const handleClickOutside = (event) => {
@@ -37,7 +35,7 @@ const Dropdown = ({ label, options, onSelect }) => {
           className="inline-flex justify-between w-full rounded-lg border-2 xs:border-0  p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 text-black bg-white"
           onClick={handleToggle}
         >
-          {selectedOption}
+          {value || options[0]}
           <svg
             className={`w-5 h-5 ml-2 -mr-1 transition-transform duration-200 ${isOpen ? 'transform rotate-180' : ''}`}
             xmlns="http://www.w3.org/2000/svg"
@@ -49,15 +47,13 @@ const Dropdown = ({ label, options, onSelect }) => {
           </svg>
         </button>
         {isOpen && (
-          <div className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5  z-20">
+          <div className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20">
             <div className="py-1 h-24 xs:h-16 overflow-auto">
               {options.map((option, index) => (
                 <button
                   key={index}
                   onClick={() => handleOptionClick(option)}
-                  className={`block px-4 py-2 xs:py-1 text-lg xs:text-sm font-semibold xs:font-normal w-full text-left hover:bg-[#d2bfe5]   focus:bg-gray-100 ${
-                    option === selectedOption ? 'bg-[#ac64d8]' : 'text-black'
-                  }`}
+                  className={`block px-4 py-2 xs:py-1 text-lg xs:text-sm font-semibold xs:font-normal w-full text-left hover:bg-[#d2bfe5] focus:bg-gray-100 ${option === value ? 'bg-[#ac64d8]' : 'text-black'}`}
                 >
                   {option}
                 </button>

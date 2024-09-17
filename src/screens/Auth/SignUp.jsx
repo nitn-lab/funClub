@@ -23,7 +23,7 @@ const Register = () => {
     personalityData: {},
     interestData: {},
     lookingForData: {},
-    selectPromptData: {}
+
   });
 
   const handleInputChange = (formId, data) => {
@@ -47,10 +47,12 @@ const Register = () => {
       ...formData.selectPromptData
     };
 
+
     try {
-      await axios.post('API', allData);
+      const res = await axios.post('http://3.110.156.153:5000/api/v1/register', allData);
+
       setLoading(false);
-      navigate('/Dashboard');
+      if (res.status === 201) { navigate('/'); }
     } catch (error) {
       console.error("Error submitting form data", error);
       setLoading(false);
@@ -61,38 +63,35 @@ const Register = () => {
     {
       id: "signUpData",
       label: "Signup",
-      component: <SignUp onInputChange={(data) => handleInputChange("signUpData", data)} />
+      component: <SignUp onInputChange={(data) => handleInputChange("signUpData", data)}
+        data={formData.signUpData} />
     },
     {
       id: "basicDetailsData",
       label: "Basic Details",
-      component: <BasicDetailsForm onInputChange={(data) => handleInputChange("basicDetailsData", data)} />
+      component: <BasicDetailsForm onInputChange={(data) => handleInputChange("basicDetailsData", data)} data={formData.basicDetailsData} />
     },
     {
       id: "advanceDetailsData",
       label: "Advance Details",
-      component: <AdvanceForm onInputChange={(data) => handleInputChange("advanceDetailsData", data)} />
+      component: <AdvanceForm onInputChange={(data) => handleInputChange("advanceDetailsData", data)} data={formData.advanceDetailsData} />
     },
     {
       id: "personalityData",
       label: "Personality Details",
-      component: <PersonalityForm onInputChange={(data) => handleInputChange("personalityData", data)} />
+      component: <PersonalityForm onInputChange={(data) => handleInputChange("personalityData", data)} data={formData.personalityData} />
     },
     {
       id: "interestData",
       label: "Interest Details",
-      component: <InterestForm onInputChange={(data) => handleInputChange("interestData", data)} />
+      component: <InterestForm onInputChange={(data) => handleInputChange("interestData", data)} data={formData.interestData} />
     },
     {
       id: "lookingForData",
       label: "Looking For Details",
-      component: <LookingForForm onInputChange={(data) => handleInputChange("lookingForData", data)} onSkip={() => handleSkip()}/>
+      component: <LookingForForm onInputChange={(data) => handleInputChange("lookingForData", data)} data={formData.lookingForData} onSkip={() => handleSkip()} />
     },
-    {
-      id: "selectPromptData",
-      label: "Select Prompts",
-      component: <SelectPrompt onInputChange={(data) => handleInputChange("selectPromptData", data)} />
-    }
+
   ];
 
   const [index, setIndex] = useState(0);
@@ -128,7 +127,7 @@ const Register = () => {
               </div>
             )}
 
-           
+
 
             <div className="flex absolute bottom-5 md:bottom-3 justify-between items-center w-[93.5%]">
               {index > 0 ? (

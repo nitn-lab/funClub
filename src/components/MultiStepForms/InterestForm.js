@@ -10,15 +10,15 @@ const InterestForm = ({ onInputChange }) => {
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    onInputChange({ selectedInterests: selectedItems });
-  }, [selectedItems, onInputChange]);
+    onInputChange({ interest_details: selectedItems });
+  }, [selectedItems]);
 
-  const handleClick = (index) => {
+  const handleClick = (interest) => {
     setSelectedItems((previousSelectedItems) => {
-      if (previousSelectedItems.includes(index)) {
-        return previousSelectedItems.filter((item) => item !== index);
+      if (previousSelectedItems.includes(interest)) {
+        return previousSelectedItems.filter((item) => item !== interest);
       } else {
-        return [...previousSelectedItems, index];
+        return [...previousSelectedItems, interest];
       }
     });
   };
@@ -58,12 +58,12 @@ const InterestForm = ({ onInputChange }) => {
             <div
               className="w-fit cursor-pointer m-2 xs:m-1.5"
               key={index}
-              onClick={() => handleClick(index)}
+              onClick={() => handleClick(interest)}
             >
               <div className="flex border-2 border-primary-light dark:border-primary-dark py-1 px-2 rounded-full items-center gap-2">
                 <CheckCircleIcon
                   style={{
-                    display: selectedItems.includes(index)
+                    display: selectedItems.includes(interest)
                       ? "block"
                       : "none",
                   }}
