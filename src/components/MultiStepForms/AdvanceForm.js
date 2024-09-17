@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Dropdown from "./Dropdown"; // Ensure the path is correct
 
-const AdvanceForm = ({ onInputChange }) => {
+const AdvanceForm = ({ onInputChange, data }) => {
   const [formData, setFormData] = useState({
-    ethnicity: "",
-    country : "",
-    exercise: "",
-    drinking: "",
-    smoking: "",
-    sexualOrientation: ""
+    ethnicity:data.ethnicity || "",
+    country :data.country || "",
+    exercise:data.exercise || "",
+    drinking:data.drinking || "",
+    smoking:data.smoking || "",
+    sexual_orientation:data.sexual_orientation || ""
   });
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const AdvanceForm = ({ onInputChange }) => {
 
   useEffect(() => {
     onInputChange(formData);
-  }, [formData, onInputChange]);
+  }, [formData]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -73,7 +73,8 @@ const AdvanceForm = ({ onInputChange }) => {
               "Switzerland",
               "Other",
             ]}
-            onSelect={(selectedOption) => handleDropdownChange('country', selectedOption)}
+            onChange={(selectedOption) => handleDropdownChange('country', selectedOption)}
+            value={data.country}
           />
         </div>
       </div>
@@ -89,7 +90,8 @@ const AdvanceForm = ({ onInputChange }) => {
               "Socially on weekends",
               "Most nights",
             ]}
-            onSelect={(selectedOption) => handleDropdownChange('drinking', selectedOption)}
+            onChange={(selectedOption) => handleDropdownChange('drinking', selectedOption)}
+            value={data.drinking}
           />
         </div>
         <div className="w-1/2">
@@ -102,7 +104,8 @@ const AdvanceForm = ({ onInputChange }) => {
               "Smoker",
               "Trying to quit",
             ]}
-            onSelect={(selectedOption) => handleDropdownChange('smoking', selectedOption)}
+            onChange={(selectedOption) => handleDropdownChange('smoking', selectedOption)}
+            value={data.smoking}
           />
         </div>
       </div>
@@ -111,7 +114,8 @@ const AdvanceForm = ({ onInputChange }) => {
           <Dropdown
             label="Exercise"
             options={["Everyday", "Often", "Sometimes", "Never"]}
-            onSelect={(selectedOption) => handleDropdownChange('exercise', selectedOption)}
+            onChange={(selectedOption) => handleDropdownChange('exercise', selectedOption)}
+            value={data.exercise}
           />
         </div>
         <div className="w-1/2">
@@ -129,7 +133,8 @@ const AdvanceForm = ({ onInputChange }) => {
               "Bicurious",
               "Aromantic",
             ]}
-            onSelect={(selectedOption) => handleDropdownChange('sexualOrientation', selectedOption)}
+            onChange={(selectedOption) => handleDropdownChange('sexual_orientation', selectedOption)}
+            value={data.sexual_orientation}
           />
         </div>
         

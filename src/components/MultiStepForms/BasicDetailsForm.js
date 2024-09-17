@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from "react";
-import Dropdown from "./Dropdown"; // Ensure the path is correct
+import Dropdown from "./Dropdown";// Ensure the path is correct
 
-const BasicDetailsForm = ({ onInputChange }) => {
-  const [selectedReligion, setSelectedReligion] = useState("");
-  const [otherReligion, setOtherReligion] = useState("");
-  const [heightCm, setHeightCm] = useState("");
-  const [heightFeet, setHeightFeet] = useState("");
-  const [heightInches, setHeightInches] = useState("");
-  const [heightUnit, setHeightUnit] = useState("cm"); // Default unit
+const BasicDetailsForm = ({ onInputChange, data }) => {
+  // Initialize state with existing data or default values
+  const [selectedReligion, setSelectedReligion] = useState(data.religion || "");
+  
+  const [otherReligion, setOtherReligion] = useState(data.religion === "Other" ? data.religion : "");
+  const [heightCm, setHeightCm] = useState(data.heightCm || "");
+  const [heightFeet, setHeightFeet] = useState(data.heightFeet || "");
+  const [heightInches, setHeightInches] = useState(data.heightInches || "");
+  const [heightUnit, setHeightUnit] = useState(data.heightUnit || "cm");
   const [formData, setFormData] = useState({
-    religion: "",
-    heightCm: "",
-    heightFeet: "",
-    heightInches: "",
-    heightUnit: "cm",
-    zodiac: "",
-    qualification: "",
-    school: "",
-    college: "",
-    jobTitle: "",
-    organizationUrl: ""
+    religion: data.religion || "",
+    heightCm: data.heightCm || "",
+    heightFeet: data.heightFeet || "",
+    heightInches: data.heightInches || "",
+    heightUnit: data.heightUnit || "cm",
+    zodiac: data.zodiac || "",
+    qualification: data.qualification || "",
+    school: data.school || "",
+    college: data.college || "",
+    job_title: data.jobTitle || "",
+    organisation_url: data.organisation_url || ""
   });
 
   useEffect(() => {
@@ -27,8 +29,9 @@ const BasicDetailsForm = ({ onInputChange }) => {
   }, []);
 
   useEffect(() => {
+    // Call the onInputChange prop to send the form data to the parent component
     onInputChange(formData);
-  }, [formData, onInputChange]);
+  }, [formData]);
 
   const handleReligionChange = (selectedOption) => {
     setSelectedReligion(selectedOption);
@@ -111,7 +114,7 @@ const BasicDetailsForm = ({ onInputChange }) => {
   };
 
   return (
-    <div className="w-full py-5 text-primary-light ">
+    <div className="w-full py-5 text-primary-light">
       <h1 className="text-4xl font-bold text-primary-light dark:text-primary-dark xs:text-3xl">Basic Details!</h1>
       <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-4 md:mt-2">
         Please fill your Basic Details!
@@ -151,14 +154,14 @@ const BasicDetailsForm = ({ onInputChange }) => {
             <Dropdown
               label=""
               options={["cm", "ft/in"]}
-              onSelect={handleHeightUnitChange}
+              onChange={handleHeightUnitChange}
             />
           </div>
         </div>
 
         <div className="w-1/2">
           <Dropdown
-            label=""
+           
             options={[
               "Religion",
               "Buddhism",
@@ -177,7 +180,8 @@ const BasicDetailsForm = ({ onInputChange }) => {
               "primal-indigenous",
               "Other"
             ]}
-            onSelect={handleReligionChange}
+            value={selectedReligion}
+            onChange={handleReligionChange}
           />
           {selectedReligion === "Other" && (
             <input
@@ -208,7 +212,8 @@ const BasicDetailsForm = ({ onInputChange }) => {
               "Capricorn ♑",
               "Sagittarius ♐"
             ]}
-            onSelect={(selectedOption) => handleDropdownChange('zodiac', selectedOption)}
+            onChange={(selectedOption) => handleDropdownChange('zodiac', selectedOption)}
+            value={formData.zodiac}
           />
         </div>
         <div className="w-1/2">
@@ -223,7 +228,8 @@ const BasicDetailsForm = ({ onInputChange }) => {
               "Master's",
               "PhD"
             ]}
-            onSelect={(selectedOption) => handleDropdownChange('qualification', selectedOption)}
+            onChange={(selectedOption) => handleDropdownChange('qualification', selectedOption)}
+            value={formData.qualification}
           />
         </div>
       </div>
@@ -237,9 +243,10 @@ const BasicDetailsForm = ({ onInputChange }) => {
             onChange={(e) => handleDropdownChange('school', e.target.value)}
           />
         </div>
+       
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2.5 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="College"
             value={formData.college}
             onChange={(e) => handleDropdownChange('college', e.target.value)}
@@ -250,21 +257,22 @@ const BasicDetailsForm = ({ onInputChange }) => {
       <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
-            placeholder="Job title"
-            value={formData.jobTitle}
-            onChange={(e) => handleDropdownChange('jobTitle', e.target.value)}
-          /></div>
-          <div className="w-1/2">
-          <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
-            placeholder="Organization Url"
-            value={formData.organizationUrl}
-            onChange={(e) => handleDropdownChange('organizationUrl', e.target.value)}
+            className="w-full border-2 rounded-lg p-2.5 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            placeholder="Job Title"
+            value={formData.job_title}
+            onChange={(e) => handleDropdownChange('job_title', e.target.value)}
           />
-          </div>
-          </div>
-          </div>
+        </div>
+        <div className="w-1/2">
+          <input
+            className="w-full border-2 rounded-lg p-2.5 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            placeholder="Organization URL"
+            value={formData.organisation_url}
+            onChange={(e) => handleDropdownChange('organisation_url', e.target.value)}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

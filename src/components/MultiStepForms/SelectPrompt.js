@@ -11,7 +11,7 @@ const SelectPrompt = ({ onInputChange }) => {
 
   useEffect(() => {
     onInputChange(formData);
-  }, [formData, onInputChange]);
+  }, [formData]);
 
   const handleDropdownChange = (name, value) => {
     if (selectedPrompts.length < 3 && !selectedPrompts.includes(value)) {
@@ -78,7 +78,7 @@ const SelectPrompt = ({ onInputChange }) => {
                 "My weakness is...",
                 "Two truths and a lie..."
               ]}
-              onSelect={(selectedOption) =>
+              onChange={(selectedOption) =>
                 handleDropdownChange("prompt", selectedOption)
               }
             />
