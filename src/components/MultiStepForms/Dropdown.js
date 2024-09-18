@@ -26,13 +26,18 @@ const Dropdown = ({ label, options, value, onChange }) => {
     };
   }, []);
 
+  // Set a max number of visible options at a time, e.g., 3
+  const visibleOptionsCount = Math.min(options.length, 3);
+  const optionHeight = 40; // Set the height of a single option in pixels
+  const dropdownHeight = visibleOptionsCount * optionHeight;
+
   return (
     <div className="relative inline-block text-left w-full" ref={dropdownRef}>
-      <label className="text-lg font-medium text-primary-light dark:text-primary-dark">{label}</label>
+      <label className="text-base font-medium text-primary-light dark:text-primary-dark">{label}</label>
       <div>
         <button
           type="button"
-          className="inline-flex justify-between w-full rounded-lg border-2 xs:border-0  p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 text-black bg-white"
+          className="inline-flex justify-between w-full rounded-lg border-2 xs:border-0 p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 text-black bg-white"
           onClick={handleToggle}
         >
           {value || options[0]}
@@ -47,13 +52,17 @@ const Dropdown = ({ label, options, value, onChange }) => {
           </svg>
         </button>
         {isOpen && (
-          <div className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20">
-            <div className="py-1 h-24 xs:h-16 overflow-auto">
+          <div 
+            className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20"
+            style={{ maxHeight: dropdownHeight, overflowY: 'auto' }}
+          >
+            <div className="py-1">
               {options.map((option, index) => (
                 <button
                   key={index}
                   onClick={() => handleOptionClick(option)}
-                  className={`block px-4 py-2 xs:py-1 text-lg xs:text-sm font-semibold xs:font-normal w-full text-left hover:bg-[#d2bfe5] focus:bg-gray-100 ${option === value ? 'bg-[#ac64d8]' : 'text-black'}`}
+                  className={`block px-4 py-1.5 xs:py-1 text-lg xs:text-sm font-semibold xs:font-normal w-full text-left hover:bg-[#d2bfe5] focus:bg-gray-100 ${option === value ? 'bg-[#ac64d8]' : 'text-black'}`}
+                  style={{ height: optionHeight }}
                 >
                   {option}
                 </button>

@@ -35,12 +35,12 @@ const VideoCalling = ({ receiver, handleCallEnd }) => {
 
       setJoined(true);
 
-      // Set a timeout to automatically end the call after 1 minute
+     
       setTimeout(() => {
         if (callActive) {
           handleEndCall();
         }
-      }, 60000); // 1 minute timeout
+      }, 60000);  
     };
 
     startCall();
@@ -57,7 +57,7 @@ const VideoCalling = ({ receiver, handleCallEnd }) => {
     rtc.localAudioTrack && rtc.localAudioTrack.close();
     rtc.localVideoTrack && rtc.localVideoTrack.close();
     setCallActive(false);
-    handleCallEnd(); // Notify parent component to close the popup
+    handleCallEnd(); 
   };
 
   return (

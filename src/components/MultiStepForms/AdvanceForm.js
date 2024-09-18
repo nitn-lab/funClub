@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Dropdown from "./Dropdown"; // Ensure the path is correct
+import Dropdown from "./Dropdown"; 
 
 const AdvanceForm = ({ onInputChange, data }) => {
   const [formData, setFormData] = useState({
@@ -37,15 +37,15 @@ const AdvanceForm = ({ onInputChange, data }) => {
   return (
     <div className="w-full py-5 text-primary-light">
       <h1 className="text-4xl font-bold text-primary-light dark:text-primary-dark xs:text-3xl">Advance Details!</h1>
-      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-4 md:mt-2">
+      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-2 ">
         Please fill your Advance Details!
       </p>
-      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
+      <div className="mt-3  flex gap-8 xs:gap-4">
         <div className="w-1/2">
-          <label className="text-lg font-medium text-primary-light dark:text-primary-dark">Ethnicity</label>
+          <label className="text-base font-medium text-primary-light dark:text-primary-dark">Ethnicity</label>
           <input
             name="ethnicity"
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Enter Ethnicity"
             value={formData.ethnicity}
             onChange={handleInputChange}
@@ -55,6 +55,7 @@ const AdvanceForm = ({ onInputChange, data }) => {
           <Dropdown
             label="Country"
             options={[
+              "Select your country",
               "United States",
               "Canada",
               "Mexico",
@@ -78,11 +79,12 @@ const AdvanceForm = ({ onInputChange, data }) => {
           />
         </div>
       </div>
-      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
+      <div className="mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2">
           <Dropdown
             label="Drinking"
             options={[
+              "How often do you drink?",
               "Not for me",
               "Sober",
               "Sober curious",
@@ -98,6 +100,7 @@ const AdvanceForm = ({ onInputChange, data }) => {
           <Dropdown
             label="Smoking"
             options={[
+              "How often do you smoke?",
               "Social smoker",
               "Smoker when drinking",
               "Non-smoker",
@@ -109,11 +112,11 @@ const AdvanceForm = ({ onInputChange, data }) => {
           />
         </div>
       </div>
-      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
+      <div className="mt-3 flex gap-8 xs:gap-4">
       <div className="w-1/2">
           <Dropdown
             label="Exercise"
-            options={["Everyday", "Often", "Sometimes", "Never"]}
+            options={["Do you workout?","Everyday", "Often", "Sometimes", "Never"]}
             onChange={(selectedOption) => handleDropdownChange('exercise', selectedOption)}
             value={data.exercise}
           />
@@ -122,6 +125,7 @@ const AdvanceForm = ({ onInputChange, data }) => {
           <Dropdown
             label="Sexual Orientation"
             options={[
+              "Select sexual orientation",
               "Straight",
               "Gay",
               "Lesbian",

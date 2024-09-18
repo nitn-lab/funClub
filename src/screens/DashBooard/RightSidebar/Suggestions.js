@@ -9,7 +9,7 @@ const Suggestions = () => {
   useEffect(() => {
     const initializedData = Data.map((item) => ({
       ...item,
-      isFollowing: false, // Add isFollowing state to each caller
+      isFollowing: false, 
     }));
     setData(initializedData);
   }, []);
@@ -18,7 +18,7 @@ const Suggestions = () => {
     setData((prevData) =>
       prevData.map((item) =>
         item._id === id
-          ? { ...item, isFollowing: !item.isFollowing } // Toggle follow state
+          ? { ...item, isFollowing: !item.isFollowing } 
           : item
       )
     );
@@ -49,8 +49,8 @@ const Suggestions = () => {
                   <div
                     className="flex w-fit items-center bg-main-gradient text-white rounded-md px-2 py-1 cursor-pointer"
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevent triggering the main caller click
-                      toggleFollow(item._id); // Toggle follow status
+                      e.stopPropagation(); 
+                      toggleFollow(item._id); 
                     }}
                   >
                     {item.isFollowing ? (

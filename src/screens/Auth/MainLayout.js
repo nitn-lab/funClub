@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Sidebarr from "../Global/Sidebar";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import CoinIcon from "@mui/icons-material/MonetizationOn"; // Replace with actual icon if needed
+import CoinIcon from "@mui/icons-material/MonetizationOn"; 
 
 const MainLayout = () => {
   const [open, setOpen] = useState(false);
@@ -16,16 +16,16 @@ const MainLayout = () => {
   };
 
   useEffect(() => {
-    // Trigger page load animation with blur and opacity fade
+   
     setTimeout(() => {
-      setPageAnimation("opacity-100 blur-0"); // Transition to full opacity and no blur
+      setPageAnimation("opacity-100 blur-0"); 
     }, 100);
 
-    // Trigger the coin animation after the page reaches its final opacity
+  
     setTimeout(() => {
       
-      setScale("scale-100"); // Transition to full scale
-    }, 700); // Ensure this timing matches the end of opacity transition
+      setScale("scale-100"); 
+    }, 700); 
   }, []);
 
   return (
@@ -61,7 +61,7 @@ const MainLayout = () => {
         <Outlet />
       </div>
 
-      {/* Background fade and centered Coin Icon with Dummy Text */}
+     
       {showCoin && (
         <div
           className="fixed inset-0 bg-[#292929] bg-opacity-50 z-50 flex items-center justify-center"

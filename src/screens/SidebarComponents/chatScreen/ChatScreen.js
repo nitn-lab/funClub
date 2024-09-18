@@ -5,7 +5,7 @@ import ReactScrollToBottom from 'react-scroll-to-bottom';
 import logo from '../../assets/images/FUNCLUB logo.png';
 import { IoMdCall } from 'react-icons/io';
 import { FaVideo } from 'react-icons/fa';
-import CallingInterface from './CallingInterface'; // Import the CallingInterface
+import CallingInterface from './CallingInterface';
 
 const ChatScreen = () => {
   const [message, setMessage] = useState("");

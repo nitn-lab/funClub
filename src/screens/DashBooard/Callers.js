@@ -34,10 +34,10 @@ const Callers = ({ onCallerSelect }) => {
   const size = useWindowSize();
 
   useEffect(() => {
-    // Initialize the callers with follow state
+  
     const initializedCallers = CallerData.map((caller) => ({
       ...caller,
-      isFollowing: false, // Add isFollowing state to each caller
+      isFollowing: false, 
     }));
     setCallers(initializedCallers);
   }, []);
@@ -53,7 +53,7 @@ const Callers = ({ onCallerSelect }) => {
     setCallers((prevCallers) =>
       prevCallers.map((caller) =>
         caller._id === id
-          ? { ...caller, isFollowing: !caller.isFollowing } // Toggle follow state
+          ? { ...caller, isFollowing: !caller.isFollowing } 
           : caller
       )
     );
@@ -74,8 +74,8 @@ const Callers = ({ onCallerSelect }) => {
           <div
             className="absolute top-2 left-2 flex items-center bg-main-gradient text-white rounded-md px-2 py-1 cursor-pointer"
             onClick={(e) => {
-              e.stopPropagation(); // Prevent triggering the main caller click
-              toggleFollow(caller._id); // Toggle follow status
+              e.stopPropagation(); 
+              toggleFollow(caller._id); 
             }}
           >
             {caller.isFollowing ? (

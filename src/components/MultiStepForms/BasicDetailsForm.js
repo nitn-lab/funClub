@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Dropdown from "./Dropdown";// Ensure the path is correct
+import Dropdown from "./Dropdown";
 
 const BasicDetailsForm = ({ onInputChange, data }) => {
-  // Initialize state with existing data or default values
+ 
   const [selectedReligion, setSelectedReligion] = useState(data.religion || "");
   
   const [otherReligion, setOtherReligion] = useState(data.religion === "Other" ? data.religion : "");
@@ -14,7 +14,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
     religion: data.religion || "",
     heightCm: data.heightCm || "",
     heightFeet: data.heightFeet || "",
-    heightInches: data.heightInches || "",
+    heightInches: data.heightInches || 0,
     heightUnit: data.heightUnit || "cm",
     zodiac: data.zodiac || "",
     qualification: data.qualification || "",
@@ -29,7 +29,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
   }, []);
 
   useEffect(() => {
-    // Call the onInputChange prop to send the form data to the parent component
+   
     onInputChange(formData);
   }, [formData]);
 
@@ -40,7 +40,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
       religion: selectedOption !== "Other" ? selectedOption : otherReligion
     }));
     if (selectedOption !== "Other") {
-      setOtherReligion(""); // Clear other religion input if not "Other"
+      setOtherReligion(""); 
     }
   };
 
@@ -116,15 +116,15 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
   return (
     <div className="w-full py-5 text-primary-light">
       <h1 className="text-4xl font-bold text-primary-light dark:text-primary-dark xs:text-3xl">Basic Details!</h1>
-      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-4 md:mt-2">
+      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-2">
         Please fill your Basic Details!
       </p>
-      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
+      <div className="mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2 flex gap-2.5">
           {heightUnit === "cm" ? (
             <div className="">
               <input
-                className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+                className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
                 placeholder="Height"
                 value={heightCm}
                 onChange={handleHeightCmChange}
@@ -134,7 +134,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
             <div className="flex gap-2.5 xs:gap-1.5">
               <div>
                 <input
-                  className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+                  className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
                   placeholder="Feet"
                   value={heightFeet}
                   onChange={handleHeightFeetChange}
@@ -142,7 +142,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
               </div>
               <div>
                 <input
-                  className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+                  className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
                   placeholder="Inches"
                   value={heightInches}
                   onChange={handleHeightInchesChange}
@@ -155,6 +155,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
               label=""
               options={["cm", "ft/in"]}
               onChange={handleHeightUnitChange}
+              value={heightUnit}
             />
           </div>
         </div>
@@ -185,7 +186,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
           />
           {selectedReligion === "Other" && (
             <input
-              className="w-full border-2 rounded-lg p-2.5 focus:outline-violet-500 focus:ring-violet-500 placeholder-black mt-3 bg-white"
+              className="w-full border-2 rounded-lg p-2 focus:outline-violet-500 focus:ring-violet-500 placeholder-black mt-3 bg-white"
               placeholder="Religion"
               value={otherReligion}
               onChange={handleOtherReligionChange}
@@ -193,7 +194,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
           )}
         </div>
       </div>
-      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
+      <div className="mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2">
           <Dropdown
             label=""
@@ -234,10 +235,10 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
         </div>
       </div>
 
-      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
+      <div className="mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="School"
             value={formData.school}
             onChange={(e) => handleDropdownChange('school', e.target.value)}
@@ -246,7 +247,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
        
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="College"
             value={formData.college}
             onChange={(e) => handleDropdownChange('college', e.target.value)}
@@ -254,10 +255,10 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
         </div>
       </div>
 
-      <div className="mt-5 md:mt-3 flex gap-8 xs:gap-4">
+      <div className="mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Job Title"
             value={formData.job_title}
             onChange={(e) => handleDropdownChange('job_title', e.target.value)}
@@ -265,7 +266,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
         </div>
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Organization URL"
             value={formData.organisation_url}
             onChange={(e) => handleDropdownChange('organisation_url', e.target.value)}

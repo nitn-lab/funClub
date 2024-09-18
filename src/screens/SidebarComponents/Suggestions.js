@@ -15,7 +15,7 @@ const Suggestions = () => {
     const initializedData = NearbyPeople.map((item) => ({
       ...item,
       isFollowing: false,
-      isOnline: Math.random() > 0.5, // Randomly set online/offline status
+      isOnline: Math.random() > 0.5, 
     }));
     setNearby(initializedData);
   }, []);

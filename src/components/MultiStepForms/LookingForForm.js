@@ -25,16 +25,16 @@ const LookingForForm = ({ onInputChange, onSkip }) => {
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold xs:text-3xl">Looking For Details!</h1>
         <button
-          className="w-max active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 px-3 rounded-xl bg-primary-light dark:bg-primary-dark text-lg font-bold text-primary-dark dark:text-primary-light"
+          className="w-max active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-1 px-2 rounded-md bg-primary-light dark:bg-primary-dark text-lg font-bold text-primary-dark dark:text-primary-light"
           onClick={onSkip}
         >
           Skip
         </button>
       </div>
-      <p className="font-medium text-lg mt-4 md:mt-2">
+      <p className="font-medium text-lg mt-2">
         Please Choose your Looking For!!
       </p>
-      <div className="mt-5 md:mt-3 grid grid-cols-4">
+      <div className="mt-3 grid grid-cols-4">
         {LookingFor &&
           LookingFor.map((item, index) => {
             return (

@@ -1,6 +1,6 @@
  import React, { useState } from 'react';
-import { MdStar } from 'react-icons/md'; // For "Popular Streams" icon
-import { FaUserAlt } from 'react-icons/fa'; // For "Near You" icon
+import { MdStar } from 'react-icons/md'; 
+import { FaUserAlt } from 'react-icons/fa'; 
 import { CiStreamOn } from "react-icons/ci";
 import { FaTowerBroadcast } from "react-icons/fa6";
 
