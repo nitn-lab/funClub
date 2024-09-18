@@ -13,7 +13,7 @@ const Dashboard = () => {
   const [videos, setVideos] = useState([]);
   const [selectedCaller, setSelectedCaller] = useState(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isChatClosing, setIsChatClosing] = useState(false); // State to handle chat closing transition
+  const [isChatClosing, setIsChatClosing] = useState(false);
 
   useEffect(() => {
     setVideos(VideoData);
@@ -37,14 +37,14 @@ const Dashboard = () => {
       setTimeout(() => {
         setIsChatOpen(false);
         setIsChatClosing(false);
-      }, 500); // Match this duration with the transition duration
+      }, 500);
     } else {
       setIsChatOpen(true);
     }
   };
 
   useEffect(() => {
-    // Toggle body scroll when chat is open
+   
     document.body.style.overflow = isChatOpen ? 'hidden' : 'auto';
   }, [isChatOpen]);
 

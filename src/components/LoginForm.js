@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function LoginForm() {
 
@@ -16,11 +17,12 @@ export default function LoginForm() {
         password
       });
       if(response.status === 200){
+        toast.success("Successfully logged in!!")
         navigate('/Dashboard'); 
       }
     }
     catch(error){
-      console.error("Error logging in", error);
+      toast.error( error.response.data.error.details[0].message);
     }
   }
   return (
@@ -32,16 +34,16 @@ export default function LoginForm() {
       <div className="mt-8 md:mt-6">
         <div>
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1  placeholder-black bg-white text-black"
+            className="w-full border-2 rounded-lg p-2 mt-1  placeholder-black bg-white text-black"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="mt-5 md:mt-3">
+        <div className="mt-3">
           
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1  placeholder-black bg-white text-black"
+            className="w-full border-2 rounded-lg p-2 mt-1  placeholder-black bg-white text-black"
             placeholder="Password"
             type="password"
             value={password}
@@ -62,7 +64,7 @@ export default function LoginForm() {
             Forget Password?
           </button>
         </div>
-        <div className="mt-5  flex flex-col gap-y-4">
+        <div className="mt-4  flex flex-col gap-y-4">
           <button
             onClick={handleLogin}
             className="active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 rounded-xl bg-main-gradient  text-md font-bold text-primary-dark"
@@ -70,7 +72,7 @@ export default function LoginForm() {
             Sign In
           </button>
         </div>
-        <div className="mt-5 flex justify-center items-center">
+        <div className="mt-4 flex justify-center items-center">
           <p className="font-medium text-base md:text-sm">Don't have an account?</p>
           <button
             className="text-violet-500 text-base md:text-sm font-medium ml-2"

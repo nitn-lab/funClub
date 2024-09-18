@@ -3,24 +3,24 @@ import PersonalityTypes from "./PersonalityTypes";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const PersonalityForm = ({ onInputChange, data }) => {
-  // Find the default type for "INTJ"
+ 
   const defaultType = PersonalityTypes.find(type => type.type === "INTJ");
 
   const [formData, setFormData] = useState({
-    personality: data.personality || defaultType.type,  // Set default to "INTJ" or fetched data
+    personality: data.personality || defaultType.type,  
   });
 
-  const [hoverIndex, setHoverIndex] = useState(null); // For hover effect
+  const [hoverIndex, setHoverIndex] = useState(null); 
 
   useEffect(() => {
-    // Only send the personality type to the backend
+   
     onInputChange({ personality: formData.personality });
   }, [formData]);
 
   const handleClick = (index) => {
     setFormData((prevData) => ({
       ...prevData,
-      personality: PersonalityTypes[index].type, // Store only the type, not the index
+      personality: PersonalityTypes[index].type, 
     }));
   };
 
@@ -31,9 +31,9 @@ const PersonalityForm = ({ onInputChange, data }) => {
 
     const isInLastTwoRows = rowIndex >= totalRows - 2;
     if (isInLastTwoRows) {
-      return "bottom-full mb-0"; // Position above the item
+      return "bottom-full mb-0"; 
     } else {
-      return "top-full mt-0"; // Position below the item
+      return "top-full mt-0"; 
     }
   };
 
@@ -49,22 +49,22 @@ const PersonalityForm = ({ onInputChange, data }) => {
   return (
     <div className="w-full py-5 text-primary-light dark:text-primary-dark relative">
       <h1 className="text-4xl font-bold xs:text-3xl">Personality Details!</h1>
-      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-4 md:mt-2">
+      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-2">
         Please fill your Personality Type Details!
       </p>
-      <div className="mt-5 md:mt-3">
+      <div >
         
         {/* Main container with flex layout */}
-        <div className="flex justify-start items-center mt-5 w-full md:w-full h-64 md:h-44 overflow-auto">
-          <div className="grid grid-cols-4 gap-3 md:gap-3">
+        <div className="flex justify-start items-center w-full md:w-full h-64 md:h-44 overflow-auto">
+          <div className="grid grid-cols-4 gap-1">
             {PersonalityTypes &&
               PersonalityTypes.map((item, index) => (
                 <div
-                  className="relative w-fit cursor-pointer m-2 xs:m-1.5"
+                  className="relative w-fit cursor-pointer m-1.5"
                   key={index}
                   onClick={() => handleClick(index)}
-                  onMouseEnter={() => setHoverIndex(index)} // Show box on hover
-                  onMouseLeave={() => setHoverIndex(null)} // Hide box on mouse leave
+                  onMouseEnter={() => setHoverIndex(index)}
+                  onMouseLeave={() => setHoverIndex(null)} 
                 >
                   <div className={`flex border-2 py-1 px-2 rounded-full items-center gap-2
                     ${formData.personality === item.type ? 'border-primary-light dark:border-primary-dark' : 'border-gray-400'}`}>
@@ -94,7 +94,7 @@ const PersonalityForm = ({ onInputChange, data }) => {
           {PersonalityTypes.find(item => item.type === formData.personality) && (
             <div
               className="ml-5 flex-1 bg-main-gradient h-fit text-primary-dark p-4 rounded-lg shadow-2xl z-20"
-              style={{ boxShadow: "0 4px 20px purple" }} // Add elevation effect
+              style={{ boxShadow: "0 4px 20px purple" }} 
             >
               <p className="text-lg">
                 {PersonalityTypes.find(item => item.type === formData.personality).description}

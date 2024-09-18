@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function ForgetPasswordForm() {
   const navigate = useNavigate();
@@ -12,10 +13,11 @@ export default function ForgetPasswordForm() {
       
       const response = await axios.post("http://3.110.156.153:5000/api/v1/passwordReset", { email, password });
       if(response.status === 201){
+        toast.success("Password reset successfully!!")
         navigate("/")
       }
     } catch (err) {
-      console.log("Error in reseting password. " + err)
+      toast.error( err.response.data.message)
     }
   };
 
@@ -28,26 +30,26 @@ export default function ForgetPasswordForm() {
       <div className="mt-8 md:mt-6">
         <div>
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 border-none outline-none placeholder-black bg-white text-black"
+            className="w-full border-2 rounded-lg p-2 mt-1 border-none outline-none placeholder-black bg-white text-black"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="mt-4">
+        <div className="mt-3">
           <input
             type="password"
-            className="w-full border-2 rounded-lg p-2.5 mt-1 border-none outline-none placeholder-black bg-white text-black"
+            className="w-full border-2 rounded-lg p-2 mt-1 border-none outline-none placeholder-black bg-white text-black"
             placeholder="New Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
-        <div className="mt-5 flex flex-col gap-y-4">
+        <div className="mt-4 flex flex-col gap-y-4">
           <button
             onClick={handleResetPassword}
-            className="active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 rounded-xl bg-main-gradient text-md font-bold"
+            className="active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 rounded-xl bg-main-gradient text-base font-base"
           >
             Reset Password
           </button>

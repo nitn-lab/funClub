@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar } from 'primereact/calendar';
-import Dropdown from './MultiStepForms/Dropdown'; // Update path as necessary
+import Dropdown from './MultiStepForms/Dropdown'; 
 
 const SignUp = ({ data, onInputChange }) => {
   const { username, email, birthdate, password, confirm_password, gender } = data;
@@ -25,11 +25,11 @@ const SignUp = ({ data, onInputChange }) => {
   return (
     <div className="w-full py-5 text-primary-light">
       <h1 className="text-4xl font-bold text-primary-light dark:text-primary-dark xs:text-3xl">Create Account!</h1>
-      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-4 md:mt-2">Create your Free Account!</p>
-      <div className="flex mt-5 md:mt-3 gap-8 xs:gap-4">
+      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-2">Create your Free Account!</p>
+      <div className="flex mt-3 gap-8 xs:gap-4">
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Username"
             type="text"
             name="username"
@@ -39,7 +39,7 @@ const SignUp = ({ data, onInputChange }) => {
         </div>
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Email"
             type="email"
             name="email"
@@ -48,10 +48,10 @@ const SignUp = ({ data, onInputChange }) => {
           />
         </div>
       </div>
-      <div className="flex mt-5 md:mt-3 gap-8 xs:gap-4">
+      <div className="flex mt-3 gap-8 xs:gap-4">
         <div className="w-1/2">
           <Calendar
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Birthdate"
             onChange={handleDateChange}
             value={birthdate ? new Date(birthdate.split('/').reverse().join('/')) : null}
@@ -63,8 +63,9 @@ const SignUp = ({ data, onInputChange }) => {
         </div>
         <div className="w-1/2">
           <Dropdown
-           
+            
             options={[
+              "Select Gender",
               "Male", "Female", "Transgender", "Prefer not to say"
             ]}
             value={gender || ''}
@@ -72,10 +73,10 @@ const SignUp = ({ data, onInputChange }) => {
           />
         </div>
       </div>
-      <div className="flex mt-5 md:mt-3 gap-8 xs:gap-4">
+      <div className="flex mt-3 gap-8 xs:gap-4">
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Password"
             type="password"
             name="password"
@@ -85,7 +86,7 @@ const SignUp = ({ data, onInputChange }) => {
         </div>
         <div className="w-1/2">
           <input
-            className="w-full border-2 rounded-lg p-2.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
+            className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Confirm Password"
             type="password"
             name="confirm_password"

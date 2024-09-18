@@ -8,14 +8,14 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 
 const Nearby = () => {
   const [nearby, setNearby] = useState([]);
-  const [filter, setFilter] = useState("all"); // Filter state: "all", "online", or "offline"
+  const [filter, setFilter] = useState("all"); 
 
   useEffect(() => {
-    // Initialize the data with online/offline status
+   
     const initializedData = NearbyPeople.map((item) => ({
       ...item,
-      isFollowing: false, // Add isFollowing state to each caller
-      isOnline: Math.random() > 0.5 // Randomly set online/offline status
+      isFollowing: false,
+      isOnline: Math.random() > 0.5
     }));
     setNearby(initializedData);
   }, []);
@@ -24,13 +24,13 @@ const Nearby = () => {
     setNearby((prevData) =>
       prevData.map((item) =>
         item._id === id
-          ? { ...item, isFollowing: !item.isFollowing } // Toggle follow state
+          ? { ...item, isFollowing: !item.isFollowing }
           : item
       )
     );
   };
 
-  // Filter users based on the selected filter
+  
   const filteredNearby = nearby.filter((item) => {
     if (filter === "all") return true;
     if (filter === "online") return item.isOnline;
@@ -81,8 +81,8 @@ const Nearby = () => {
             <div
               className="absolute top-2 xs:top-1 left-2 xs:left-1 flex items-center bg-main-gradient text-white rounded-md px-2 py-1 cursor-pointer"
               onClick={(e) => {
-                e.stopPropagation(); // Prevent triggering the main caller click
-                toggleFollow(item._id); // Toggle follow status
+                e.stopPropagation(); 
+                toggleFollow(item._id);
               }}
             >
               {item.isFollowing ? (

@@ -6,7 +6,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 const InterestForm = ({ onInputChange }) => {
   const [selectedItems, setSelectedItems] = useState([]);
-  const [isAtBottom, setIsAtBottom] = useState(false); // Track scroll position
+  const [isAtBottom, setIsAtBottom] = useState(false);
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
@@ -46,12 +46,12 @@ const InterestForm = ({ onInputChange }) => {
   return (
     <div className="w-full py-5 text-primary-light dark:text-primary-dark relative">
       <h1 className="text-4xl font-bold xs:text-3xl">Interest Details!</h1>
-      <p className="font-medium text-lg mt-4 md:mt-2">
+      <p className="font-medium text-lg mt-2">
         Please Choose your Interests!!
       </p>
       <div
-        className="scrollable-div h-[19rem] md:h-64 mt-3 flex flex-wrap overflow-auto"
-        ref={scrollContainerRef} // Reference to the scrollable div
+        className="scrollable-div h-64 mt-1 flex flex-wrap overflow-auto"
+        ref={scrollContainerRef} 
       >
         {interests &&
           interests.map((interest, index) => (
@@ -79,7 +79,7 @@ const InterestForm = ({ onInputChange }) => {
       {/* Arrow for scrolling to bottom */}
       {!isAtBottom && (
         <div
-          className="absolute -bottom-5 bg-primary-light dark:bg-primary-dark right-0 p-1 cursor-pointer animate-bounce rounded-full"
+          className="absolute -bottom-8 bg-primary-light dark:bg-primary-dark right-0 p-1 cursor-pointer animate-bounce rounded-full"
           onClick={scrollToBottom}
         >
           <ArrowDownwardIcon className="text-primary-dark dark:text-primary-light" fontSize="medium" />
@@ -89,7 +89,7 @@ const InterestForm = ({ onInputChange }) => {
       {/* Arrow for scrolling to top */}
       {isAtBottom && (
         <div
-          className="absolute -bottom-5 bg-primary-light dark:bg-primary-dark animate-bounce rounded-full  right-0  cursor-pointer p-1"
+          className="absolute -bottom-8 bg-primary-light dark:bg-primary-dark animate-bounce rounded-full  right-0  cursor-pointer p-1"
           onClick={scrollToTop}
         >
           <ArrowUpwardIcon className="text-primary-dark dark:text-primary-light" fontSize="medium" />
