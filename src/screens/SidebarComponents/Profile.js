@@ -1,109 +1,157 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CreateIcon from "@mui/icons-material/Create";
 import PaidIcon from '@mui/icons-material/Paid';
+import { UserContext } from "../../components/context/UserContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Profile = () => {
+  const { id } = useContext(UserContext);
   const [profilePicture, setProfilePicture] = useState(null);
-  const [username, setUsername] = useState("John Doe");
-  const [about, setAbout] = useState("Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque fuga quasi maxime vitae, labore dolores!");
-  const [ubication, setUbication] = useState("Los Angeles, United States");
-  const [personalInfo, setPersonalInfo] = useState({
+  const [user, setUser] = useState({
+    username: "",
+    country: "",
+    ethnicity: "",
+    smoking: "",
+    drinking: "",
+    personality: "",
+    sexual_orientation: "",
+    about: "",
     relationship: "No data",
-    smoke: "No data",
-    sexuality: "No data",
-    ethnicity: "No data",
     bodyType: "No data",
   });
+  const token = localStorage.getItem('jwtToken');
   const [isEditing, setIsEditing] = useState({
     about: false,
-    ubication: false,
-    personalInfo: false,
+    username: false,
+    ethnicity: false,
   });
   const [albums, setAlbums] = useState([]);
 
-  const handlePictureChange = (e, type) => {
-    const file = e.target.files[0];
-    if (file) { 
-      const imageUrl = URL.createObjectURL(file);
-      if(type === "profile"){
-        setProfilePicture(imageUrl);
-      }
-      else if(type === "album"){
-        setAlbums([...albums, imageUrl]);
-      }
+  useEffect(() => {
+    if (id) {
+      fetchUserData(id); // Fetch user data based on user ID
+    }
+  }, [id]);
+
+  const fetchUserData = async (id) => {
+    try {
+      const response = await axios.get(`http://3.110.156.153:5000/api/v1/userById/${id}`, {
+        headers: { Authorization: `${token} ` },
+      });
+
+      const fetchedUser = response.data.data;
+      setUser({
+        username: fetchedUser.username,
+        country: fetchedUser.country,
+        ethnicity: fetchedUser.ethnicity,
+        smoking: fetchedUser.smoking,
+        drinking: fetchedUser.drinking,
+        personality: fetchedUser.personality,
+        sexual_orientation: fetchedUser.sexual_orientation,
+        about: fetchedUser.about || "No data",
+        relationship: fetchedUser.relationship || "No data",
+        bodyType: fetchedUser.bodyType || "No data",
+      });
+      setAlbums(fetchedUser.albums || []);
+      setProfilePicture(fetchedUser.profilePicture || null);
+    } catch (error) {
+      console.error("Failed to fetch user data", error);
+    }
+  };
+
+  const updateUserData = async (updatedData) => {
+    try {
+      await axios.put(`http://3.110.156.153:5000/api/v1/updateUsers/${id}`, updatedData, {
+        headers: { Authorization: `${token}` },
+      });
+      toast.success("Field updated successfully!!");
+    } catch (error) {
+      console.error("Failed to update user data!!");
     }
   };
 
   const handleLogout = () => {
     setProfilePicture(null);
-    setUsername("User");
+    // Handle logout logic here
   };
-
-  const handleRemovePicture = ()=> {
-    setProfilePicture(null);
-  }
 
   const toggleEdit = (section) => {
     setIsEditing((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
-  const handleInputChange = (e, section, key) => {
-    if (section === "personalInfo") {
-      setPersonalInfo((prev) => ({
-        ...prev,
-        [key]: e.target.value.trim() !== "" ? e.target.value : "No data"
-      }));
-    } else {
-      section === "about" ? setAbout(e.target.value) : setUbication(e.target.value);
-    }
+  const handleInputChange = (e, section) => {
+    setUser((prev) => ({
+      ...prev,
+      [section]: e.target.value,
+    }));
   };
 
   const saveChanges = (section) => {
     toggleEdit(section);
+
+    // Prepare updated data based on the current state
+    const updatedData = {
+      username: user.username,
+      about: user.about,
+      ethnicity: user.ethnicity,
+      smoking: user.smoking,
+      drinking: user.drinking,
+      personality: user.personality,
+      sexual_orientation: user.sexual_orientation,
+      relationship: user.relationship,
+      bodyType: user.bodyType,
+      profilePicture,
+      albums,
+    };
+
+    // Send updated data to the API
+    updateUserData(updatedData);
   };
 
   return (
     <div className="flex flex-col items-center w-[calc(100vw-30vw)] md:w-[98vw] mx-auto">
-      {/* Header Section */}
+      {/* Profile Header */}
       <div className="flex justify-between items-center w-full px-5 xs:px-3 py-3 bg-black rounded-lg text-white">
         <div className="relative flex items-center gap-x-3">
           <div className="relative">
             {profilePicture ? (
-             <div className="relative">
-             <img
-                src={profilePicture}
-                alt="Profile"
-                className="w-14 h-14 rounded-full p-1.5 border-2 border-[#09d271]"
-              />
-              <button onClick={handleRemovePicture} className="absolute -top-3 left-0 text-white text-3xl">&times;</button>
-             </div>
+              <div className="relative">
+                <img
+                  src={profilePicture}
+                  alt="Profile"
+                  className="w-14 h-14 rounded-full p-1.5 border-2 border-[#09d271]"
+                />
+                <button onClick={() => setProfilePicture(null)} className="absolute -top-3 left-0 text-white text-3xl">&times;</button>
+              </div>
             ) : (
               <AccountCircleIcon
                 style={{ fontSize: "3.5rem" }}
                 className="rounded-full bg-main-gradient"
               />
             )}
-            {/* Plus Icon */}
-            <span className="absolute bottom-1 -right-1.5  text-white  cursor-pointer">
-              <AddAPhotoIcon
-                fontSize="small"
-                onClick={() => document.getElementById("fileInput").click()}
-              />
+            <span className="absolute bottom-1 -right-1.5 text-white cursor-pointer">
+              <AddAPhotoIcon fontSize="small" onClick={() => document.getElementById("fileInput").click()} />
             </span>
-            {/* Hidden File Input */}
             <input
               type="file"
               id="fileInput"
               className="hidden"
-              onChange={(e) => handlePictureChange(e, "profile")}
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const imageUrl = URL.createObjectURL(file);
+                  setProfilePicture(imageUrl);
+                }
+              }}
             />
           </div>
           <div>
-            <h2 className="text-lg font-semibold">{username}</h2>
+            <h2 className="text-lg font-semibold">{user.username}</h2>
             <p className="text-[rgb(9,210,113)]">Online</p>
           </div>
         </div>
@@ -120,124 +168,140 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Main Content Section */}
+      {/* Main Content */}
       <div className="flex xs:block w-full mt-4 mx-auto rounded-md">
         {/* Left Sidebar */}
         <div className="w-3/4 p-6 xs:p-3 bg-black text-white shadow scrollable-div overflow-y-auto h-[calc(100vh-20vh)]">
           {/* About Section */}
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">About</h3>
               <button onClick={() => toggleEdit("about")}><CreateIcon /></button>
             </div>
             {isEditing.about ? (
               <input
                 type="text"
-                value={about}
+                value={user.about}
                 onChange={(e) => handleInputChange(e, "about")}
                 onBlur={() => saveChanges("about")}
-                className="w-full p-2 brder-none outline-none bg-black text-white"
+                className="w-full border-none outline-none bg-black text-white"
               />
             ) : (
-              <p className="font-base text-base">{about}</p>
+              <p className="font-base text-base">{user.about}</p>
             )}
           </div>
 
-          {/* Highlighted Stories Section */}
-          <div className="my-6">
-            <h3 className="text-lg font-semibold">Highlighted stories</h3>
-            <div className="mt-4 grid grid-cols-5 md:grid-cols-3 gap-6">
-              {albums.map((album, index) => (
-                <div
-                  key={index}
-                  className="relative h-36 bg-purple-200 rounded-lg overflow-hidden"
-                >
-                  <img
-                    src={album}
-                    alt={`album ${index}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-              <div
-                className="relative h-36 bg-purple-200 rounded-lg text-purple-600 font-bold flex items-center justify-center cursor-pointer"
-                onClick={() => document.getElementById("albumInput").click()}
-              >
-                <AddAPhotoIcon fontSize="large" />
-                {/* Hidden File Input for Album */}
-                <input
-                  type="file"
-                  id="albumInput"
-                  className="hidden"
-                  onChange={(e) => handlePictureChange(e, "album")}
-                />
-              </div>
+          {/* Ethnicity Section */}
+          <div className="my-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Ethnicity</h3>
+              <button onClick={() => toggleEdit("ethnicity")}><CreateIcon /></button>
             </div>
-          </div>
-
-          {/* Ubication Section */}
-          <div className="my-6">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold">Ubication</h3>
-              <button onClick={() => toggleEdit("ubication")}><CreateIcon /></button>
-            </div>
-            {isEditing.ubication ? (
+            {isEditing.ethnicity ? (
               <input
                 type="text"
-                value={ubication}
-                onChange={(e) => handleInputChange(e, "ubication")}
-                onBlur={() => saveChanges("ubication")}
-                className="w-full p-2 rounded-lg bg-black border-none outline-none text-white"
+                value={user.ethnicity}
+                onChange={(e) => handleInputChange(e, "ethnicity")}
+                onBlur={() => saveChanges("ethnicity")}
+                className="w-full p-0 border-none outline-none bg-black text-white"
               />
             ) : (
-              <p>{ubication}</p>
+              <p className="font-base text-base">{user.ethnicity}</p>
             )}
           </div>
 
-          {/* Personal Information Section */}
-          <div className="my-6">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold">Personal Information</h3>
-              <button onClick={() => toggleEdit("personalInfo")}><CreateIcon /></button>
+          <div className="my-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Country</h3>
+              <button onClick={() => toggleEdit("country")}><CreateIcon /></button>
             </div>
-            {isEditing.personalInfo ? (
-              <ul className="mt-4 space-y-2">
-                {Object.keys(personalInfo).map((key) => (
-                  <li key={key}>
-                    <input
-                      type="text"
-                      value={personalInfo[key]}
-                      onChange={(e) => handleInputChange(e, "personalInfo", key)}
-                      onBlur={() => saveChanges("personalInfo")}
-                      className="w-full p-2 rounded-lg bg-black border-none outline-none text-white"
-                    />
-                  </li>
-                ))}
-              </ul>
+            {isEditing.country ? (
+              <input
+                type="text"
+                value={user.country}
+                onChange={(e) => handleInputChange(e, "country")}
+                onBlur={() => saveChanges("country")}
+                className="w-full p-0 border-none outline-none bg-black text-white"
+              />
             ) : (
-              <ul className="mt-4 space-y-2">
-                <li>Relationship: {personalInfo.relationship}</li>
-                <li>Smoke: {personalInfo.smoke}</li>
-                <li>Sexuality: {personalInfo.sexuality}</li>
-                <li>Ethnicity: {personalInfo.ethnicity}</li>
-                <li>Body Type: {personalInfo.bodyType}</li>
-              </ul>
+              <p className="font-base text-base">{user.country}</p>
             )}
           </div>
 
-          {/* Interests Section */}
-          <div className="my-6">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold">Interests</h3>
-              <button><CreateIcon /></button>
+          <div className="my-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Smoking</h3>
+              <button onClick={() => toggleEdit("smoking")}><CreateIcon /></button>
             </div>
-            <button className="mt-4 w-20 h-20 bg-purple-600 text-white py-2 rounded-full">
-              Add Interest
-            </button>
+            {isEditing.smoking ? (
+              <input
+                type="text"
+                value={user.smoking}
+                onChange={(e) => handleInputChange(e, "smoking")}
+                onBlur={() => saveChanges("smoking")}
+                className="w-full p-0 border-none outline-none bg-black text-white"
+              />
+            ) : (
+              <p className="font-base text-base">{user.smoking}</p>
+            )}
+          </div>
+
+          <div className="my-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Drinking</h3>
+              <button onClick={() => toggleEdit("drinking")}><CreateIcon /></button>
+            </div>
+            {isEditing.drinking ? (
+              <input
+                type="text"
+                value={user.drinking}
+                onChange={(e) => handleInputChange(e, "drinking")}
+                onBlur={() => saveChanges("drinking")}
+                className="w-full p-0 border-none outline-none bg-black text-white"
+              />
+            ) : (
+              <p className="font-base text-base">{user.drinking}</p>
+            )}
+          </div>
+
+          <div className="my-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Personality</h3>
+              <button onClick={() => toggleEdit("personality")}><CreateIcon /></button>
+            </div>
+            {isEditing.personality ? (
+              <input
+                type="text"
+                value={user.personality}
+                onChange={(e) => handleInputChange(e, "personality")}
+                onBlur={() => saveChanges("personality")}
+                className="w-full p-0 border-none outline-none bg-black text-white"
+              />
+            ) : (
+              <p className="font-base text-base">{user.personality}</p>
+            )}
+          </div>
+
+          <div className="my-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Sexual Orientation</h3>
+              <button onClick={() => toggleEdit("sexual_orientation")}><CreateIcon /></button>
+            </div>
+            {isEditing.sexual_orientation ? (
+              <input
+                type="text"
+                value={user.sexual_orientation}
+                onChange={(e) => handleInputChange(e, "sexual_orientation")}
+                onBlur={() => saveChanges("sexual_orientation")}
+                className="w-full p-0 border-none outline-none bg-black text-white"
+              />
+            ) : (
+              <p className="font-base text-base">{user.sexual_orientation}</p>
+            )}
           </div>
         </div>
 
-        {/* Right Sidebar */}
+        {/* right sidebar */}
         <div className="w-1/4 p-4 text-white bg-black border-l-2 border-gray-600 pr-3 shadow xs:flex">
           <div className="mb-6">
                <PaidIcon className="text-yellow-400 ml-3" style={{fontSize: "3rem"}}/>

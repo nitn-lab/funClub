@@ -6,24 +6,27 @@ import reportWebVitals from "./reportWebVitals";
 import { PrimeReactProvider } from 'primereact/api';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { UserProvider} from "./components/context/UserContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <PrimeReactProvider>
-      <App />
-      <ToastContainer
-        autoClose={3000}
-        position="bottom-right"
-        theme="dark"
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeButton={false}
-        closeOnClick
-        draggable
-        pauseOnHover
-      />
+    <UserProvider>
+      <PrimeReactProvider>
+        <App />
+        <ToastContainer
+          autoClose={3000}
+          position="bottom-right"
+          theme="dark"
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeButton={false}
+          closeOnClick
+          draggable
+          pauseOnHover
+        />
 
-    </PrimeReactProvider>
+      </PrimeReactProvider>
+    </UserProvider>
   </React.StrictMode>
 );
 
