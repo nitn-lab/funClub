@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import SignUp from "../../components/SignUp";
 import BasicDetailsForm from "../../components/MultiStepForms/BasicDetailsForm";
 import AdvanceForm from "../../components/MultiStepForms/AdvanceForm";
@@ -12,10 +12,13 @@ import Sidebar from './Sidebar';
 import axios from 'axios';
 import Pagination from '../../components/MultiStepForms/Pagination ';
 import { toast } from "react-toastify";
+import { UserContext } from "../../components/context/UserContext"; 
 
 const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const {updateUserId} = useContext(UserContext);
 
   const [formData, setFormData] = useState({
     signUpData: {},
@@ -50,10 +53,10 @@ const Register = () => {
 
     try {
       const res = await axios.post('http://3.110.156.153:5000/api/v1/register', allData);
-      console.log(res)
       setLoading(false);
       if (res.status === 201) {
         toast.success("Successfully registered!!")
+        updateUserId(res.data.data._id)
          navigate('/'); }
     } catch (error) {
       toast.error( error.response.data.error.details[0].message);

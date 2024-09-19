@@ -17,12 +17,13 @@ export default function LoginForm() {
         password
       });
       if(response.status === 200){
-        toast.success("Successfully logged in!!")
+        localStorage.setItem('jwtToken', response.data.jwtToken);
+        toast.success("Successfully logged in!!");
         navigate('/Dashboard'); 
       }
     }
     catch(error){
-      toast.error( error.response.data.error.details[0].message);
+      console.error( error);
     }
   }
   return (
