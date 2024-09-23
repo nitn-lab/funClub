@@ -1,7 +1,8 @@
-import React from "react";
+import React, {useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { UserContext } from "./context/UserContext"; 
 
 export default function LoginForm() {
 
@@ -9,6 +10,7 @@ export default function LoginForm() {
   const [password, setPassword] = React.useState('');
 
   const navigate = useNavigate();
+  const {updateUserId} = useContext(UserContext);
 
   const handleLogin = async () => {
     try{
@@ -16,14 +18,21 @@ export default function LoginForm() {
         email,
         password
       });
+      console.log(response)
       if(response.status === 200){
         localStorage.setItem('jwtToken', response.data.jwtToken);
         toast.success("Successfully logged in!!");
+        updateUserId(response.data.tokenObject._id)
         navigate('/Dashboard'); 
       }
     }
     catch(error){
-      console.error( error);
+      if(error.response.status === 401){
+        toast.error("Email or password is invalid or incorrect!")
+      }
+      else{
+        toast.error(error.response.data.error.details[0].message)
+      }
     }
   }
   return (

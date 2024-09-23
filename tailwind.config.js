@@ -16,6 +16,9 @@ module.exports = {
       "xl" : {"max" : "1536px"}
     },
     extend: {
+      fontFamily : {
+        gotham : ['Gotham', 'sans-serif']
+      },
       backgroundImage : {
         'main-gradient' : 'var(--main-gradient )'
       },
