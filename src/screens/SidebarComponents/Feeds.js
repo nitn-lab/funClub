@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { FaHeart } from "react-icons/fa";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import HomeIcon from '@mui/icons-material/Home';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { FaBookmark } from "react-icons/fa6";
+import { IoMdHome } from "react-icons/io";
+import { IoMdCart } from "react-icons/io";
 import LockIcon from '@mui/icons-material/Lock';
 
 import NearbyPeople from "./NearbyComponent/NearbyPeople.json";
@@ -59,7 +61,7 @@ const Feeds = () => {
           } text-lg px-4 xs:px-2 py-2  flex items-center gap-x-2 xs:gap-x-0`}
           onClick={() => setActiveTab("all")}
         >
-          <HomeIcon className="xs:hidden"/> All
+          <IoMdHome className="xs:hidden"/> All
         </button>
         <button
           className={`${
@@ -67,7 +69,7 @@ const Feeds = () => {
           } text-lg px-4 xs:px-2 py-2 gap-x-2 flex items-center xs:gap-x-0`}
           onClick={() => setActiveTab("liked")}
         >
-          <FavoriteIcon className="xs:hidden"/> Liked
+          <FaHeart className="xs:hidden"/> Liked
         </button>
         <button
           className={`${
@@ -75,7 +77,7 @@ const Feeds = () => {
           } text-lg px-4 xs:px-2 py-2 gap-x-2 xs:gap-x-0 flex items-center`}
           onClick={() => setActiveTab("saved")}
         >
-          <BookmarkIcon className="xs:hidden"/> Saved
+          <FaBookmark className="xs:hidden"/> Saved
         </button>
         <button
           className={`${
@@ -83,13 +85,13 @@ const Feeds = () => {
           } text-lg px-4 xs:px-2 py-2 gap-x-2 xs:gap-x-0 flex items-center`}
           onClick={() => setActiveTab("purchased")}
         >
-          <ShoppingCartIcon className="xs:hidden"/> Purchased
+          <IoMdCart className="xs:hidden"/> Purchased
         </button>
       </div>
 
       {/* Feeds Content */}
       <div
-        className="scrollable-div text-white overflow-y-auto mx-auto h-[calc(100vh-18vh)] md:h-[77vh] grid grid-cols-2 xs:gridcols-1 gap-x-10 w-[calc(100vw-30vw)] md:w-[98vw]"
+        className="scrollable-div text-white overflow-y-auto h-[calc(100vh-18vh)] md:h-[77vh] grid grid-cols-2 xs:grid-cols-1 gap-x-10 sm:gap-x-2 w-[calc(100vw-30vw)] md:w-[98vw]  mx-auto "
       >
         {renderContent() &&
           renderContent().length > 0 &&

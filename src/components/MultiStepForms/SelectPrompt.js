@@ -1,16 +1,38 @@
 import React, { useState, useEffect } from "react";
-import {useNavigate} from 'react-router-dom'
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Dropdown from "./Dropdown";
 
-const SelectPrompt = ({ onInputChange }) => {
+const SelectPrompt = ({ onInputChange, onSkip }) => {
   const [formData, setFormData] = useState({});
   const [selectedPrompts, setSelectedPrompts] = useState([]);
   const [stories, setStories] = useState({});
   const [charCounts, setCharCounts] = useState({});
   const [submittedPrompts, setSubmittedPrompts] = useState([]);
+  const [promptOptions, setPromptOptions] = useState([]);
+
+  const navigate = useNavigate();
+  const token = localStorage.getItem('jwtToken')
+
+  // Fetch prompts from API
+  useEffect(() => {
+    const fetchPrompts = async () => {
+      try {
+        const response = await axios.get("http://3.110.156.153:5000/api/v1/getPromptQues", {
+          headers: { Authorization: `${token}` },
+        });
+        console.log(response)
+        setPromptOptions(response.data); 
+      } catch (error) {
+        console.error("Error fetching prompts", error);
+      }
+    };
+
+    fetchPrompts();
+  }, []);
 
   useEffect(() => {
-    onInputChange(formData);
+    onInputChange(formData); // Send form data to parent
   }, [formData]);
 
   const handleDropdownChange = (name, value) => {
@@ -41,43 +63,24 @@ const SelectPrompt = ({ onInputChange }) => {
     setSubmittedPrompts((prevPrompts) => [...prevPrompts, prompt]);
   };
 
-  const navigate = useNavigate()
-
   return (
     <div className="w-full py-5 text-primary-light dark:text-primary-dark">
-       <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold xs:text-3xl">Prompts!</h1>
         <button
-          className="w-max active:scale-[.98] acitve:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 px-3 rounded-xl bg-primary-light dark:bg-primary-dark text-lg font-bold dark:text-primary-light text-primary-dark"
-          onClick={() => navigate('/Dashboard')}
+          className="w-max active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-1 px-2 rounded-md bg-primary-light dark:bg-primary-dark text-lg font-bold text-primary-dark dark:text-primary-light"
+          onClick={onSkip}
         >
           Skip
         </button>
       </div>
-      <p className="font-medium text-lg mt-4 md:mt-2">
-        Please select a prompt!
-      </p>
-      <div className=" scrollable-div mt-2  h-72 md:h-64 overflow-auto">
+      <p className="font-medium text-lg mt-2">Please select a prompt!</p>
+      <div className="scrollable-div mt-3 h-72 md:h-64 overflow-auto">
         <div className="w-full">
           {submittedPrompts.length < 3 && (
             <Dropdown
               label="Prompts"
-              options={[
-                "My weird but true story is...",
-                "The first item on my bucket list is...",
-                "The hottest thing you can do is...",
-                "My hidden talent is...",
-                "A surprising thing about me is...",
-                "The key to my heart is...",
-                "My favorite playlist is called...",
-                "My parents will like you if...",
-                "I can beat you in a game of...",
-                "People would describe me as...",
-                "Perks of dating me...",
-                "I want someone who...",
-                "My weakness is...",
-                "Two truths and a lie..."
-              ]}
+              options={promptOptions} 
               onChange={(selectedOption) =>
                 handleDropdownChange("prompt", selectedOption)
               }

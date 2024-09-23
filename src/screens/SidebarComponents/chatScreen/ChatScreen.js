@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import InputEmoji from 'react-input-emoji';
-import {FaImage} from 'react-icons/fa6'
+import { FaImage } from 'react-icons/fa6'
 import ReactScrollToBottom from 'react-scroll-to-bottom';
 import logo from '../../assets/images/FUNCLUB logo.png';
 import { IoMdCall } from 'react-icons/io';
@@ -37,8 +37,8 @@ const ChatScreen = () => {
       <div className={`flip-card relative w-full h-full transition-transform duration-500 ${callActive ? 'flip' : ''}`}>
         <div className="front absolute top-0 left-0 w-full h-full  text-white">
           {receiver ? (
-            <div className="chat-screen w-full h-full">
-              <div className="header bg-gradient-to-tl from-violet-500 to-pink-500 text-white px-10 py-2.5 xs:px-5">
+            <div className="chat-screen relative w-full bg-purple-200 h-[96vh]">
+              <div className="header bg-fuchsia-800 text-white px-10 py-2.5 xs:px-5">
                 <div className="flex justify-between items-center">
                   <div className="flex gap-5 items-center xs:gap-3">
                     <div>
@@ -65,7 +65,7 @@ const ChatScreen = () => {
                 </div>
               </div>
               <ReactScrollToBottom className="chat-body 
-              bg-purple-200 px-6 xs:px-3 h-[calc(78vh-18px)]">
+               px-6 xs:px-3 h-full">
                 <div>
                   {messages.map((content, key) => (
                     content._id === receiver._id && (
@@ -77,24 +77,27 @@ const ChatScreen = () => {
                     )
                   ))}
                 </div>
-              </ReactScrollToBottom>
-              <div className="flex items-center px-6 sm:px-2 bg-purple-200">
-                <div className="bg-fuchsia-800 text-white p-2 rounded-full cursor-pointer">
-                  <FaImage />
+                <div className="absolute w-[93%] bottom-40">
+                <div className="flex items-center ">
+                  <div className="bg-fuchsia-800 text-white p-2 rounded-full cursor-pointer">
+                    <FaImage />
+                  </div>
+                  <InputEmoji
+                    background="#edecfb"
+                    value={message}
+                    onChange={handleChange}
+                    onEnter={handleSend}
+                  />
+                  <button
+                    className="py-1 px-3 rounded-lg bg-fuchsia-800 text-white text-lg font-semibold hover:border-2 hover:border-fuchsia-800 hover:bg-white hover:text-fuchsia-800"
+                    onClick={handleSend}
+                  >
+                    Send
+                  </button>
                 </div>
-                <InputEmoji
-                  background="#edecfb"
-                  value={message}
-                  onChange={handleChange}
-                  onEnter={handleSend}
-                />
-                <button
-                  className="py-1 px-3 rounded-lg bg-fuchsia-800 text-white text-lg font-semibold hover:border-2 hover:border-fuchsia-800 hover:bg-white hover:text-fuchsia-800"
-                  onClick={handleSend}
-                >
-                  Send
-                </button>
               </div>
+              </ReactScrollToBottom>
+             
             </div>
           ) : (
             <div className="p-6 sm:hidden">
@@ -106,7 +109,7 @@ const ChatScreen = () => {
           )}
         </div>
         <div className={`back transition-transform duration-500 ${callActive ? 'transform rotate-y-180' : ''}`}>
-          <CallingInterface  endVideoCall={endVideoCall} />
+          <CallingInterface endVideoCall={endVideoCall} />
         </div>
       </div>
     </div>

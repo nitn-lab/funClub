@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, {  useState } from "react";
 import SignUp from "../../components/SignUp";
 import BasicDetailsForm from "../../components/MultiStepForms/BasicDetailsForm";
 import AdvanceForm from "../../components/MultiStepForms/AdvanceForm";
@@ -11,14 +11,13 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from './Sidebar';
 import axios from 'axios';
 import Pagination from '../../components/MultiStepForms/Pagination ';
-import { toast } from "react-toastify";
-import { UserContext } from "../../components/context/UserContext"; 
+import { toast } from "react-toastify"; 
 
 const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const {updateUserId} = useContext(UserContext);
+
 
   const [formData, setFormData] = useState({
     signUpData: {},
@@ -27,7 +26,7 @@ const Register = () => {
     personalityData: {},
     interestData: {},
     lookingForData: {},
-
+    //  selectPromptData: {}
   });
 
   const handleInputChange = (formId, data) => {
@@ -48,18 +47,20 @@ const Register = () => {
       ...formData.personalityData,
       ...formData.interestData,
       ...formData.lookingForData,
-      ...formData.selectPromptData
+      // ...formData.selectPromptData
     };
+
+    console.log(allData)
 
     try {
       const res = await axios.post('http://3.110.156.153:5000/api/v1/register', allData);
       setLoading(false);
       if (res.status === 201) {
         toast.success("Successfully registered!!")
-        updateUserId(res.data.data._id)
+       
          navigate('/'); }
     } catch (error) {
-      toast.error( error.response.data.error.details[0].message);
+      toast.error("Error signing in. Please try again later!");
       setLoading(false);
     }
   };
@@ -96,6 +97,11 @@ const Register = () => {
       label: "Looking For Details",
       component: <LookingForForm onInputChange={(data) => handleInputChange("lookingForData", data)} data={formData.lookingForData} onSkip={() => handleSkip()} />
     },
+    // {
+    //   id: "selectPromptData",
+    //   label: "Select Prompts",
+    //   component: <SelectPrompt onInputChange={(data) => handleInputChange("selectPromptData", data)} data={formData.selectPromptData} onSkip={() => handleSkip()}/>
+    // },
 
   ];
 
@@ -116,7 +122,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex w-screen h-screen p-8 xs:p-3 justify-center bg-main-gradient md:block xs:h-[93vh]">
+    <div className="flex w-screen h-screen p-8 xs:p-3 justify-center bg-main-gradient md:block xs:h-[93vh] font-gotham">
       <Sidebar steps={data} currentStep={index} />
       <div className="signup w-2/3 xs:w-1/2 bg-primary-dark dark:bg-primary-light opacity-[0.9] px-8 xs:px-3 relative rounded-r-lg md:w-full md:mt-3 md:rounded-lg md:h-[85%]">
         <div className="flex">

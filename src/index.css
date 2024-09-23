@@ -2,6 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face{
+    font-family: 'Gotham';
+    src:url('../src/fonts/Gotham-Black.otf') format('openType');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'Gotham';
+    src:url('../src/fonts/Gotham-Bold.otf') format('openType');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'Gotham';
+    src:url('../src/fonts/Gotham-Light.otf') format('openType');
+    font-weight: lighter;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'Gotham';
+    src:url('../src/fonts/Gotham-Medium.otf') format('openType');
+    font-weight:normal;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'Gotham';
+    src:url('../src/fonts/Gotham-MediumItalic.otf') format('openType');
+    font-weight:normal;
+    font-style: italic;
+}
+
 :root{
     --main-gradient : linear-gradient(to top right, #8b5cf6, #ec4899);
    

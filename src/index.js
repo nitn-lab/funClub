@@ -17,7 +17,7 @@ root.render(
           autoClose={3000}
           position="bottom-right"
           theme="dark"
-          hideProgressBar={false}
+          hideProgressBar={true}
           newestOnTop={false}
           closeButton={false}
           closeOnClick

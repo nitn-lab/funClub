@@ -49,7 +49,7 @@ const Dashboard = () => {
   }, [isChatOpen]);
 
   return (
-    <div className="w-full flex justify-between items-start md:justify-normal md:gap-x-2 md:block">
+    <div className="w-full flex justify-between items-start md:justify-normal md:gap-x-2 md:block font-gotham">
       <div className="relative w-[calc(100vw-540px)] md:w-[100vw] h-[96vh] md:h-[87vh] mx-auto">
         <div>
           <VideoCarousel videos={videos} onSlideChange={handleSlideChange} />

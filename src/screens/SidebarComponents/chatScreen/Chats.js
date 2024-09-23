@@ -35,7 +35,7 @@ const Chats = ({ showChatScreen }) => {
       <div className="flex items-start rounded-md">
         {!showChatScreen && chatScreen && (
           <button
-            className="text-white bg-main-gradient text-sm rounded-full p-1 mr-2"
+            className="text-white bg-main-gradient text-sm rounded-full p-1"
             onClick={() => setChatScreen(false)}
           >
             <CloseIcon />
