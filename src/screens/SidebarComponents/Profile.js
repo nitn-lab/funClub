@@ -1,16 +1,21 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import CreateIcon from "@mui/icons-material/Create";
 import ModeIcon from '@mui/icons-material/Mode';
 import PaidIcon from '@mui/icons-material/Paid';
 import { UserContext } from "../../components/context/UserContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Modal } from 'react-responsive-modal';
+import { useNavigate } from "react-router-dom";
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL
 
 const Profile = () => {
+
+  const navigate = useNavigate();
   const { id } = useContext(UserContext);
   const [profilePicture, setProfilePicture] = useState(null);
   const [user, setUser] = useState({
@@ -27,7 +32,20 @@ const Profile = () => {
   });
   const token = localStorage.getItem('jwtToken');
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isModalClosing, setIsModalClosing] = useState(false);
+
   const [albums, setAlbums] = useState([]);
+
+  const handlePictureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const newAlbum = URL.createObjectURL(file);
+      setAlbums([...albums, newAlbum]);
+    }
+  };
+
 
   useEffect(() => {
     if (id) {
@@ -36,11 +54,12 @@ const Profile = () => {
   }, [id]);
 
   const fetchUserData = async (id) => {
+    setLoading(true);
     try {
-      const response = await axios.get(`http://3.110.156.153:5000/api/v1/userById/${id}`, {
+      const response = await axios.get(`${BASE_URL}/api/v1/userById/${id}`, {
         headers: { Authorization: `${token}` },
       });
-
+      setLoading(false);
       const fetchedUser = response.data.data;
       setUser({
         username: fetchedUser.username,
@@ -54,27 +73,27 @@ const Profile = () => {
         relationship: fetchedUser.relationship || "No data",
         bodyType: fetchedUser.bodyType || "No data",
       });
-      setAlbums(fetchedUser.albums || []);
+
       setProfilePicture(fetchedUser.profilePicture || null);
     } catch (error) {
       console.error("Failed to fetch user data", error);
+      setLoading(false);
     }
   };
 
   const updateUserData = async (updatedData) => {
+    setLoading(true);
     try {
-      await axios.put(`http://3.110.156.153:5000/api/v1/updateUsers/${id}`, updatedData, {
+      await axios.put(`${BASE_URL}/api/v1/updateUsers/${id}`, updatedData, {
         headers: { Authorization: `${token} ` },
       });
+      setLoading(false);
       toast.success("Field updated successfully!!");
     } catch (error) {
-      console.error("Failed to update user data!!");
-    }
-  };
 
-  const handleLogout = () => {
-    setProfilePicture(null);
-    // Handle logout logic here
+      console.error("Failed to update user data!!");
+      setLoading(false);
+    }
   };
 
   const toggleEdit = () => {
@@ -90,8 +109,6 @@ const Profile = () => {
 
   const saveChanges = () => {
     toggleEdit();
-
-    // Prepare updated data based on the current state
     const updatedData = {
       username: user.username,
       about: user.about,
@@ -103,15 +120,52 @@ const Profile = () => {
       relationship: user.relationship,
       bodyType: user.bodyType,
       profilePicture,
-      albums,
-    };
 
-    // Send updated data to the API
+    };
     updateUserData(updatedData);
   };
 
+  const openLogoutModal = () => {
+    setIsLogoutModalOpen(true);
+    setIsModalClosing(false)
+  };
+
+
+  const closeLogoutModal = () => {
+    setIsModalClosing(true);
+
+    setIsLogoutModalOpen(false);
+
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwtToken');
+    navigate("/");
+    setProfilePicture(null);
+    toast.success("Logged out successfully!!");
+
+  }
+
+  const calculateProgress = () => {
+    const fields = [
+      user.username,
+      user.about,
+      user.ethnicity,
+      user.country,
+      user.sexual_orientation,
+      user.smoking,
+      user.drinking,
+      user.personality,
+    ];
+
+    const filledFields = fields.filter((field) => field !== "" && field !== "No data");
+    const progress = (filledFields.length / fields.length) * 100;
+
+    return progress;
+  };
+
   return (
-    <div className="flex flex-col items-center w-[calc(100vw-30vw)] md:w-[98vw] mx-auto h-[96vh] md:h-[92vh]">
+    <div className="flex flex-col items-center w-[calc(100vw-30vw)] md:w-[98vw] mx-auto h-[96vh] md:h-[92vh] font-gotham">
       {/* Profile Header */}
       <div className="flex justify-between items-center w-full px-5 xs:px-3 py-3 bg-black rounded-lg text-white">
         <div className="relative flex items-center gap-x-3">
@@ -123,7 +177,7 @@ const Profile = () => {
                   alt="Profile"
                   className="w-14 h-14 rounded-full p-1.5 border-2 border-[#09d271]"
                 />
-                <button onClick={() => setProfilePicture(null)} className="absolute -top-3 left-0 text-white text-3xl">&times;</button>
+               
               </div>
             ) : (
               <AccountCircleIcon
@@ -157,60 +211,169 @@ const Profile = () => {
             <SettingsIcon />
           </button>
           <button
-            className="bg-main-gradient text-white p-1 rounded-full"
-            onClick={handleLogout}
+            className="logout-button bg-main-gradient text-white p-1 rounded-full"
+            onClick={openLogoutModal}
           >
             <ExitToAppIcon />
           </button>
         </div>
       </div>
 
+      {/* Modal */}
+
+      <Modal
+        open={isLogoutModalOpen}
+        onClose={closeLogoutModal}
+        showCloseIcon={false}
+        center
+        classNames={{
+          overlay: { background: "rgba(0, 0, 0, 0.462)" },
+          modal: "customModal",
+        }}
+      >
+        <div className="modal-content">
+          <h2 className="text-xl font-semibold mb-4 text-center">Confirm Logout</h2>
+          <p className="text-center mb-4">Are you sure you want to logout?</p>
+          <div className="flex justify-center">
+            <button
+              onClick={handleLogout}
+              className="bg-main-gradient text-white py-2  rounded-full hover:scale-105 w-full"
+            >
+              Logout
+            </button>
+
+          </div>
+          <div className="flex justify-center  mt-4">
+            <button
+              onClick={closeLogoutModal}
+              className="  py-2 rounded-full w-full hover:bg-gray-200 font-bold text-base"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
+
       {/* Main Content */}
       <div className="flex xs:block w-full mt-4 mx-auto rounded-md  h-full">
         {/* Left Sidebar */}
-        <div className="w-3/4 p-6 xs:p-3 bg-black text-white shadow scrollable-div overflow-y-auto xs:w-full">
+        <div className="w-3/4 p-6 xs:p-3 bg-black text-white shadow  xs:w-full  scrollable-div overflow-y-auto  h-full">
+
+          <div className='scrollable-div overflow-y-auto  h-[68vh]'>
 
 
-          {/* About Section */}
-          <div className=''>
-            <h3 className="text-lg font-semibold">About</h3>
-            <input
-              type="text"
-              value={user.about}
-              onChange={(e) => handleInputChange(e, "about")}
-              disabled={!isEditing}
-              className={`w - full border-none outline-none bg-black text-white ${isEditing ? "border-b-2 border-white outline-white rounded-md p-1 mt-2" : ""}`}
-            />
+            <div className="">
+              <h3 className="text-lg font-semibold">Highlighted stories</h3>
+              <div className="my-3 grid grid-cols-5 md:grid-cols-3 gap-6">
+                {albums.map((album, index) => (
+                  <div
+                    key={index}
+                    className="relative h-36 bg-purple-200 rounded-lg overflow-hidden"
+                  >
+                    <img
+                      src={album}
+                      alt={`album ${index}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+                <div
+                  className="relative h-36 bg-purple-200 rounded-lg text-purple-600 font-bold flex items-center justify-center cursor-pointer"
+                  onClick={() => document.getElementById("albumInput").click()}
+                >
+                  <AddAPhotoIcon fontSize="large" />
+                  {/* Hidden File Input for Album */}
+                  <input
+                    type="file"
+                    id="albumInput"
+                    className="hidden"
+                    onChange={handlePictureChange}
+                  />
+                </div>
+              </div>
+
+              <div >
+                <h3 className="text-lg font-semibold">About</h3>
+                <input
+                  type="text"
+                  value={user.about}
+                  onChange={(e) => handleInputChange(e, "about")}
+                  disabled={!isEditing}
+                  className={`w-[50%] border-none outline-none bg-black text-white ${isEditing ? "border-b-2 border-white outline-white rounded-sm p-1 mt-2 ml-2" : ""}`}
+                />
+              </div>
+
+
+              {/* Ethnicity Section */}
+              <div className='my-3'>
+                <h3 className="text-lg font-semibold">Ethnicity</h3>
+                <input
+                  type="text"
+                  value={user.ethnicity}
+                  onChange={(e) => handleInputChange(e, "ethnicity")}
+                  disabled={!isEditing}
+                  className={`w-[50%] border-none outline-none bg-black text-white ${isEditing ? "border-b-2 border-white outline-white rounded-sm p-1 mt-2 ml-2" : ""}`}
+                />
+              </div>
+
+              {/* Country Section */}
+              <div >
+                <h3 className="text-lg font-semibold">Country</h3>
+                <input
+                  type="text"
+                  value={user.country}
+                  onChange={(e) => handleInputChange(e, "country")}
+                  disabled={!isEditing}
+                  className={`w-[50%] border-none outline-none bg-black text-white ${isEditing ? "border-b-2 border-white outline-white rounded-sm p-1 mt-2 ml-2" : ""}`}
+                />
+              </div>
+
+              <div className='my-3'>
+                <h3 className="text-lg font-semibold">Sexual Orientation</h3>
+                <input
+                  type="text"
+                  value={user.sexual_orientation}
+                  onChange={(e) => handleInputChange(e, "sexual_orientation")}
+                  disabled={!isEditing}
+                  className={`w-[50%] border-none outline-none bg-black text-white ${isEditing ? "border-b-2 border-white outline-white rounded-sm p-1 mt-2 ml-2" : ""}`}
+                />
+              </div>
+
+              <div >
+                <h3 className="text-lg font-semibold">Smoking</h3>
+                <input
+                  type="text"
+                  value={user.smoking}
+                  onChange={(e) => handleInputChange(e, "smoking")}
+                  disabled={!isEditing}
+                  className={`w-[50%] border-none outline-none bg-black text-white ${isEditing ? "border-b-2 border-white outline-white rounded-sm p-1 mt-2 ml-2" : ""}`}
+                />
+              </div>
+
+              <div className='my-3'>
+                <h3 className="text-lg font-semibold">Drinking</h3>
+                <input
+                  type="text"
+                  value={user.drinking}
+                  onChange={(e) => handleInputChange(e, "drinking")}
+                  disabled={!isEditing}
+                  className={`w-[50%] border-none outline-none bg-black text-white ${isEditing ? "border-b-2 border-white outline-white rounded-sm p-1 mt-2 ml-2" : ""}`}
+                />
+              </div>
+
+              <div >
+                <h3 className="text-lg font-semibold">Personality</h3>
+                <input
+                  type="text"
+                  value={user.personality}
+                  onChange={(e) => handleInputChange(e, "personality")}
+                  disabled={!isEditing}
+                  className={`w-[50%] border-none outline-none bg-black text-white ${isEditing ? "border-b-2 border-white outline-white rounded-sm p-1 mt-2 ml-2" : ""}`}
+                />
+              </div>
+            </div>
           </div>
-
-          {/* Ethnicity Section */}
-          <div className={isEditing ? "bg-gray-800 p-2 rounded my-3" : "my-3"}>
-            <h3 className="text-lg font-semibold">Ethnicity</h3>
-            <input
-              type="text"
-              value={user.ethnicity}
-              onChange={(e) => handleInputChange(e, "ethnicity")}
-              disabled={!isEditing}
-              className={`w - full border-none outline-none bg-black text-white ${isEditing ? "border-b-2 border-[#09d271]" : ""}`}
-            />
-          </div>
-
-          {/* Country Section */}
-          <div className={isEditing ? "bg-gray-800 p-2 rounded my-3" : "my-3"}>
-            <h3 className="text-lg font-semibold">Country</h3>
-            <input
-              type="text"
-              value={user.country}
-              onChange={(e) => handleInputChange(e, "country")}
-              disabled={!isEditing}
-              className={`w - full border-none outline-none bg-black text-white ${isEditing ? "border-b-2 border-[#09d271]" : ""}`}
-            />
-          </div>
-
-          <div className="flex items-center fixed bottom-8 xs:bottom-[16rem] justify-end w-[48%] md:w-2/3 gap-x-6 xs:justify-start">
-
-
-
+          <div className="flex items-center fixed bottom-8 xs:bottom-[16rem] justify-end w-[48%] md:w-2/3 gap-x-6 xs:justify-start mt-24">
             {!isEditing && <button onClick={toggleEdit}
               className="mb-4 bg-main-gradient text-white rounded-full p-2"><ModeIcon /></button>}
 
@@ -236,19 +399,12 @@ const Profile = () => {
             <button className="bg-main-gradient py-1 px-2 rounded-lg">Buy Credits</button>
           </div>
 
-
           <div className="mb-2">
             <h3 className="text-lg font-semibold">Activity Score</h3>
-            <p className="mt-0.5">Your profile is 70% complete</p>
-            <div className="h-2 bg-gray-700 rounded-full">
-              <div className="h-2 bg-main-gradient w-[70%] rounded-full mt-2"></div>
-            </div>
+            <p className="mt-0.5">Your profile is {calculateProgress().toFixed(0)}% complete</p>
+           
           </div>
-
         </div>
-
-        {/* Fixed Save Button */}
-
       </div>
     </div>
   );

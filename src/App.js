@@ -13,9 +13,12 @@ import Suggestions from "./screens/SidebarComponents/Suggestions";
 import Profile from './screens/SidebarComponents/Profile';
 import ForgetPassword from './screens/Auth/ForgetPassword';
 import MainLayout from './screens/Auth/MainLayout';
+import SubscriptionDetails from "./screens/SidebarComponents/SubscriptionDetails";
+
 
 
 const router = createBrowserRouter([
+  
   {
     path: "/",
     element: <Login />,
@@ -67,12 +70,18 @@ const router = createBrowserRouter([
         path: "suggestions",
         element: <Suggestions />,
       },
+      {
+        path: "subscription",
+        element: <SubscriptionDetails />,
+      },
+
     ],
   }
 ]);
 
 function App() {
   return <RouterProvider router={router} />;
+  
 }
 
 export default App;

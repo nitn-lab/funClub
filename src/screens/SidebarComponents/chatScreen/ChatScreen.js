@@ -37,7 +37,7 @@ const ChatScreen = () => {
       <div className={`flip-card relative w-full h-full transition-transform duration-500 ${callActive ? 'flip' : ''}`}>
         <div className="front absolute top-0 left-0 w-full h-full  text-white">
           {receiver ? (
-            <div className="chat-screen relative w-full bg-purple-200 h-[96vh]">
+            <div className="chat-screen relative w-full bg-purple-300 h-[96vh]">
               <div className="header bg-fuchsia-800 text-white px-10 py-2.5 xs:px-5">
                 <div className="flex justify-between items-center">
                   <div className="flex gap-5 items-center xs:gap-3">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 const Dropdown = ({ label, options, value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,14 +26,14 @@ const Dropdown = ({ label, options, value, onChange }) => {
     };
   }, []);
 
-  // Set a max number of visible options at a time, e.g., 3
+  
   const visibleOptionsCount = Math.min(options.length, 3);
-  const optionHeight = 40; // Set the height of a single option in pixels
+  const optionHeight = 40; 
   const dropdownHeight = visibleOptionsCount * optionHeight;
 
   return (
     <div className="relative inline-block text-left w-full" ref={dropdownRef}>
-      <label className="text-base font-medium text-primary-light dark:text-primary-dark">{label}</label>
+      <label className="text-base font-medium text-primary-dark">{label}</label>
       <div>
         <button
           type="button"
@@ -56,7 +56,7 @@ const Dropdown = ({ label, options, value, onChange }) => {
             className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20"
             style={{ maxHeight: dropdownHeight, overflowY: 'auto' }}
           >
-            <div className="py-1">
+            <div className="py-1 ">
               {options.map((option, index) => (
                 <button
                   key={index}
@@ -64,7 +64,7 @@ const Dropdown = ({ label, options, value, onChange }) => {
                   className={`block px-4 py-1.5 xs:py-1 text-lg xs:text-sm font-semibold xs:font-normal w-full text-left hover:bg-[#d2bfe5] focus:bg-gray-100 ${option === value ? 'bg-[#ac64d8]' : 'text-black'}`}
                   style={{ height: optionHeight }}
                 >
-                  {option}
+                  { option}
                 </button>
               ))}
             </div>

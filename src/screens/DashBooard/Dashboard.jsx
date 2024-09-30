@@ -5,8 +5,9 @@ import VideoData from "./Videos.json";
 import UserInfo from './RightSidebar/UserInfo';
 import Suggestions from "./RightSidebar/Suggestions";
 import CallerProfile from "./RightSidebar/CallerProfile";
-import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import { IoMdChatboxes } from "react-icons/io";
 import Chats from "../SidebarComponents/chatScreen/Chats"; 
+import Signout from "../SidebarComponents/Signout";
 
 const Dashboard = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -58,12 +59,13 @@ const Dashboard = () => {
           <Callers onCallerSelect={handleCallerSelect} />
         </div>
       </div>
+      
 
       {/* Right Sidebar */}
       <div className={`relative w-[250px] h-[96vh] bg-black rounded-lg md:hidden p-2 transition-opacity duration-500 ease-in-out`}>
         {/* Chat Icon */}
         
-          <ChatBubbleIcon onClick={toggleChat} className="absolute z-10 text-black bottom-4 right-5 cursor-pointer p-1 bg-white rounded-full" style={{fontSize : "2.5rem"}}/>
+          <IoMdChatboxes onClick={toggleChat} className="absolute z-10 text-black bottom-4 right-5 cursor-pointer p-1 bg-white rounded-full" style={{fontSize : "2.5rem"}}/>
        
 
         {selectedCaller ? (

@@ -5,12 +5,12 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 const PersonalityForm = ({ onInputChange, data }) => {
  
   const defaultType = PersonalityTypes.find(type => type.type === "INTJ");
-
+ 
   const [formData, setFormData] = useState({
     personality: data.personality || defaultType.type,  
   });
 
-  const [hoverIndex, setHoverIndex] = useState(null); 
+  const [hoverIndex, setHoverIndex] = useState(null)
 
   useEffect(() => {
    
@@ -47,9 +47,9 @@ const PersonalityForm = ({ onInputChange, data }) => {
   };
 
   return (
-    <div className="w-full py-5 text-primary-light dark:text-primary-dark relative">
+    <div className="w-full py-5 text-primary-dark relative">
       <h1 className="text-4xl font-bold xs:text-3xl">Personality Details!</h1>
-      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-2">
+      <p className="font-medium text-lg text-primary-dark mt-2">
         Please fill your Personality Type Details!
       </p>
       <div >
@@ -67,13 +67,13 @@ const PersonalityForm = ({ onInputChange, data }) => {
                   onMouseLeave={() => setHoverIndex(null)} 
                 >
                   <div className={`flex border-2 py-1 px-2 rounded-full items-center gap-2
-                    ${formData.personality === item.type ? 'border-primary-light dark:border-primary-dark' : 'border-gray-400'}`}>
+                    ${formData.personality === item.type ? 'border-primary-dark' : 'border-gray-400'}`}>
                     <CheckCircleIcon
                       style={{
                         display: formData.personality === item.type ? "block" : "none"
                       }}
                     />
-                    <h2 className={`text-primary-light dark:text-primary-dark font-semibold`}>
+                    <h2 className={`text-primary-dark font-semibold`}>
                       {item.type}
                     </h2>
                   </div>

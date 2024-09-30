@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Sidebarr from "../Global/Sidebar";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import CoinIcon from "@mui/icons-material/MonetizationOn"; 
+import Signout from "../SidebarComponents/Signout";
+import { useSignOut } from "../../components/context/SignOutContext";
 
 const MainLayout = () => {
   const [open, setOpen] = useState(false);
   const [showCoin, setShowCoin] = useState(true);
   const [pageAnimation, setPageAnimation] = useState("opacity-0 blur-sm");
-  const [scale, setScale] = useState("scale-0")
+  const [scale, setScale] = useState("scale-0");
+  const token = localStorage.getItem("jwtToken");
+  const navigate = useNavigate();
+  const {isSignOutPopupOpen} = useSignOut();
 
   const handleScreenClick = () => {
     setShowCoin(false);
   };
 
   useEffect(() => {
+    if(!token){
+      navigate('/');
+    }
    
     setTimeout(() => {
       setPageAnimation("opacity-100 blur-0"); 
@@ -56,12 +64,14 @@ const MainLayout = () => {
         <Sidebarr />
       </div>
 
+      {isSignOutPopupOpen && <Signout/>}
+
       {/* Main content */}
       <div className="w-full">
         <Outlet />
       </div>
 
-     
+    
       {showCoin && (
         <div
           className="fixed inset-0 bg-[#292929] bg-opacity-50 z-50 flex items-center justify-center"

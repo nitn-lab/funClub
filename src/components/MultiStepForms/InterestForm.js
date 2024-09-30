@@ -1,28 +1,32 @@
 import React, { useState, useEffect, useRef } from "react";
-import interests from "./Interests";
+import interests from "./Interests"; // Assuming you have a file that exports interest data
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
-const InterestForm = ({ onInputChange }) => {
-  const [selectedItems, setSelectedItems] = useState([]);
+const InterestForm = ({ onInputChange, data }) => {
+  const [formData, setFormData] = useState({
+    interest_details: data.interest_details || [],
+  });
   const [isAtBottom, setIsAtBottom] = useState(false);
   const scrollContainerRef = useRef(null);
 
+  // Update parent component when formData changes
   useEffect(() => {
-    onInputChange({ interest_details: selectedItems });
-  }, [selectedItems]);
+    onInputChange({ interest_details: formData.interest_details });
+  }, [formData, onInputChange]);
 
+  // Handle interest selection and deselection
   const handleClick = (interest) => {
-    setSelectedItems((previousSelectedItems) => {
-      if (previousSelectedItems.includes(interest)) {
-        return previousSelectedItems.filter((item) => item !== interest);
-      } else {
-        return [...previousSelectedItems, interest];
-      }
+    setFormData((prev) => {
+      const newinterest_details = prev.interest_details.includes(interest)
+        ? prev.interest_details.filter((item) => item !== interest) // Deselect
+        : [...prev.interest_details, interest]; // Select
+      return { ...prev, interest_details: newinterest_details }; // Return updated state
     });
   };
 
+  // Scroll to the bottom of the container
   const scrollToBottom = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({
@@ -33,6 +37,7 @@ const InterestForm = ({ onInputChange }) => {
     }
   };
 
+  // Scroll to the top of the container
   const scrollToTop = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({
@@ -44,14 +49,14 @@ const InterestForm = ({ onInputChange }) => {
   };
 
   return (
-    <div className="w-full py-5 text-primary-light dark:text-primary-dark relative">
+    <div className="w-full py-5 text-primary-dark relative">
       <h1 className="text-4xl font-bold xs:text-3xl">Interest Details!</h1>
       <p className="font-medium text-lg mt-2">
-        Please Choose your Interests!!
+        Please Choose your interests!!
       </p>
       <div
         className="scrollable-div h-64 mt-1 flex flex-wrap overflow-auto"
-        ref={scrollContainerRef} 
+        ref={scrollContainerRef}
       >
         {interests &&
           interests.map((interest, index) => (
@@ -60,17 +65,13 @@ const InterestForm = ({ onInputChange }) => {
               key={index}
               onClick={() => handleClick(interest)}
             >
-              <div className="flex border-2 border-primary-light dark:border-primary-dark py-1 px-2 rounded-full items-center gap-2">
+              <div className="flex border-2 border-primary-dark py-1 px-2 rounded-full items-center gap-2">
                 <CheckCircleIcon
                   style={{
-                    display: selectedItems.includes(interest)
-                      ? "block"
-                      : "none",
+                    display: formData.interest_details.includes(interest) ? "block" : "none",
                   }}
                 />
-                <h2 className="font-semibold">
-                  {interest.type}
-                </h2>
+                <h2 className="font-semibold">{interest.type}</h2>
               </div>
             </div>
           ))}
@@ -79,20 +80,20 @@ const InterestForm = ({ onInputChange }) => {
       {/* Arrow for scrolling to bottom */}
       {!isAtBottom && (
         <div
-          className="absolute -bottom-8 bg-primary-light dark:bg-primary-dark right-0 p-1 cursor-pointer animate-bounce rounded-full"
+          className="absolute -bottom-8 bg-primary-dark right-0 p-1 cursor-pointer animate-bounce rounded-full"
           onClick={scrollToBottom}
         >
-          <ArrowDownwardIcon className="text-primary-dark dark:text-primary-light" fontSize="medium" />
+          <ArrowDownwardIcon className="text-primary-light" fontSize="medium" />
         </div>
       )}
 
       {/* Arrow for scrolling to top */}
       {isAtBottom && (
         <div
-          className="absolute -bottom-8 bg-primary-light dark:bg-primary-dark animate-bounce rounded-full  right-0  cursor-pointer p-1"
+          className="absolute -bottom-8 bg-primary-dark animate-bounce rounded-full right-0 cursor-pointer p-1"
           onClick={scrollToTop}
         >
-          <ArrowUpwardIcon className="text-primary-dark dark:text-primary-light" fontSize="medium" />
+          <ArrowUpwardIcon className="text-primary-light" fontSize="medium" />
         </div>
       )}
     </div>

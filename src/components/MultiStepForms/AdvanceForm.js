@@ -36,13 +36,13 @@ const AdvanceForm = ({ onInputChange, data }) => {
 
   return (
     <div className="w-full py-5 text-primary-light">
-      <h1 className="text-4xl font-bold text-primary-light dark:text-primary-dark xs:text-3xl">Advance Details!</h1>
-      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-2 ">
+      <h1 className="text-4xl font-bold text-primary-dark xs:text-3xl">Advance Details!</h1>
+      <p className="font-medium text-lg text-primary-dark mt-2 ">
         Please fill your Advance Details!
       </p>
       <div className="mt-3  flex gap-8 xs:gap-4">
         <div className="w-1/2">
-          <label className="text-base font-medium text-primary-light dark:text-primary-dark">Ethnicity</label>
+          <label className="text-base font-medium text-primary-dark">Ethnicity</label>
           <input
             name="ethnicity"
             className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
