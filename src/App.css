@@ -90,6 +90,25 @@ input:-moz-autofill {
   font-family: 'Gotham', sans-serif;
 }
 
+.customPostModal{
+  width: 900px;
+  height: 500px;
+  background-color: #86198f !important;
+  box-shadow: 5px gray !important;
+  color: white !important;
+  border-radius: 15px;
+  font-family: 'Gotham', sans-serif;
+}
+
+.slick-prev{
+  z-index: 1;
+  left: -13px !important;
+}
+.slick-next{
+  z-index: 1;
+  right: -19px !important;
+
+}
 /* Blob animation keyframes */
 @keyframes blob {
   0%, 100%{

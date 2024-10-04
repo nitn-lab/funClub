@@ -59,11 +59,13 @@ const Register = () => {
     try {
       const res = await axios.post(`${BASE_URL}/api/v1/register`, allData);
       setLoading(false);
+      console.log(res)
       if (res.status === 201) {
         toast.success("Successfully registered!!")
        
          navigate('/'); }
     } catch (error) {
+      console.log(error)
       toast.error("Error signing in. Please try again later!");
       setLoading(false);
     }
@@ -108,25 +110,17 @@ const Register = () => {
     },
 
   ];
-  const validateFormData = () => {
-    const { signUpData, basicDetailsData, advanceDetailsData, personalityData, interestData, selectPromptData } = formData;
-    return (
-      Object.keys(signUpData).length > 0 &&
-      Object.keys(basicDetailsData).length > 0 && 
-      Object.keys(advanceDetailsData).length > 0 &&
-      Object.keys(personalityData).length > 0 &&
-      Object.keys(interestData).length > 0 &&
-      
-      Object.keys(selectPromptData).length > 0
-    );
-};
-
 
   const [index, setIndex] = useState(0);
 
   const handleNext = (e) => {
     e.preventDefault();
-    setIndex((idx) => idx + 1);
+    if(index === data.length - 1){
+      handleSubmit(e)
+    }
+    else{
+      setIndex((idx) => idx + 1);
+    }
   };
 
   const handleBack = (e) => {
@@ -135,14 +129,8 @@ const Register = () => {
   };
 
   const handleSkip = () => {
-    if(index === data.length - 1 ){
-      if(validateFormData()){
-        toast.success("Successfully registered!")
-        navigate('/');
-      }
-      else{
-        toast.error("Please fill all required fields")
-      }
+    if(index === data.length - 1){
+      handleSubmit(new Event('submit'))
     }
     else{
       setIndex((idx) => idx + 1);
@@ -150,9 +138,9 @@ const Register = () => {
   };
 
   return (
-    <div className="flex w-screen h-screen p-8 xs:p-3 justify-center bg-main-gradient md:block xs:h-[93vh] font-gotham">
+    <div className="flex w-screen h-screen p-8 xs:p-3 justify-center bg-main-gradient md:block xs:h-[99vh] font-gotham">
       <Sidebar steps={data} currentStep={index} />
-      <div className="signup w-2/3 xs:w-1/2 bg-primary-light opacity-[0.9] px-8 xs:px-3 relative rounded-r-lg md:w-full md:mt-3 md:rounded-lg md:h-[85%]">
+      <div className="signup w-2/3 xs:w-1/2 bg-primary-light opacity-[0.9] px-8 xs:px-3 relative rounded-r-lg md:w-full md:mt-3 md:rounded-lg md:h-[87%]">
         <div className="flex">
           <div className="w-full items-center justify-center">
             {index < data.length && data[index].component}
@@ -185,7 +173,7 @@ const Register = () => {
 
               <button
                 onClick={index === data.length - 1 ? handleSubmit : handleNext}
-                className="w-max active:scale-[.98] acitve:duration-75 hover:scale-[1.01] ease-in-out transition-all py-1 px-2 rounded-md  bg-primary-dark text-primary-light text-lg font-bold flex items-center justify-between gap-2 xxs:right-1"
+                className="w-max active:scale-[.98] acitve:duration-75 hover:scale-[1.01] ease-in-out transition-all py-1 px-2 rounded-md  bg-primary-dark text-primary-light text-lg font-bold flex items-center justify-between gap-2 xxs:right-1 xs:-bottom-2"
               >
                 {loading ? (
                   <span className="loading loading-spinner loading-md"></span>

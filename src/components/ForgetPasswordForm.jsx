@@ -54,19 +54,19 @@ export default function ForgetPasswordForm({backToLogin}) {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="mt-3 relative"> {/* Relative positioning for password eye icon */}
+        <div className="mt-3 relative"> 
           <input
             className="w-full border-2 rounded-lg p-2 mt-1  placeholder-black bg-white text-black"
             placeholder="New Password"
-            type={showPassword ? "text" : "password"} // Toggle password visibility
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <span 
             className="absolute right-3 top-4 cursor-pointer text-black" 
-            onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+            onClick={() => setShowPassword(!showPassword)}  
           >
-            {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Button to show/hide password */}
+            {showPassword ? <FaEyeSlash /> : <FaEye />} 
           </span>
         </div>
 

@@ -55,8 +55,8 @@ const PersonalityForm = ({ onInputChange, data }) => {
       <div >
         
         {/* Main container with flex layout */}
-        <div className="flex justify-start items-center w-full md:w-full h-64 md:h-44 overflow-auto">
-          <div className="grid grid-cols-4 gap-1">
+        <div className="flex justify-start items-center w-full md:w-full h-64 md:h-44 overflow-auto xs:mt-5">
+          <div className="grid grid-cols-4 gap-1 xs:flex xs:flex-wrap xs:mt-3">
             {PersonalityTypes &&
               PersonalityTypes.map((item, index) => (
                 <div
@@ -93,7 +93,7 @@ const PersonalityForm = ({ onInputChange, data }) => {
           {/* Display the description box next to the selected personality type */}
           {PersonalityTypes.find(item => item.type === formData.personality) && (
             <div
-              className="ml-5 flex-1 bg-main-gradient h-fit text-primary-dark p-4 rounded-lg shadow-2xl z-20"
+              className="ml-5 flex-1 bg-main-gradient h-fit text-primary-dark p-4 rounded-lg shadow-2xl z-20 xs:hidden"
               style={{ boxShadow: "0 4px 20px purple" }} 
             >
               <p className="text-lg">

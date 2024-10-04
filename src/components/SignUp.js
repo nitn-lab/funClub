@@ -7,8 +7,8 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 const SignUp = ({ data, onInputChange }) => {
   const { username, email, birthdate, password, confirm_password, gender, role, active } = data;
   const [selectedDate, setSelectedDate] = useState(birthdate ? new Date(birthdate.split('/').reverse().join('/')) : null);
-  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for toggling confirm password visibility
+  const [showPassword, setShowPassword] = useState(false); 
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +24,7 @@ const SignUp = ({ data, onInputChange }) => {
     if (date > today) {
       toast.error('Please choose a valid birthdate.');
     } else {
-      const formattedDate = new Date(date).toLocaleDateString('en-GB');
+      const formattedDate = new Date(date).toLocaleDateString('en-US');
       onInputChange({ ...data, birthdate: formattedDate });
       setSelectedDate(date);
     }
@@ -35,7 +35,7 @@ const SignUp = ({ data, onInputChange }) => {
   };
 
   const handleConfirmPasswordBlur = () => {
-    // Validate password and confirm password match when the user finishes typing (onBlur)
+  
     if (confirm_password && confirm_password !== password) {
       toast.error('Passwords do not match!');
     }
@@ -76,7 +76,7 @@ const SignUp = ({ data, onInputChange }) => {
             placeholder="Birthdate"
             onChange={handleDateChange}
             value={selectedDate}
-            maxDate={new Date()}  // Restrict to today's date or earlier
+            maxDate={new Date()} 
             showIcon
             dateFormat="dd/mm/yy"
             inputStyle={{ backgroundColor: "white", border: "none", outline: "none", color: "black" }}
@@ -86,7 +86,6 @@ const SignUp = ({ data, onInputChange }) => {
         <div className="w-1/2">
           <Dropdown
             options={[
-              "Select Gender",
               "Male", "Female", "Transgender", "Prefer not to say"
             ]}
             value={gender || ''}
@@ -95,12 +94,12 @@ const SignUp = ({ data, onInputChange }) => {
         </div>
       </div>
 
-      <div className="flex mt-3 gap-8 xs:gap-4 relative">
-        <div className="w-1/2 relative">
+      <div className="flex mt-3 gap-8 xs:gap-4 relative xs:block">
+        <div className="w-1/2 relative xs:w-full">
           <input
             className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Password"
-            type={showPassword ? "text" : "password"} // Toggle password visibility
+            type={showPassword ? "text" : "password"}
             name="password"
             value={password || ''}
             onChange={handleChange}
@@ -108,26 +107,26 @@ const SignUp = ({ data, onInputChange }) => {
           <button
             type="button"
             className="absolute right-3 top-4 cursor-pointer"
-            onClick={() => setShowPassword(!showPassword)} // Toggle showPassword state
+            onClick={() => setShowPassword(!showPassword)} 
             aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>
         </div>
-        <div className="w-1/2 relative">
+        <div className="w-1/2 relative xs:w-full">
           <input
             className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Confirm Password"
-            type={showConfirmPassword ? "text" : "password"} // Toggle confirm password visibility
+            type={showConfirmPassword ? "text" : "password"} 
             name="confirm_password"
             value={confirm_password || ''}
             onChange={handleChange}
-            onBlur={handleConfirmPasswordBlur} // Check if passwords match onBlur
+            onBlur={handleConfirmPasswordBlur}
           />
           <button
             type="button"
             className="absolute right-3 top-4 cursor-pointer"
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)} // Toggle showConfirmPassword state
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}  
             aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
           >
             {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}

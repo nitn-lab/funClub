@@ -1,142 +1,96 @@
-import React from "react";
-import { FaCheck, FaLock } from "react-icons/fa";
-import logo from '../assets/images/FUNCLUB logo.png';
+import React from 'react';
+
+const tiers = [
+    {
+        title: 'Plus',
+        description: ['Unlimited Likes', 'Unlimited Rewinds', '1 Free Boost a month', 'Hide Advertisements'],
+        color: "text-[#ab4dd6]"
+    },
+    {
+        title: 'Gold',
+        description: ['See Who Likes You', 'Top Picks every day', 'Passport to any location', 'Weekly Super Likes', ],
+        color: 'text-[#eec143]'
+    },
+    {
+        title: 'Platinum',
+        description: ['Message before matching', 'Priority likes', 'Boost your profile',],
+        color: "text-[#d4d8dd]"
+    },
+];
+
+const featureRows = [
+    { feature: 'Match, Chat, Meet', plus: true, gold: true, platinum: true },
+    { feature: 'Unlimited Likes', plus: true, gold: true, platinum: true },
+    { feature: 'Unlimited Rewinds', plus: true, gold: true, platinum: true },
+    { feature: 'Passport to any location', plus: true, gold: true, platinum: true },
+    { feature: 'Hide Advertisements', plus: false, gold: true, platinum: true },
+    { feature: 'Go Incognito', plus: false, gold: true, platinum: true },
+    { feature: 'Super Likes', plus: false, gold: true, platinum: true },
+    { feature: 'Free Boost', plus: false, gold: false, platinum: true },
+    { feature: 'New Top Picks every day', plus: false, gold: false, platinum: true },
+    { feature: 'Additional Feature 1', plus: false, gold: false, platinum: true },
+    { feature: 'Additional Feature 2', plus: false, gold: false, platinum: true },
+    { feature: 'Additional Feature 3', plus: false, gold:false, platinum: true },
+];
 
 const Subscription = () => {
     return (
-        <div className="w-[95%] mx-auto font-gotham h-[96vh] md:h-[92vh] bg-black p-3 rounded-md md:w-full">
-            
-
-            {/* Subscription Plans */}
-            <div className="grid grid-cols-4 gap-7 py-4">
-                <div></div>
-                <div className="text-center">
-                    <div className="px-4 py-3 bg-gradient-to-r from-white to-[#724eae] rounded-lg flex justify-center items-center gap-x-1">
-                    <img src={logo} className="w-7 h-8"/>
-                        <h2 className="font-base text-xl"> Plus</h2>
-                    </div>
-                </div>
-                <div className="text-center">
-                    <div className="px-4 py-3  bg-gradient-to-r from-white to-[#e6af16] rounded-lg flex justify-center items-center gap-x-1">
-                    <img src={logo} className="w-7 h-8"/>
-                        <h2 className="font-base text-xl">Gold</h2>
-                    </div>
-                </div>
-                <div className="text-center">
-                    <div className="px-4 py-3 bg-gradient-to-r from-white to-[#8f939a] rounded-lg flex justify-center items-center gap-x-1">
-                    <img src={logo} className="w-7 h-8"/>
-                        <h2 className="font-base text-xl">Platinum</h2>
-                    </div>
+        <div className="h-[96vh] md:h-[99vh] overflow-y-auto scrollable-div bg-black text-white mx-auto w-[calc(100vw-25vw)] md:w-full font-gotham pt-8 rounded-md md:rounded-none"
+        >
+            <h2 className=" text-[#f0f2f4] text-3xl font-bold italic text-center" >Subscription Tiers</h2>
+            <h3 className="text-[#c1c3c5] text-center mt-8 font-light">Upgrade to Plus, Gold, or Platinum for an enhanced Tinder experience.</h3>
+            {/* Cards - centered horizontally */}
+            <div
+            >
+                <div className="flex justify-center gap-6  my-16 mx-6 md:block">
+                    {tiers.map((tier, index) => (
+                        <div
+                            key={index}
+                            className="bg-[#111418] rounded-lg py-4 px-8 h-64 md:h-auto hover:scale-110 border border-gray-600 transition-all w-72 md:w-3/4 md:mx-auto"
+                        >
+                            <h5 className={`text-2xl font-bold mb-2 ${tier.color}`}>{tier.title}</h5>
+                            <ul >
+                                {tier.description.map((line, index) => (
+                                    <li key={index} className="text-[#ccd2d4] my-0.5">
+                                        • {line}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
                 </div>
             </div>
 
-            {/* Features Table */}
-           <div className="scrollable-div overflow-y-auto h-[calc(100vh-30vh)] md:h-[calc(100vh-33vh)]">
-           
-           <fieldset className="border border-gray-300 text-white px-6 rounded-md">
-           <legend className="px-3 rounded-full text-black bg-white">Upgrade Your Likes</legend>
-                <div className="flex items-center py-2">
-                    <h3 className="font-base w-1/4">Unlimited Likes</h3>
-                    <div className="flex justify-between w-3/4">
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                    </div>
-                </div>
-                <div className="flex items-center py-3">
-                    <h3 className="font-base w-1/4">See Who Likes You</h3>
-                    <div className="flex justify-between w-3/4">
-                        <div className="flex-1 flex justify-center items-center"><FaLock className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                    </div>
-                </div>
-                <div className="flex items-center py-3">
-                    <h3 className="font-base w-1/4">Priority Likes</h3>
-                    <div className="flex justify-between w-3/4">
-                        <div className="flex-1 flex justify-center items-center"><FaLock className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaLock className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                    </div>
-                </div>
-            </fieldset>
-            
-            <fieldset className="border border-gray-300 text-white px-6 rounded-md my-6">
-            <legend className="px-3 rounded-full text-black bg-white">Enhance Your Experience</legend>
-                <div className="flex items-center py-3">
-                    <h3 className="font-base w-1/4">Unlimited Rewinds</h3>
-                    <div className="flex justify-between w-3/4">
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                    </div>
-                </div>
-                <div className="flex items-center py-3">
-                    <h3 className="font-base w-1/4">1 free boost per month</h3>
-                    <div className="flex justify-between w-3/4">
-                        <div className="flex-1 flex justify-center items-center"><FaLock className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                    </div>
-                </div>
-                <div className="flex items-center py-3">
-                    <h3 className="font-base w-1/4">Message before matching</h3>
-                    <div className="flex justify-between w-3/4">
-                        <div className="flex-1 flex justify-center items-center"><FaLock className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaLock className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset className="border border-gray-300 text-white px-6 rounded-md">
-            <legend className="px-3 rounded-full text-black bg-white">Take Control</legend>
-                <div className="flex items-center py-3">
-                    <h3 className="font-base w-1/4">Control your profile</h3>
-                    <div className="flex justify-between w-3/4">
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                    </div>
-                </div>
-                <div className="flex items-center py-3">
-                    <h3 className="font-base w-1/4">Control who sees you</h3>
-                    <div className="flex justify-between w-3/4">
-                        <div className="flex-1 flex justify-center items-center"><FaLock className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                    </div>
-                </div>
-                <div className="flex items-center py-3">
-                    <h3 className="font-base w-1/4">Hide ads</h3>
-                    <div className="flex justify-between w-3/4">
-                        <div className="flex-1 flex justify-center items-center"><FaLock className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaLock className="text-xl" /></div>
-                        <div className="flex-1 flex justify-center items-center"><FaCheck className="text-xl" /></div>
-                    </div>
-                </div>
-            </fieldset>
-
-            
-           </div>
-           {/* Pricing Options */}
-           <div className="grid grid-cols-4 gap-4 pt-6 ">
-           <div></div>
-                <div className="text-center">
-                    <button className="bg-gradient-to-r from-fuchsia-800 to-white hover:bg-gradient-to-r hover:from-white hover:to-fuchsia-800 text-white py-2 px-4 rounded-full">
-                        Starting at ₹89
-                    </button>
-                </div>
-                <div className="text-center">
-                    <button className="bg-gradient-to-r from-[#e6af16] to-[#f9db89] hover:to-[#e6af16] hover:from-[#f9db89] text-white py-2 px-4 rounded-full">
-                        Starting at ₹143
-                    </button>
-                </div>
-                <div className="text-center">
-                    <button className="bg-gradient-to-r 
-                    to-gray-300 from-black hover:from-gray-300 hover:to-black text-white py-2 px-4 rounded-full">
-                        Starting at ₹287
-                    </button>
+            {/* Table - Not scrollable */}
+            <div className="bg-[#111418] border-t-2 border-gray-600 pb-10">
+                <h3 className="text-[#f0f2f4] text-2xl font-bold text-center mt-8 mb-16">Subscription Tier at a Glance</h3>
+                <div className="flex justify-center">
+                    <table className="w-[85%] md:w-98% border-collapse text-center">
+                        <thead>
+                            <tr className="bg-black font-semibold text-xl">
+                                <th className="border border-gray-600 py-4">Features</th>
+                                <th className="border border-gray-600">Plus</th>
+                                <th className="border border-gray-600">Gold</th>
+                                <th className="border border-gray-600">Platinum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {featureRows.map((row, index) => (
+                                <tr key={index} className="py-4">
+                                    <td className="border border-gray-600 py-4">{row.feature}</td>
+                                    <td className="border border-gray-600 text-[#ab4dd6] w-[20%] text-3xl">
+                                        {row.plus ? '•' : ''}
+                                    </td>
+                                    <td className="border border-gray-600 text-[#eec143] w-[20%] text-3xl">
+                                        {row.gold ? '•' : ''}
+                                    </td>
+                                    <td className="border border-gray-600 text-[#d4d8dd] w-[20%] text-3xl">
+                                        {row.platinum ? '•' : ''}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

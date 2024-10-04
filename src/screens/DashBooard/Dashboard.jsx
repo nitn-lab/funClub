@@ -5,9 +5,8 @@ import VideoData from "./Videos.json";
 import UserInfo from './RightSidebar/UserInfo';
 import Suggestions from "./RightSidebar/Suggestions";
 import CallerProfile from "./RightSidebar/CallerProfile";
-import { IoMdChatboxes } from "react-icons/io";
 import Chats from "../SidebarComponents/chatScreen/Chats"; 
-import Signout from "../SidebarComponents/Signout";
+import chat from '../Global/icons/live-chat.png'
 
 const Dashboard = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -24,13 +23,6 @@ const Dashboard = () => {
     setCurrentSlide(newSlide);
   };
 
-  const handleCallerSelect = (caller) => {
-    setSelectedCaller(caller);
-  };
-
-  const handleCloseCallerProfile = () => {
-    setSelectedCaller(null);
-  };
 
   const toggleChat = () => {
     if (isChatOpen) {
@@ -56,7 +48,7 @@ const Dashboard = () => {
           <VideoCarousel videos={videos} onSlideChange={handleSlideChange} />
         </div>
         <div>
-          <Callers onCallerSelect={handleCallerSelect} />
+          <Callers/>
         </div>
       </div>
       
@@ -64,12 +56,11 @@ const Dashboard = () => {
       {/* Right Sidebar */}
       <div className={`relative w-[250px] h-[96vh] bg-black rounded-lg md:hidden p-2 transition-opacity duration-500 ease-in-out`}>
         {/* Chat Icon */}
-        
-          <IoMdChatboxes onClick={toggleChat} className="absolute z-10 text-black bottom-4 right-5 cursor-pointer p-1 bg-white rounded-full" style={{fontSize : "2.5rem"}}/>
-       
 
+        <img src={chat}  onClick={toggleChat} className="absolute h-12 z-10 bottom-4 right-5 cursor-pointer"/>
+      
         {selectedCaller ? (
-          <CallerProfile caller={selectedCaller} onClose={handleCloseCallerProfile} />
+          <CallerProfile caller={selectedCaller} />
         ) : (
           <>
             {videos.length > 0 && (

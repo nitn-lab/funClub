@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { UserProvider } from "./components/context/UserContext";
 import { SignOutProvider } from "./components/context/SignOutContext";
 import Theme from '../src/Theme.js';
+import store from "./store/userStore.js";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

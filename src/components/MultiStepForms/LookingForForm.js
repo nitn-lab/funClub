@@ -4,20 +4,20 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const LookingForForm = ({ onInputChange, onSkip, data }) => {
   const [formData, setFormData] = useState({
-    looking_for: data.looking_for || [], // Ensure correct property is used
+    looking_for: data.looking_for || [],
   });
 
   useEffect(() => {
-    onInputChange({ looking_for: formData.looking_for }); // Update parent component when formData changes
-  }, [formData, onInputChange]); // Include onInputChange in dependency array
+    onInputChange({ looking_for: formData.looking_for });
+  }, [formData, onInputChange]);
 
   const handleClick = (dataType) => {
     setFormData((prev) => {
       const updatedLookingFor = prev.looking_for.includes(dataType)
-        ? prev.looking_for.filter((item) => item !== dataType) // Deselect
-        : [...prev.looking_for, dataType]; // Select
+        ? prev.looking_for.filter((item) => item !== dataType)
+        : [...prev.looking_for, dataType]; 
 
-      return { ...prev, looking_for: updatedLookingFor }; // Return a new object with updated looking_for
+      return { ...prev, looking_for: updatedLookingFor };
     });
   };
 
@@ -35,7 +35,7 @@ const LookingForForm = ({ onInputChange, onSkip, data }) => {
       <p className="font-medium text-lg mt-2">
         Please Choose your Looking For!!
       </p>
-      <div className="mt-3 grid grid-cols-4">
+      <div className="mt-3 grid grid-cols-4 xs:flex xs:flex-wrap">
         {LookingFor && LookingFor.map((item, index) => (
           <div
             className="w-fit cursor-pointer m-2 xs:m-1.5"

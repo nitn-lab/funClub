@@ -12,12 +12,12 @@ export default function LoginForm({onForgotPassword}) {
   const [password, setPassword] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [rememberMe, setRememberMe] = React.useState(false);
-  const [showPassword, setShowPassword] = React.useState(false); // New state for password visibility
+  const [showPassword, setShowPassword] = React.useState(false); 
 
   const navigate = useNavigate();
-  const { updateUserId, userEmail, updateEmail } = useContext(UserContext);
+  const { userEmail, updateEmail } = useContext(UserContext);
 
-  // Load email from context on component mount
+  
   useEffect(() => {
     if (userEmail) {
       setEmail(userEmail);
@@ -37,13 +37,13 @@ export default function LoginForm({onForgotPassword}) {
       if (response.status === 200) {
         localStorage.setItem('jwtToken', response.data.jwtToken);
         toast.success("Successfully logged in!!");
-        updateUserId(response.data.tokenObject._id);
+        localStorage.setItem("id",response.data.tokenObject._id);
         
-        // Set email in context
+      
         if (rememberMe) {
-          updateEmail(email); // Store email in context
+          updateEmail(email);
         } else {
-          updateEmail(''); // Clear email if not remembered
+          updateEmail('');
         }
 
         navigate('/Dashboard'); 
@@ -77,15 +77,15 @@ export default function LoginForm({onForgotPassword}) {
           <input
             className="w-full border-2 rounded-lg p-2 mt-1  placeholder-black bg-white text-black"
             placeholder="Password"
-            type={showPassword ? "text" : "password"} // Toggle password visibility
+            type={showPassword ? "text" : "password"}  
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <span 
             className="absolute right-3 top-4 cursor-pointer text-black" 
-            onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+            onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Button to show/hide password */}
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
           </span>
         </div>
         <div className="mt-5 flex justify-between items-center">
@@ -95,7 +95,7 @@ export default function LoginForm({onForgotPassword}) {
               id="remember" 
               className="bg-white"
               checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)} // Toggle checkbox state
+              onChange={() => setRememberMe(!rememberMe)} 
             />
             <label className="ml-2 font-medium text-base md:text-sm" htmlFor="remember">
               Remember for now

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "./Dropdown";
+import {useSelector} from 'react-redux'
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const SelectPrompt = ({ onInputChange, onSkip, data }) => {
-  // Initialize state with data prop
+
   const [formData, setFormData] = useState({
-    prompt_question: data.prompt_question || [], // Pull from data prop
+    prompt_question: data.prompt_question || [], 
   });
   const [selectedPrompts, setSelectedPrompts] = useState([]);
   const [stories, setStories] = useState({});
@@ -18,7 +19,7 @@ const SelectPrompt = ({ onInputChange, onSkip, data }) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("jwtToken");
 
-  // Fetch prompts from API
+
   useEffect(() => {
     if(token){
       navigate("/");
@@ -35,19 +36,19 @@ const SelectPrompt = ({ onInputChange, onSkip, data }) => {
     fetchPrompts();
   }, []);
 
-  // Update parent component when form data changes
+
   useEffect(() => {
     onInputChange({ prompt_question: formData.prompt_question });
   }, [formData]);
 
-  // Handle dropdown selection
+
   const handleDropdownChange = (name, value) => {
     if (selectedPrompts.length < 3 && !selectedPrompts.includes(value)) {
       setSelectedPrompts([...selectedPrompts, value]);
     }
   };
 
-  // Handle story input change
+
   const handleStoryChange = (prompt, value) => {
     const charCount = value.length;
     if (charCount <= 150) {
@@ -62,7 +63,7 @@ const SelectPrompt = ({ onInputChange, onSkip, data }) => {
     }
   };
 
-  // Handle submission of a story
+ 
   const handleSubmit = (prompt) => {
     const newEntry = { [prompt]: stories[prompt] };
     const updatedPromptQues = [...formData.prompt_question, newEntry];
@@ -72,7 +73,7 @@ const SelectPrompt = ({ onInputChange, onSkip, data }) => {
     setSubmittedPrompts((prevPrompts) => [...prevPrompts, prompt]);
   };
 
-  // Extract questions from prompt options
+
   const questions = promptOptions.map((prompt) => {
     return prompt.questions;
   });

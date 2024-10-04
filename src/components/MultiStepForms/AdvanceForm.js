@@ -55,7 +55,7 @@ const AdvanceForm = ({ onInputChange, data }) => {
           <Dropdown
             label="Country"
             options={[
-              "Select your country",
+             
               "United States",
               "Canada",
               "Mexico",
@@ -84,7 +84,7 @@ const AdvanceForm = ({ onInputChange, data }) => {
           <Dropdown
             label="Drinking"
             options={[
-              "How often do you drink?",
+             
               "Not for me",
               "Sober",
               "Sober curious",
@@ -100,7 +100,7 @@ const AdvanceForm = ({ onInputChange, data }) => {
           <Dropdown
             label="Smoking"
             options={[
-              "How often do you smoke?",
+            
               "Social smoker",
               "Smoker when drinking",
               "Non-smoker",
@@ -116,7 +116,7 @@ const AdvanceForm = ({ onInputChange, data }) => {
       <div className="w-1/2">
           <Dropdown
             label="Exercise"
-            options={["Do you workout?","Everyday", "Often", "Sometimes", "Never"]}
+            options={["Everyday", "Often", "Sometimes", "Never"]}
             onChange={(selectedOption) => handleDropdownChange('exercise', selectedOption)}
             value={data.exercise}
           />
@@ -125,7 +125,7 @@ const AdvanceForm = ({ onInputChange, data }) => {
           <Dropdown
             label="Sexual Orientation"
             options={[
-              "Select sexual orientation",
+             
               "Straight",
               "Gay",
               "Lesbian",

@@ -42,18 +42,18 @@ const Chats = ({ showChatScreen }) => {
           </button>
         )}
         {chatScreen ? (
-          <div className="sm:hidden w-full bg-main-gradient z-50 border-r-2 border-gray-400">
-            <ChatScreen />
+          <div className={`sm:hidden w-full bg-main-gradient z-50 border-r-2 border-gray-400 ${showChatScreen ? "px-5" : ""}`}>
+            <ChatScreen showChatScreen={showChatScreen}/>
           </div>
         ) : (
           <div className="sm:hidden w-full"></div>
         )}
         <div
-          className="chats scrollable-div w-[350px] bg-gradient-to-tl from-violet-500 to-pink-500  h-[96vh]
-           text-white sm:w-full pb-2 overflow-y-auto"
+          className="chats scrollable-div w-[350px] bg-black  h-[96vh]
+           text-white sm:w-full pb-2 overflow-y-auto rounded-md shadow-lg"
           id="user-list"
         >
-          <div className="flex gap-2 items-center px-4 py-2.5 bg-[#9759e9]">
+          <div className="flex gap-2 items-center px-4 py-2.5 bg-fuchsia-800">
             <img src={logo} alt="FunClub" className="w-12 " />
             <h2 className="text-xl font-semibold italic">CHATS</h2>
           </div>
@@ -63,7 +63,7 @@ const Chats = ({ showChatScreen }) => {
             users.map((user) => {
               return (
                 <div
-                  className="flex gap-8 xs:gap-3 items-center pb-3 hover:bg-[#9759e9]  transition-all py-3 px-6 cursor-pointer"
+                  className="flex gap-8 xs:gap-3 items-center pb-3 hover:bg-fuchsia-800 hover:scale-105  transition-all py-3 px-6 cursor-pointer"
                   onClick={() => {
                     setReceiver(user);
                     handleWindow(user);
@@ -78,12 +78,12 @@ const Chats = ({ showChatScreen }) => {
                           : user.profile_url
                       }
                       alt="user"
-                      className="rounded-full h-14 w-14 object-cover "
+                      className="rounded-full h-12 w-12 object-cover "
                     />
                     <div className="online-status h-3 w-3  bg-[#05fc4f] rounded-full absolute top-1"></div>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">{user.firstname}</h3>
+                    <h3 className="font-base text-base">{user.firstname}</h3>
                     <p className="text-gray-200">Last seen</p>
                   </div>
                 </div>

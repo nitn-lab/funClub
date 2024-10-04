@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import { useSignOut } from "../../components/context/SignOutContext";
 import {Modal} from 'react-responsive-modal';
 import {toast} from 'react-toastify';
+import {useDispatch} from 'react-redux';
 
 const Signout = () => {
   const {isSignOutPopupOpen, closeSignOutPopup} = useSignOut();

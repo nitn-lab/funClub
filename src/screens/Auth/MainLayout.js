@@ -14,7 +14,7 @@ const MainLayout = () => {
   const [scale, setScale] = useState("scale-0");
   const token = localStorage.getItem("jwtToken");
   const navigate = useNavigate();
-  const {isSignOutPopupOpen} = useSignOut();
+  const {isSignOutPopupOpen, closeSignOutPopup} = useSignOut();
 
   const handleScreenClick = () => {
     setShowCoin(false);
@@ -23,6 +23,9 @@ const MainLayout = () => {
   useEffect(() => {
     if(!token){
       navigate('/');
+    }
+    else{
+      closeSignOutPopup();
     }
    
     setTimeout(() => {
@@ -41,18 +44,13 @@ const MainLayout = () => {
       className={`fixed inset-0 p-2 md:p-0 bg-main-gradient flex md:block items-start w-full transition-opacity duration-700 ease-out ${pageAnimation}`}
     >
       {/* Sidebar and header */}
-      <div className="md:flex w-1/2 justify-between my-2 hidden">
+      <div className="md:flex w-full my-2 md:my-0 hidden bg-black">
         <button
           className="hidden md:block text-white"
           onClick={() => setOpen(!open)}
         >
           {open ? <ArrowCircleLeftIcon /> : <ArrowCircleRightIcon />}
         </button>
-        
-        <h3 className="text-white italic font-semibold hidden md:block md:text-center">
-          FUNCLUB
-        </h3>
-        
       </div>
       
       {/* Sidebar transition */}

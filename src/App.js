@@ -14,8 +14,8 @@ import Profile from './screens/SidebarComponents/Profile';
 import ForgetPassword from './screens/Auth/ForgetPassword';
 import MainLayout from './screens/Auth/MainLayout';
 import SubscriptionDetails from "./screens/SidebarComponents/SubscriptionDetails";
-
-
+import UserProfile from './screens/SidebarComponents/UserProfile';
+import UpdateProfile from './screens/SidebarComponents/UpdateProfile';
 
 const router = createBrowserRouter([
   
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
       },
       {
         path: "chat/:id",
-        element: <ChatScreen />,
+        element: <ChatScreen showChatScreen={true}/>,
       },
       {
         path: "nearby",
@@ -74,7 +74,16 @@ const router = createBrowserRouter([
         path: "subscription",
         element: <SubscriptionDetails />,
       },
-
+      {
+        path: "user/:id",
+        element: <UserProfile />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "update",
+        element: <UpdateProfile />,
+        errorElement: <NotFound />,
+      },
     ],
   }
 ]);

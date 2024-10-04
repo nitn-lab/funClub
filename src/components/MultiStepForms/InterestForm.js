@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import interests from "./Interests"; // Assuming you have a file that exports interest data
+import interests from "./Interests";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -11,22 +11,22 @@ const InterestForm = ({ onInputChange, data }) => {
   const [isAtBottom, setIsAtBottom] = useState(false);
   const scrollContainerRef = useRef(null);
 
-  // Update parent component when formData changes
+ 
   useEffect(() => {
     onInputChange({ interest_details: formData.interest_details });
   }, [formData, onInputChange]);
 
-  // Handle interest selection and deselection
+ 
   const handleClick = (interest) => {
     setFormData((prev) => {
       const newinterest_details = prev.interest_details.includes(interest)
-        ? prev.interest_details.filter((item) => item !== interest) // Deselect
-        : [...prev.interest_details, interest]; // Select
-      return { ...prev, interest_details: newinterest_details }; // Return updated state
+        ? prev.interest_details.filter((item) => item !== interest) 
+        : [...prev.interest_details, interest]; 
+      return { ...prev, interest_details: newinterest_details };
     });
   };
 
-  // Scroll to the bottom of the container
+
   const scrollToBottom = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({
@@ -37,7 +37,7 @@ const InterestForm = ({ onInputChange, data }) => {
     }
   };
 
-  // Scroll to the top of the container
+ 
   const scrollToTop = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({
@@ -80,7 +80,7 @@ const InterestForm = ({ onInputChange, data }) => {
       {/* Arrow for scrolling to bottom */}
       {!isAtBottom && (
         <div
-          className="absolute -bottom-8 bg-primary-dark right-0 p-1 cursor-pointer animate-bounce rounded-full"
+          className="absolute -bottom-8 xs:bottom-2 bg-primary-dark right-0 p-1 cursor-pointer animate-bounce rounded-full"
           onClick={scrollToBottom}
         >
           <ArrowDownwardIcon className="text-primary-light" fontSize="medium" />
@@ -90,7 +90,7 @@ const InterestForm = ({ onInputChange, data }) => {
       {/* Arrow for scrolling to top */}
       {isAtBottom && (
         <div
-          className="absolute -bottom-8 bg-primary-dark animate-bounce rounded-full right-0 cursor-pointer p-1"
+          className="absolute -bottom-8 xs:bottom-2 bg-primary-dark animate-bounce rounded-full right-0 cursor-pointer p-1"
           onClick={scrollToTop}
         >
           <ArrowUpwardIcon className="text-primary-light" fontSize="medium" />
