@@ -1,3 +1,29 @@
+input::placeholder{
+  color: black !important;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none;
+}
+/* For Webkit browsers (Chrome, Safari, Edge) */
+input:-webkit-autofill {
+  background-color: white !important; /* Keeps the background white */
+  -webkit-box-shadow: 0 0 0 1000px white inset !important; /* Ensures background stays white */
+  -webkit-text-fill-color: black !important; /* Keeps the text color black */
+}
+
+/* For Firefox */
+input:-moz-autofill {
+  background-color: white !important;
+  box-shadow: 0 0 0 1000px white inset !important;
+  color: black !important;
+}
+
 @media (max-width: 560px) {
   .signup {
     height: 78%;
@@ -60,10 +86,29 @@
 }
 
 .customModal{
-  border-radius: 5px;
-  
+  border-radius: 15px;
+  font-family: 'Gotham', sans-serif;
 }
 
+.customPostModal{
+  width: 900px;
+  height: 500px;
+  background-color: #86198f !important;
+  box-shadow: 5px gray !important;
+  color: white !important;
+  border-radius: 15px;
+  font-family: 'Gotham', sans-serif;
+}
+
+.slick-prev{
+  z-index: 1;
+  left: -13px !important;
+}
+.slick-next{
+  z-index: 1;
+  right: -19px !important;
+
+}
 /* Blob animation keyframes */
 @keyframes blob {
   0%, 100%{
@@ -122,4 +167,66 @@
 .back{
  
   transform: rotateY(180deg);
+}
+
+/* login forget password animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Slide-in and slide-out classes */
+.slide-in-right {
+  animation: slideInRight 0.5s forwards;
+}
+
+.slide-out-left {
+  animation: slideOutLeft 0.5s forwards;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s forwards;
+}
+
+.slide-out-right {
+  animation: slideOutRight 0.5s forwards;
 }

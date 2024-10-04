@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Modal } from "react-responsive-modal";
 import { FaTimes } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
 const CallPopup = ({ open, handlePopup, logo }) => {
   const [roomIdModalOpen, setRoomIdModalOpen] = useState(false);

@@ -17,11 +17,12 @@ const CallingInterface = ({ endVideoCall }) => {
         setVideoMuted(!videoMuted);
     };
 
-    return (
-        <div className="relative w-[calc(100%-5%)] h-[96vh] bg-black text-white rounded-md mx-auto bg-opacity-75">
+    return ( 
+        <div className="relative w-full h-[96vh] bg-black text-white rounded-md mx-auto bg-opacity-75">
 
             <p className="text-lg text-center pt-10">Calling...</p>
-            <div className="flex gap-10 justify-between absolute bottom-10 left-[32%]">
+          <div className='flex justify-center'>
+          <div className="flex gap-10 justify-between absolute  bottom-28">
                 <button
                     onClick={toggleMuteAudio}
                     className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200"
@@ -42,6 +43,7 @@ const CallingInterface = ({ endVideoCall }) => {
                     {videoMuted ? <VideocamOffIcon /> : <VideocamIcon />}
                 </button>
             </div>
+          </div>
         </div>
     );
 };

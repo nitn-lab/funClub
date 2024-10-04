@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Dropdown from "./Dropdown";
 
 const BasicDetailsForm = ({ onInputChange, data }) => {
- 
-  const [selectedReligion, setSelectedReligion] = useState(data.religion || "");
-  
-  const [otherReligion, setOtherReligion] = useState(data.religion === "Other" ? data.religion : "");
-  const [heightCm, setHeightCm] = useState(data.heightCm || "");
-  const [heightFeet, setHeightFeet] = useState(data.heightFeet || "");
-  const [heightInches, setHeightInches] = useState(data.heightInches || "");
-  const [heightUnit, setHeightUnit] = useState(data.heightUnit || "cm");
   const [formData, setFormData] = useState({
     religion: data.religion || "",
     heightCm: data.heightCm || "",
     heightFeet: data.heightFeet || "",
-    heightInches: data.heightInches || 0,
+    heightInches: data.heightInches || "",
     heightUnit: data.heightUnit || "cm",
-    zodiac: data.zodiac || "",
+    
     qualification: data.qualification || "",
     school: data.school || "",
     college: data.college || "",
@@ -24,12 +16,17 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
     organisation_url: data.organisation_url || ""
   });
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const [selectedReligion, setSelectedReligion] = useState(data.religion || "");
+  const [otherReligion, setOtherReligion] = useState(
+    data.religion === "Other" ? data.religion : ""
+  );
+  const [zodiac, setZodiac] = useState(data.zodiac || "");
+  const [heightCm, setHeightCm] = useState(data.heightCm || "");
+  const [heightFeet, setHeightFeet] = useState(data.heightFeet || "");
+  const [heightInches, setHeightInches] = useState(data.heightInches || "");
+  const [heightUnit, setHeightUnit] = useState(data.heightUnit || "cm");
 
   useEffect(() => {
-   
     onInputChange(formData);
   }, [formData]);
 
@@ -40,7 +37,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
       religion: selectedOption !== "Other" ? selectedOption : otherReligion
     }));
     if (selectedOption !== "Other") {
-      setOtherReligion(""); 
+      setOtherReligion("");
     }
   };
 
@@ -107,6 +104,7 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
   };
 
   const handleDropdownChange = (name, value) => {
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value
@@ -115,8 +113,10 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
 
   return (
     <div className="w-full py-5 text-primary-light">
-      <h1 className="text-4xl font-bold text-primary-light dark:text-primary-dark xs:text-3xl">Basic Details!</h1>
-      <p className="font-medium text-lg text-primary-light dark:text-primary-dark mt-2">
+      <h1 className="text-4xl font-bold text-primary-dark xs:text-3xl">
+        Basic Details!
+      </h1>
+      <p className="font-medium text-lg text-primary-dark mt-2">
         Please fill your Basic Details!
       </p>
       <div className="mt-3 flex gap-8 xs:gap-4">
@@ -162,7 +162,33 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
 
         <div className="w-1/2">
           <Dropdown
-           
+
+            options={[
+              "Zodiac",
+              "Leo ♌",
+              "Aries ♈",
+              "Virgo ♍",
+              "Libra ♎",
+              "Taurus ♉",
+              "Gemini ♊",
+              "Cancer ♋",
+              "Pisces ♓",
+              "Scorpio ♏",
+              "Aquarius ♒",
+              "Capricorn ♑",
+              "Sagittarius ♐"
+            ]}
+            onChange={(selectedOption) =>
+              handleDropdownChange("zodiac", selectedOption)
+            }
+            value={formData.zodiac}
+          />
+
+        </div>
+      </div>
+      <div className="mt-3 flex gap-8 xs:gap-4">
+        <div className="w-1/2">
+          <Dropdown
             options={[
               "Religion",
               "Buddhism",
@@ -193,33 +219,9 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
             />
           )}
         </div>
-      </div>
-      <div className="mt-3 flex gap-8 xs:gap-4">
         <div className="w-1/2">
           <Dropdown
-            label=""
-            options={[
-              "Zodiac",
-              "Leo ♌",
-              "Aries ♈",
-              "Virgo ♍",
-              "Libra ♎",
-              "Taurus ♉",
-              "Gemini ♊",
-              "Cancer ♋",
-              "Pisces ♓",
-              "Scorpio ♏",
-              "Aquarius ♒",
-              "Capricorn ♑",
-              "Sagittarius ♐"
-            ]}
-            onChange={(selectedOption) => handleDropdownChange('zodiac', selectedOption)}
-            value={formData.zodiac}
-          />
-        </div>
-        <div className="w-1/2">
-          <Dropdown
-            label=""
+
             options={[
               "Qualification",
               "High School",
@@ -229,7 +231,9 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
               "Master's",
               "PhD"
             ]}
-            onChange={(selectedOption) => handleDropdownChange('qualification', selectedOption)}
+            onChange={(selectedOption) =>
+              handleDropdownChange("qualification", selectedOption)
+            }
             value={formData.qualification}
           />
         </div>
@@ -241,37 +245,45 @@ const BasicDetailsForm = ({ onInputChange, data }) => {
             className="w-full border-2 rounded-lg p-2 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="School"
             value={formData.school}
-            onChange={(e) => handleDropdownChange('school', e.target.value)}
+            onChange={(e) => handleDropdownChange("school", e.target.value)}
           />
         </div>
-       
+
         <div className="w-1/2">
           <input
             className="w-full border-2 rounded-lg p-2 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="College"
             value={formData.college}
-            onChange={(e) => handleDropdownChange('college', e.target.value)}
+            onChange={(e) => handleDropdownChange("college", e.target.value)}
           />
         </div>
       </div>
 
       <div className="mt-3 flex gap-8 xs:gap-4">
+
         <div className="w-1/2">
           <input
             className="w-full border-2 rounded-lg p-2 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Job Title"
             value={formData.job_title}
-            onChange={(e) => handleDropdownChange('job_title', e.target.value)}
+            onChange={(e) => handleDropdownChange("job_title", e.target.value)}
           />
         </div>
+
         <div className="w-1/2">
           <input
             className="w-full border-2 rounded-lg p-2 xs:0.5 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Organization URL"
             value={formData.organisation_url}
-            onChange={(e) => handleDropdownChange('organisation_url', e.target.value)}
+            onChange={(e) =>
+              handleDropdownChange("organisation_url", e.target.value)
+            }
           />
         </div>
+
+
+
+
       </div>
     </div>
   );
