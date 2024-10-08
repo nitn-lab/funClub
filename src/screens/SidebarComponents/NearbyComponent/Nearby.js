@@ -97,8 +97,6 @@ const Nearby = () => {
 
   return (
     <>
-
-
       {/* <div className="flex justify-end mx-6 xs:mx-1 gap-x-2 mb-3">
         <button
           className={`px-3 rounded-md ${
@@ -138,7 +136,8 @@ const Nearby = () => {
         )}
       </div>
 
-      <div className="scrollable-div grid grid-cols-4 sm:grid-cols-3 mx-6 xs:mx-1 my-1 gap-6 xs:gap-1.5 items-center h-[91vh] md:h-[87vh] overflow-auto xs:mt-3">
+      <div className="scrollable-div flex justify-center mx-6 xs:mx-1 my-1 gap-6 xs:gap-1.5 items-center h-[91vh] md:h-[87vh] overflow-y-auto xs:mt-3 w-full">
+      <p className=" text-black text-2xl ">No one is online nearby.</p>
         {/* {filteredNearby.map((item) => (
           <div
             key={item._id}
@@ -207,7 +206,7 @@ const Nearby = () => {
                   Cancel
                 </button>
                 <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                  className="bg-main-gradient text-white px-4 py-2 rounded-md"
                   onClick={handleAllowLocation}
                 >
                   Allow Location

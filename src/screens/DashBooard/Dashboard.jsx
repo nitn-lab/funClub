@@ -23,7 +23,6 @@ const Dashboard = () => {
     setCurrentSlide(newSlide);
   };
 
-
   const toggleChat = () => {
     if (isChatOpen) {
       setIsChatClosing(true);
@@ -37,13 +36,12 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-   
     document.body.style.overflow = isChatOpen ? 'hidden' : 'auto';
   }, [isChatOpen]);
 
   return (
-    <div className="w-full flex justify-between items-start md:justify-normal md:gap-x-2 md:block font-gotham">
-      <div className="relative w-[calc(100vw-540px)] md:w-[100vw] h-[96vh] md:h-[87vh] mx-auto">
+    <div className="w-full flex justify-between items-start md:justify-normal md:gap-x-2 md:block font-gotham font-light">
+      <div className="relative w-[calc(100vw-520px)] md:w-[100vw] h-[100vh] md:h-[87vh] mx-auto my-2 md:my-0 ">
         <div>
           <VideoCarousel videos={videos} onSlideChange={handleSlideChange} />
         </div>
@@ -51,14 +49,10 @@ const Dashboard = () => {
           <Callers/>
         </div>
       </div>
-      
-
       {/* Right Sidebar */}
-      <div className={`relative w-[250px] h-[96vh] bg-black rounded-lg md:hidden p-2 transition-opacity duration-500 ease-in-out`}>
+      <div className={`relative w-[250px] bg-black h-[100vh] md:hidden p-2 transition-opacity duration-500 ease-in-out`}>
         {/* Chat Icon */}
-
         <img src={chat}  onClick={toggleChat} className="absolute h-12 z-10 bottom-4 right-5 cursor-pointer"/>
-      
         {selectedCaller ? (
           <CallerProfile caller={selectedCaller} />
         ) : (
@@ -75,9 +69,8 @@ const Dashboard = () => {
           </>
         )}
       </div>
-
       {/* Chat Component */}
-      <div className={`fixed bottom-0 right-4 md:hidden w-[710px] h-[calc(100vh-15vh)] rounded-t-lg transition-transform duration-500 ease-in-out ${isChatOpen ? (isChatClosing ? 'translate-y-full' : 'translate-y-0') : 'translate-y-full'} `}>
+      <div className={`fixed bottom-0 right-2 md:hidden w-[728px] h-[calc(100vh-12vh)] rounded-t-lg transition-transform duration-500 ease-in-out ${isChatOpen ? (isChatClosing ? 'translate-y-full' : 'translate-y-0') : 'translate-y-full'} `}>
         {(isChatOpen || isChatClosing) && (
           <div className="h-full ">
             <Chats showChatScreen={false} shouldNavigate={true}/>

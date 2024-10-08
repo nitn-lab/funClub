@@ -6,12 +6,16 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import { IoMdHome, IoMdCart } from "react-icons/io";
 import LockIcon from "@mui/icons-material/Lock";
+import { formatDistanceToNow } from 'date-fns';
 import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Feeds = () => {
   const [data, setData] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [tab, setTab] = useState("followers");
   const [activeTab, setActiveTab] = useState("all");
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
@@ -19,15 +23,30 @@ const Feeds = () => {
   const loggedInUser = localStorage.getItem("id");
 
   useEffect(() => {
+    const logedInuserData = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/v1/userById/${loggedInUser}`, {
+          headers: { authorization: ` ${token}` },
+        });
+        setFollowing(res.data.data.following);
+        setFollowers(res.data.data.followers);
+      }
+      catch (error) {
+        console.error('Failed to fetch user data', error);
+      }
+    }
+    logedInuserData();
+  }, [loggedInUser, token])
+
+
+  useEffect(() => {
     const getUsersAndPosts = async () => {
       try {
-       
+
         const res = await axios.get(`${BASE_URL}/api/v1/users`, {
           headers: { authorization: ` ${token}` },
         });
         const users = res.data.data;
-
-       
         const usersWithPosts = await Promise.all(
           users.map(async (user) => {
             const postsRes = await axios.get(
@@ -36,23 +55,24 @@ const Feeds = () => {
                 headers: { authorization: `${token}` },
               }
             );
-
             return {
               ...user,
               posts: postsRes.data.data || [],
             };
           })
         );
-
         setData(usersWithPosts);
       } catch (err) {
         console.error("Error fetching users or posts:", err);
       }
     };
-
     getUsersAndPosts();
-  }, [token]);
+  }, []);
 
+  const timeAgo = (createdAt) => {
+    const time = formatDistanceToNow(new Date(createdAt), { addSuffix: true })
+    return time.replace('about', '')
+  }
   const toggleLike = async (id) => {
     try {
       const res = await axios.put(
@@ -62,15 +82,12 @@ const Feeds = () => {
           headers: { authorization: ` ${token}` },
         }
       );
-
       if (res.data.data.likes.includes(loggedInUser)) {
         setLikedPosts((prev) => [...prev, id]);
       } else {
         setLikedPosts((prev) => prev.filter((likeid) => likeid !== id));
       }
-
-      
-      const updatedPosts = data.map((user) => ({
+      const updatedLikedPosts = data.map((user) => ({
         ...user,
         posts: user.posts.map((post) => {
           if (post._id === id) {
@@ -79,8 +96,7 @@ const Feeds = () => {
           return post;
         }),
       }));
-
-      setData(updatedPosts);
+      setData(updatedLikedPosts);
     } catch (error) {
       console.error("Error toggling like:", error);
     }
@@ -95,42 +111,53 @@ const Feeds = () => {
           headers: { authorization: `${token}` },
         }
       );
-      console.log(res.data.data)
       const savedByUsers = res.data.data.saves;
-
       if (savedByUsers.includes(loggedInUser)) {
         setSavedPosts((prev) => [...prev, id]);
       } else {
         setSavedPosts((prev) => prev.filter((saveid) => saveid !== id));
       }
+      const updatedSavedPosts = data.map((user) => ({
+        ...user,
+        posts: user.posts.map((post) => {
+          if (post._id === id) {
+            return { ...post, saves: res.data.data.saves };
+          }
+          return post;
+        }),
+      }));
+      setData(updatedSavedPosts);
     } catch (error) {
       console.error("Error toggling save:", error);
     }
   };
 
   const renderContent = () => {
+    let posts = []
     switch (activeTab) {
       case "liked":
-        return ((data
-          .flatMap((user) => user.posts.map(post => post.createdBy._id === loggedInUser && post.likes.length > 0 ? post : ""))
-        ));
+        posts = data
+          .flatMap((user) => user.posts.map(post => post.createdBy._id === loggedInUser && post.likes.length > 0 ? post : "")).filter(post => post)
+        break;
       case "saved":
-        return (data
+        posts = data
           .flatMap((user) => user.posts)
-          .map((post) => post.saves.includes(loggedInUser) ? post : ""));
+          .filter((post) => post.saves.includes(loggedInUser));
+        break;
       case "purchased":
-        return data
-          .flatMap((user) => user.posts)
-          .filter((post) => post.purchased);
+        posts = [];
+        break;
       default:
-        return data.flatMap((user) => user.posts);
+        posts = data.flatMap((user) => user.posts);
+        break;
     }
+    return posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
   };
 
   return (
-    <div className="font-gotham">
+    <div className="font-gotham font-light">
       {/* Tabs */}
-      <div className="flex justify-around mx-auto w-[calc(100vw-30vw)] md:w-[100vw] rounded-md xs:rounded-none mb-3 mt-1 bg-black text-white py-3 xs:py-2">
+      <div className="flex justify-around mx-auto w-full mb-2 bg-black text-white py-3 xs:py-2">
         <button
           className={`${activeTab === "all" ? "border-b-2 border-white" : ""
             } text-lg px-4 xs:px-2 py-2 flex items-center gap-x-2 xs:gap-x-0`}
@@ -162,31 +189,37 @@ const Feeds = () => {
       </div>
 
       {/* Feeds Content */}
-      <div className="scrollable-div text-white overflow-y-auto h-[calc(100vh-18vh)] md:h-[77vh] grid grid-cols-2 xs:grid-cols-1 gap-x-10 sm:gap-x-2 w-[calc(100vw-30vw)] md:w-[98vw] mx-auto">
-        {data.map(user => user.posts && user.posts.length > 0 && 
-          renderContent().map((post) => (
-            post && <div className="bg-black p-4 xs:px-2 rounded-md mb-3 h-fit" key={post._id}>
+      <div className="flex w-full">
+
+        <div className="scrollable-div text-white overflow-y-auto h-[100vh] w-2/3 xs:w-full mx-5 md:mx-2 pb-24 grid">
+
+          {renderContent().length > 0 ? (renderContent().map((post) => {
+            return (post ? (<div className="bg-black p-4 xs:px-2 rounded-md mb-3 h-fit" key={post._id}>
               <div className="flex justify-between items-center">
                 <div className="flex gap-x-3 items-center">
                   <img
-                    src="https://images.pexels.com/photos/432059/pexels-photo-432059.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    src={post.createdBy.profileImage}
                     className="h-11 w-11 rounded-full border-2 border-[#9c8fd0] p-1"
                     alt="User avatar"
                   />
-                  <h3>{user.username}</h3>
+                  <h3>{post.createdBy.username}</h3>
                 </div>
-                <button className="border-2 border-white py-1 px-2.5 rounded-lg bg-main-gradient hover:scale-[1.03] mr-1">
-                  Follow
-                </button>
+                <p className=" text-sm">
+                  {timeAgo(post.createdAt)}
+                </p>
               </div>
 
-              <div className="relative w-full h-[22rem] mt-4 mb-2 rounded-md border-2 border-gray-200">
-                <img
-                  src={post.image}
+              <div className="relative w-full h-[27rem] mt-4 mb-2 rounded-md border-2 border-gray-200">
+                {post.image && <img
+                  src={`${BASE_URL}${post.image}`}
                   className={`w-full h-full rounded-md ${post.isPrivate ? "blur-md" : ""}`}
                   alt="Post Content"
-                />
-
+                />}
+                {post.video && <video autoPlay loop controls
+                  src={`${BASE_URL}${post.video}`}
+                  className={`w-full h-full rounded-md ${post.isPrivate ? "blur-md" : ""}`}
+                  alt="Post Content"
+                />}
                 {post.isPrivate && (
                   <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 rounded-md">
                     <LockIcon className="text-pink-500" style={{ fontSize: "3rem" }} />
@@ -197,7 +230,6 @@ const Feeds = () => {
                   </div>
                 )}
               </div>
-
               <div className="flex items-center justify-between mx-2">
                 <div
                   className="cursor-pointer"
@@ -226,14 +258,61 @@ const Feeds = () => {
                   {post.likes.length} {post.likes.length === 1 ? "like" : "likes"}
                 </p>
                 <div className="flex items-center gap-x-2">
-                <p>{user.username}</p>
-                <p className="text-sm">{post.content}</p>
+
+                  <p className="text-sm font-lighter">{post.content}</p>
 
                 </div>
               </div>
+            </div>) : (<div className="text-center">
+              <h2>hello</h2>
+            </div>))
+          })) : (<div className="flex justify-center items-center w-full h-full">
+            <div>
+              <div className="ml-7 mb-3">
+                <svg aria-label="When you share photos, they will appear on your profile." class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="62" role="img" viewBox="0 0 96 96" width="62"><title>When you share photos, they will appear on your profile.</title><circle cx="48" cy="48" fill="none" r="47" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"></circle><ellipse cx="48.002" cy="49.524" fill="none" rx="10.444" ry="10.476" stroke="currentColor" stroke-linejoin="round" stroke-width="2.095"></ellipse><path d="M63.994 69A8.02 8.02 0 0 0 72 60.968V39.456a8.023 8.023 0 0 0-8.01-8.035h-1.749a4.953 4.953 0 0 1-4.591-3.242C56.61 25.696 54.859 25 52.469 25h-8.983c-2.39 0-4.141.695-5.181 3.178a4.954 4.954 0 0 1-4.592 3.242H32.01a8.024 8.024 0 0 0-8.012 8.035v21.512A8.02 8.02 0 0 0 32.007 69Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg></div>
+              <h2 className="text-xl font-normal">No posts yet!</h2>
             </div>
-          ))
-       )}
+          </div>)}
+        </div>
+
+
+        <div className="online-users bg-black rounded-md p-4 text-white h-fit w-1/3 mr-3 xs:hidden">
+          {/* Tabs */}
+          <div className="flex justify-around mb-2">
+            <button
+              className={`${tab === "followers" ? "border-b-2 border-white" : ""
+                } text-lg px-4 xs:px-2 py-2 gap-x-2 flex items-center xs:gap-x-0`}
+              onClick={() => setTab("followers")}
+            >
+              Followers
+            </button>
+            <button
+              className={`${tab === "following" ? "border-b-2 border-white" : ""
+                } text-lg px-4 xs:px-2 py-2 gap-x-2 flex items-center xs:gap-x-0`}
+              onClick={() => setTab("following")}
+            >
+              Following
+            </button>
+          </div>
+
+          {/* Content */}
+          {data && data.length > 0 && (
+            <div>
+              {data
+                .filter((user) =>
+                  tab === "followers"
+                    ? followers.includes(user._id)
+                    : following.includes(user._id)
+                )
+                .map((user) => (
+                  <div className="flex items-center gap-3 mt-2  px-10 py-4 rounded-md transition-all hover:bg-fuchsia-800 hover:scale-105">
+                    <img src={user.profileImage} alt="img" className="h-10 w-10 rounded-full object-cover bg-white" />
+                    <h4>{user.username}</h4>
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

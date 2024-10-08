@@ -16,6 +16,9 @@ import MainLayout from './screens/Auth/MainLayout';
 import SubscriptionDetails from "./screens/SidebarComponents/SubscriptionDetails";
 import UserProfile from './screens/SidebarComponents/UserProfile';
 import UpdateProfile from './screens/SidebarComponents/UpdateProfile';
+import PrivacyPolicy from "./screens/SidebarComponents/PrivacyPolicy";
+import TermsAndConditions from "./screens/SidebarComponents/TermsConditions";
+import Settings from "./screens/SidebarComponents/Settings";
 
 const router = createBrowserRouter([
   
@@ -82,6 +85,21 @@ const router = createBrowserRouter([
       {
         path: "update",
         element: <UpdateProfile />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "privacy-policy",
+        element: <PrivacyPolicy />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "terms",
+        element: <TermsAndConditions />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
         errorElement: <NotFound />,
       },
     ],

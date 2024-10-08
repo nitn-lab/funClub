@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import axios from 'axios';
 // import { Typography } from './Typography';
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const StyledSidebarHeader = styled.div`
   height: 64px;
@@ -39,17 +41,41 @@ const StyledLogo = styled.div`
 `;
 
 export const SidebarHeader = ({ children, rtl, ...rest }) => {
+  const id = localStorage.getItem('id');
+const token = localStorage.getItem('jwtToken');
+
+const [user, setUser] = useState([]);
+
+useEffect(() => {
+  if (id) {
+    fetchUserData(id);
+  }
+}, [id]);
+
+const fetchUserData = async (id) => {
+
+  try {
+    const response = await axios.get (`${BASE_URL}/api/v1/userById/${id}`, {
+      headers: { Authorization:  `${token} `},
+    });
+
+    setUser(response.data.data);
+  } catch (error) {
+    console.error('Failed to fetch user data', error);
+
+  }
+};
   return (
     <StyledSidebarHeader {...rest}>
       <div className="flex items-center justify-between">
         <StyledLogo rtl={rtl}>
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center gap-x-2 ml-3">
             <img
-              src="https://images.pexels.com/photos/2318543/pexels-photo-2318543.jpeg?auto=compress&cs=tinysrgb&w=600"
+              src={user.profileImage}
               className="h-10 w-10 rounded-full"
             />
 
-            <h2>Name</h2>
+            <h2>{user.username}</h2>
           </div>
         </StyledLogo>
         {/* <Typography variant="subtitle1" fontWeight={700} color="#0098e5">

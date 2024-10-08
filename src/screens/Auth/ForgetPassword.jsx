@@ -1,8 +1,22 @@
-import React from "react";
+import React, {useState} from "react";
 import ForgetPasswordForm from "../../components/ForgetPasswordForm";
 import logo from "../../assets/images/FUNCLUB logo.png";
-
+import { useNavigate } from "react-router-dom";
+ 
 const ForgetPassword = () => {
+
+  const navigate = useNavigate();
+  const [showLoginForm, setShowLoginForm] = useState(true);
+  const [animationClass, setAnimationClass] = useState("");
+  const handleBackToLoginClick = () => {
+    console.log("clicked")
+    setAnimationClass("slide-out-right"); 
+    setTimeout(() => {
+      setShowLoginForm(true);
+      navigate("/")
+      setAnimationClass("slide-in-left"); 
+    }, 300); 
+  };
   return (
     <div className="relative h-screen w-screen xs:h-[93vh]">
       <img
@@ -11,8 +25,9 @@ const ForgetPassword = () => {
       />
       <div className="absolute top-0 xs:p-3 p-20 w-full h-full">
         <div className="flex backdrop-blur-lg rounded-lg bg-white/10 h-full xs:h-[75%] xs:mt-20">
-          <div className="flex items-center justify-center w-1/2 md:w-full h-full ">
-            <ForgetPasswordForm />
+          <div  className={`flex items-center justify-center w-1/2 md:w-full h-full ${animationClass}`}
+            style={{ animationDuration: "0.3s" }}>
+            <ForgetPasswordForm handleBackToLoginClick={handleBackToLoginClick}/>
           </div>
           <div className="md:hidden relative flex w-1/2 items-center h-full">
             <div className="flex w-full  justify-center text-white">

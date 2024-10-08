@@ -35,7 +35,7 @@ const featureRows = [
 
 const Subscription = () => {
     return (
-        <div className="h-[96vh] md:h-[99vh] overflow-y-auto scrollable-div bg-black text-white mx-auto w-[calc(100vw-25vw)] md:w-full font-gotham pt-8 rounded-md md:rounded-none"
+        <div className="h-[100vh]  overflow-y-auto scrollable-div font-light bg-black text-white mx-auto w-full font-gotham pt-8 "
         >
             <h2 className=" text-[#f0f2f4] text-3xl font-bold italic text-center" >Subscription Tiers</h2>
             <h3 className="text-[#c1c3c5] text-center mt-8 font-light">Upgrade to Plus, Gold, or Platinum for an enhanced Tinder experience.</h3>

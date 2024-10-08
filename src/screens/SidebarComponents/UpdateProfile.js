@@ -11,7 +11,7 @@ const UpdateProfile = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
     username: '',
-    about: '',
+    bio:'',
     country: '',
     personality: '',
     smoking: '',
@@ -30,20 +30,20 @@ const UpdateProfile = () => {
   const fetchUserData = async (id) => {
     setLoading(true);
     try {
-      const response = await axios.get (`${BASE_URL}/api/v1/userById/${id}`, {
-        headers: { Authorization:  `${token} `},
+      const response = await axios.get(`${BASE_URL}/api/v1/userById/${id}`, {
+        headers: { Authorization: `${token} ` },
       });
       setLoading(false);
       const fetchedUser = response.data.data;
       setUserData({
         username: fetchedUser.username,
         country: fetchedUser.country,
+        bio: fetchedUser.bio,
         ethnicity: fetchedUser.ethnicity,
         smoking: fetchedUser.smoking,
         drinking: fetchedUser.drinking,
         personality: fetchedUser.personality,
         sexual_orientation: fetchedUser.sexual_orientation,
-        about: fetchedUser.about || '',
       });
     } catch (error) {
       console.error('Failed to fetch user data', error);
@@ -64,14 +64,11 @@ const UpdateProfile = () => {
     setLoading(true);
     try {
       const res = await axios.put(`${BASE_URL}/api/v1/updateUsers/${id}`, userData, {
-        headers: { Authorization:  `${token}` },
+        headers: { Authorization: `${token}` },
       });
-      console.log(res)
-      if (res.status === 403) {
-        navigate('/');
-      } else {
+     
         toast.success('Field updated successfully!!');
-      }
+        navigate('/dashboard/profile')
       setLoading(false);
     } catch (error) {
       console.error('Failed to update user data!!', error);
@@ -80,105 +77,105 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="w-[calc(100vw-25vw)] md:w-full mx-auto h-[96vh] md:h-[99vh] font-gotham rounded-lg md:rounded-none bg-black text-white p-8 scrollable-div overflow-y-auto">
-      <h2 className="text-center font-semibold italic text-xl underline underline-offset-4">Edit Profile</h2>
+    <div className="w-full md:w-full mx-auto h-[100vh] font-gotham font-light rounded-lg md:rounded-none bg-black text-white p-8 scrollable-div overflow-y-auto">
+      <h2 className="text-center font-medium italic text-xl underline underline-offset-4">Edit Profile</h2>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <form onSubmit={handleSubmit} className="w-full mt-12">
-          <div className="flex sm:block items-center justify-center w-full gap-x-16 my-12">
-          <label className="flex items-center gap-x-3  w-1/2 sm:w-full">
-          Username
+        <form onSubmit={handleSubmit} className="w-4/5 mx-auto my-12 sm:w-full sm:mx-3">
+
+          <label className=" w-full">
+            Username
             <input
-            className="bg-gray-800 rounded-lg p-2 w-full"
+              className="bg-gray-800 rounded-lg p-2 w-full mt-2 mb-8"
               type="text"
               name="username"
               value={userData.username}
               onChange={handleInputChange}
             />
           </label>
-          <label className="flex items-center gap-x-3 w-1/2 sm:w-full sm:my-12">
+          <label className="w-full my-10">
             Country
-            <input 
-             className="bg-gray-800 rounded-lg w-full p-2"
+            <input
+              className="bg-gray-800 rounded-lg w-full p-2 mt-2 mb-8"
               type="text"
               name="country"
               value={userData.country}
               onChange={handleInputChange}
             />
           </label>
-          </div>
 
-          <div className="flex sm:block items-center justify-center w-full gap-x-12 my-12">
-          <label className="flex items-center gap-x-3  w-1/2 sm:w-full">
-          Ethnicity
+
+
+          <label className="w-full">
+            Ethnicity
             <input
-            className="bg-gray-800 rounded-lg p-2 w-full"
+              className="bg-gray-800 rounded-lg p-2 w-full mt-2 mb-8"
               type="text"
               name="ethnicity"
               value={userData.ethnicity}
               onChange={handleInputChange}
             />
           </label>
-          <label className="flex items-center gap-x-3  w-1/2 sm:w-full sm:my-12">
-          Personality
+          <label className="w-full">
+            Personality
             <input
-            className="bg-gray-800 rounded-lg p-2 w-full"
+              className="bg-gray-800 rounded-lg p-2 w-full mt-2 mb-8"
               type="text"
               name="personality"
               value={userData.personality}
               onChange={handleInputChange}
             />
           </label>
-          </div>
 
-          <div className="flex sm:block items-center justify-center w-full gap-x-20 my-12">
-          <label className="flex items-center gap-x-3  w-1/2 sm:w-full">
-          Smoking
+
+
+          <label className="w-full">
+            Smoking
             <input
-            className="bg-gray-800 rounded-lg p-2 w-full"
+              className="bg-gray-800 rounded-lg p-2 w-full mt-2 mb-8"
               type="text"
               name="smoking"
               value={userData.smoking}
               onChange={handleInputChange}
             />
           </label>
-          <label className="flex items-center gap-x-3 w-1/2 sm:w-full sm:my-12">
+          <label className="w-full my-12">
             Drinking
             <input
-             className="bg-gray-800 rounded-lg w-full p-2"
+              className="bg-gray-800 rounded-lg w-full p-2 mt-2 mb-8"
               type="text"
               name="drinking"
               value={userData.drinking}
               onChange={handleInputChange}
             />
           </label>
-          </div>
 
-          <div className="flex sm:block items-center justify-center w-full gap-x-8 my-12">
-          
-          <label className="flex items-center gap-x-3 w-1/2 sm:w-full">
+
+
+
+          <label className="w-full">
             Sexual Orientation
             <input
-             className="bg-gray-800 rounded-lg w-full p-2"
+              className="bg-gray-800 rounded-lg w-full p-2 mt-2 mb-8"
               type="text"
               name="sexual_orientation"
               value={userData.sexual_orientation}
               onChange={handleInputChange}
             />
           </label>
-          <label className="flex items-center gap-x-3 w-1/2 sm:w-full sm:mt-12">
+          <label className="w-full">
             Bio
             <input
-             className="bg-gray-800 rounded-lg w-full p-2"
+              className="bg-gray-800 rounded-lg w-full p-2 mt-2 mb-8"
               type="text"
-              name="about"
-              value={userData.about}
+              name="bio"
+              value={userData.bio}
               onChange={handleInputChange}
             />
           </label>
-          </div>
-          <button type="submit" className="float-right bg-main-gradient hover:scale-105 p-2 rounded-lg sm:mb-16">Update</button>
+
+          <button type="submit" className="float-right bg-main-gradient hover:scale-105 p-2 rounded-lg ">Update</button>
         </form>
       )}
     </div>

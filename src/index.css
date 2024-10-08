@@ -5,35 +5,35 @@
 @font-face{
     font-family: 'Gotham';
     src:url('../src/fonts/Gotham-Black.otf') format('openType');
-    font-weight: normal;
+    font-weight: 900;
     font-style: normal;
 }
 
 @font-face{
     font-family: 'Gotham';
     src:url('../src/fonts/Gotham-Bold.otf') format('openType');
-    font-weight: bold;
+    font-weight: 700;
     font-style: normal;
 }
 
 @font-face{
     font-family: 'Gotham';
     src:url('../src/fonts/Gotham-Light.otf') format('openType');
-    font-weight: lighter;
+    font-weight: 300;
     font-style: normal;
 }
 
 @font-face{
     font-family: 'Gotham';
     src:url('../src/fonts/Gotham-Medium.otf') format('openType');
-    font-weight:normal;
+    font-weight:500;
     font-style: normal;
 }
 
 @font-face{
     font-family: 'Gotham';
     src:url('../src/fonts/Gotham-MediumItalic.otf') format('openType');
-    font-weight:normal;
+    font-weight:500;
     font-style: italic;
 }
 

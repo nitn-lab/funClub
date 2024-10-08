@@ -138,7 +138,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex w-screen h-screen p-8 xs:p-3 justify-center bg-main-gradient md:block xs:h-[99vh] font-gotham">
+    <div className="flex w-screen h-screen p-8 xs:p-3 justify-center bg-main-gradient md:block xs:h-[100vh] font-gotham">
       <Sidebar steps={data} currentStep={index} />
       <div className="signup w-2/3 xs:w-1/2 bg-primary-light opacity-[0.9] px-8 xs:px-3 relative rounded-r-lg md:w-full md:mt-3 md:rounded-lg md:h-[87%]">
         <div className="flex">
