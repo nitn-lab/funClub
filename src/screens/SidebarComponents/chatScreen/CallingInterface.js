@@ -18,7 +18,7 @@ const CallingInterface = ({ endVideoCall }) => {
     };
 
     return ( 
-        <div className="relative w-full h-[96vh] bg-black text-white rounded-md mx-auto bg-opacity-75">
+        <div className="relative w-full h-[100vh] bg-black text-white mx-auto bg-opacity-75">
 
             <p className="text-lg text-center pt-10">Calling...</p>
           <div className='flex justify-center'>

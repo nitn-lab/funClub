@@ -68,7 +68,7 @@ const Live = () => {
   return (
     <div className="">
       {/* Tabs and Go Live Button */}
-      <div className="flex items-center justify-between mb-4 w-[calc(100vw-30vw)] md:w-full  mx-auto">
+      <div className="flex items-center justify-between mb-4 w-[calc(100vw-30vw)] md:w-full mt-2 mx-auto">
         <div className="flex gap-x-3 xs:gap-x-1.5">
           <button
             className={`px-4 xs:px-1.5 py-2 xs:py-0 rounded-md xs:rounded-sm flex gap-x-2 xs:gap-x-0.5 items-center ${activeTab === "popular" ? "bg-white text-black" : "bg-black text-white"}`}

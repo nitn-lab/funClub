@@ -20,6 +20,7 @@ const Login = () => {
 
 
   const handleForgotPasswordClick = () => {
+    console.log("clicked")
     setAnimationClass("slide-out-left")
     setTimeout(() => {
       navigate('/forget-password')
@@ -30,9 +31,11 @@ const Login = () => {
 
 
   const handleBackToLoginClick = () => {
+    console.log("clicked")
     setAnimationClass("slide-out-right"); 
     setTimeout(() => {
       setShowLoginForm(true);
+      navigate("/")
       setAnimationClass("slide-in-left"); 
     }, 300); 
   };
@@ -53,7 +56,7 @@ const Login = () => {
             {showLoginForm ? (
               <LoginForm onForgotPassword={handleForgotPasswordClick} />
             ) : (
-              <ForgetPasswordForm backToLogin={handleBackToLoginClick} />
+              <ForgetPasswordForm handleBackToLoginClick={handleBackToLoginClick} />
             )}
           </div>
           <div className="md:hidden relative flex w-1/2 items-center h-full">

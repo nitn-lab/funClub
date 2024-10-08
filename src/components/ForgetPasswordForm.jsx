@@ -6,13 +6,13 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-export default function ForgetPasswordForm({backToLogin}) {
+export default function ForgetPasswordForm({handleBackToLoginClick}) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
-
+console.log(handleBackToLoginClick)
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -77,7 +77,7 @@ export default function ForgetPasswordForm({backToLogin}) {
           >
            {loading ? (<span className="loading loading-spinner loading-md"></span>):("Reset Password")}
           </button>
-          <button onClick={backToLogin}>Back to login</button>
+          <button onClick={handleBackToLoginClick}>Back to login</button>
         </div>
       </div>
     </div>

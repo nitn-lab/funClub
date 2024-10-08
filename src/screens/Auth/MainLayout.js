@@ -41,7 +41,7 @@ const MainLayout = () => {
 
   return (
     <div
-      className={`fixed inset-0 p-2 md:p-0 bg-main-gradient flex md:block items-start w-full transition-opacity duration-700 ease-out ${pageAnimation}`}
+      className={`fixed inset-0 md:p-0 bg-main-gradient flex md:block items-start w-full transition-opacity duration-700 ease-out ${pageAnimation}`}
     >
       {/* Sidebar and header */}
       <div className="md:flex w-full my-2 md:my-0 hidden bg-black">

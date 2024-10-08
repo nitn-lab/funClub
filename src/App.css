@@ -37,14 +37,7 @@ input:-moz-autofill {
   border-radius: 5px !important;
 }
 
-.ps-sidebar-root {
-  border-right-width: 0px !important;
-}
 
-.ps-sidebar-container {
-  border-radius: 8px;
-  opacity: 0.9;
-}
 
 .pulse-button {
   position: relative;

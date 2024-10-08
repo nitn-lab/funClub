@@ -37,13 +37,13 @@ const ChatScreen = ({showChatScreen}) => {
       <div className={`flip-card relative w-full h-full transition-transform duration-500 ${callActive ? 'flip' : ''}`}>
         <div className="front absolute top-0 left-0 w-full h-full  text-white">
           {receiver ? (
-            <div className="chat-screen relative w-full bg-fuchsia-400 h-[96vh] rounded-md shadow-lg">
-              <div className="header bg-fuchsia-800 text-white px-10 py-2.5 xs:px-5 rounded-t-md">
+            <div className="chat-screen relative w-full bg-fuchsia-400 h-[100vh]">
+              <div className="header bg-fuchsia-800 text-white px-10 py-2.5 xs:px-5">
                 <div className="flex justify-between items-center">
                   <div className="flex gap-5 items-center xs:gap-3">
                     <div>
                       <img
-                        src={`receiver.profile_url || https://avatar.iran.liara.run/username?username=${receiver.firstname}+${receiver.lastname}`}
+                        src={receiver.profileImage}
                         alt="user"
                         className="rounded-full h-12 w-12 xs:h-12 xs:w-12 object-cover"
                       />
@@ -77,7 +77,7 @@ const ChatScreen = ({showChatScreen}) => {
                     )
                   ))}
                 </div>
-                <div className={`absolute w-[93%] ${!showChatScreen ? "bottom-40" : "bottom-28"}`}>
+                <div className={`absolute w-[93%] ${!showChatScreen ? "bottom-44" : "bottom-28"}`}>
                 <div className="flex items-center ">
                   <div className="bg-fuchsia-800 text-white p-2 rounded-full cursor-pointer">
                     <FaImage />

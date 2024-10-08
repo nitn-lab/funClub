@@ -16,40 +16,31 @@ const Suggestions = () => {
   useEffect(() => {
     const fetchUsersAndFollowedList = async () => {
       try {
-     
         const res = await axios.get(`${BASE_URL}/api/v1/users`, {
           headers: {
             Authorization: `${token}`,
           },
         });
         if(res.status === 403){
-          navigate("/")
+          localStorage.removeItem("jwtToken")
         }
-       
         const userRes = await axios.get(`${BASE_URL}/api/v1/userById/${loggedInUserId}`, {
           headers: {
             Authorization: `${token}`, 
           },
         });
-
-      
         const followedUsersList = userRes.data.data.following;
-
-   
         const filteredData = res.data.data
           .filter(user =>
             ["creator", "verified creator", "vip creator"].includes(user.role) && user._id !== loggedInUserId
           )
           .slice(0, 6);
-
-   
         setData(filteredData);
         setFollowedUsers(followedUsersList);
       } catch (error) {
         console.error("Error fetching users or followed list:", error);
       }
     };
-
     fetchUsersAndFollowedList();
   }, [loggedInUserId, token]);
 
@@ -64,10 +55,6 @@ const Suggestions = () => {
           Authorization: `${token}`,
         },
       });
-
-      console.log(res, "follow");
-
-     
       setFollowedUsers(prev =>
         isFollowing
           ? prev.filter(userId => userId !== id)
@@ -77,20 +64,18 @@ const Suggestions = () => {
       console.error("Error updating follow status:", error);
     }
   };
-
   const isUserFollowing = (userId) => {
     return followedUsers.includes(userId);
   };
 
   return (
-    <div>
-      <h2 className="font-semibold text-lg text-primary-dark mt-2 mb-2">
+    <div className="font-light">
+      <h2 className="font-medium text-lg text-primary-dark mt-2 mb-2">
         Suggested for you
       </h2>
       <div className="grid grid-cols-2 gap-3">
         {data && data.length > 0 && data.map((item) => {
           const isFollowing = isUserFollowing(item._id);
-
           return (
             <div key={item._id} className="bg-primary-dark rounded-md py-1 hover:scale-[1.01] cursor-pointer text-primary-light" onClick={() => navigate(`/dashboard/user/${item._id}`)}>
               <div className="flex-col items-center justify-center">

@@ -19,6 +19,12 @@ module.exports = {
       fontFamily : {
         gotham : ['Gotham', 'sans-serif']
       },
+      fontWeight: {
+        light: 300,
+        medium: 500,
+        bold: 700,
+        black: 900,
+      },
       backgroundImage : {
         'main-gradient' : 'var(--main-gradient )'
       },
