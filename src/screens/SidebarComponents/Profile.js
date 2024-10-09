@@ -4,8 +4,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import camera from '../Global/icons/camera.png'
 import video from '../Global/icons/video.png';
+import option from './Global/icons/option.png';
 import { formatDistanceToNow } from 'date-fns';
 import {useNavigate} from 'react-router-dom'
+import VideoComponent from "./VideoComponent";
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Profile = () => {
@@ -29,6 +31,7 @@ const Profile = () => {
       fetchUserData(id);
     }
     const fetchPosts = async () => {
+     try{
       const res = await axios.get(
         `${BASE_URL}/api/v1/user/${id}/posts`,
         {
@@ -36,6 +39,13 @@ const Profile = () => {
         }
       );
       setPosts(res.data.data)
+     }
+     catch(err){
+      if(err.response.status === 403){
+        localStorage.removeItem('jwtToken')
+        navigate('/')
+      }
+     }
     }
     fetchPosts();
   }, []);
@@ -191,10 +201,8 @@ const Profile = () => {
                     />
                     <label htmlFor="video-input" className="cursor-pointer text-main-gradient flex items-center w-fit gap-2"><img src={video} className="h-7" />
                     Videos</label>
-                    
                   </div>
                   {loading ? <span className="loading loading-spinner loading-md"></span> : <button className="px-3 py-1.5 rounded-md bg-main-gradient" onClick={createPost}>Share</button>}
-                  
                 </div>
               </div>
             </div>
@@ -229,15 +237,25 @@ const Profile = () => {
                     <div className="flex items-center gap-3 mb-4 justify-between">
                       <div className="flex items-center gap-3">
                         <img src={user.profileImage} alt="user img" className="w-[60px] h-[60px] rounded-full object-cover  border-2 border-white" />
-                        {console.log(post)}
-                        <p>{user.username}</p>
+                        <p className="text-xl">{user.username}</p>
                       </div>
-                      <p className="font-light text-sm">{timeAgo(post.createdAt)}</p>
+                     <div className="flex items-center gap-3">
+                     <p className="font-light text-sm">{timeAgo(post.createdAt)}</p>
+                     <img src={option} className="h-7" />
+                  
+                     </div>
                     </div>
                     <p className="truncate">{post.content}</p>
                     <div className="h-[350px] mt-4 border-2 border-white w-full overflow-hidden">
                       {post.image && <img src={`${BASE_URL}${post.image}`} alt="image" className="w-full h-full object-cover transition-all hover:scale-110 cursor-pointer" />}
-                      {post.video && <video alt="image" autoPlay loop className="w-full h-full object-cover transition-all hover:scale-110 cursor-pointer"><source src={`${BASE_URL}${post.video}`}/></video>}
+                      {post.video && (
+                          <VideoComponent
+                            src={`${BASE_URL}${post.video}`}
+                            className="w-full h-full object-cover transition-all hover:scale-110 cursor-pointer"
+                            poster={`https://gratisography.com/photo/reindeer-dog/`}
+                            alt="Post Content"
+                          />
+                      )}
                     </div>
                   </div>)
               }

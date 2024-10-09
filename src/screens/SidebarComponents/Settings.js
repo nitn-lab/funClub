@@ -41,7 +41,7 @@ const Settings = () => {
 
   return (
     <div className="w-full h-[100vh] mx-auto p-10 bg-black text-white font-gotham font-light">
-      <h2 className="mb-5 text-xl">Settings and activity</h2>
+      <h2 className="mb-5 text-2xl font-medium">Settings and activity</h2>
       <button
         className="bg-gray-800 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center w-full justify-between"
         onClick={handleToggle}
@@ -78,9 +78,9 @@ const Settings = () => {
                       </label>
                       <input
                         type="text"
-                        className="form-control m-2 w-full p-2 rounded-md border-none outline-none text-black"
+                        className="form-control m-2 w-full p-2  border-none outline-none bg-black text-white"
                         id="email"
-                        placeholder="Enter email"
+                       
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                       />
@@ -91,9 +91,9 @@ const Settings = () => {
                       </label>
                       <input
                         type="password"
-                        className="form-control w-full p-2 rounded-md m-2 border-none outline-none text-black"
+                        className="form-control w-full p-2  m-2 border-none outline-none bg-black text-white"
                         id="password"
-                        placeholder="Enter password"
+                      
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                       />

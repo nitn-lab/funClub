@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { formatDistanceToNow } from 'date-fns';
 import { useParams } from "react-router-dom";
+import VideoComponent from "./VideoComponent";
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const UserProfile = () => {
@@ -36,12 +37,12 @@ const UserProfile = () => {
       });
       console.log(postResponse.data)
       setPosts(postResponse.data.data);
-      
+
     } catch (error) {
       console.error("Failed to fetch user data or posts", error);
     }
   };
-console.log(posts)
+  console.log(posts)
   return (
     <div className="flex-col items-center w-full md:w-full mx-auto h-[100vh] scrollable-div overflow-y-auto font-gotham font-light bg-black">
       {user && (
@@ -104,11 +105,11 @@ console.log(posts)
                       )}
                       {post.video && (
                         <div className="h-[350px] mt-4 border-2 border-white w-full overflow-hidden">
-                          <video
+                          <VideoComponent
                             src={`${BASE_URL}${post.video}`}
-                            alt="post image"
                             className="w-full h-full object-cover transition-all hover:scale-110 cursor-pointer"
-                            autoPlay loop
+                            poster={`https://gratisography.com/photo/reindeer-dog/`}
+                            alt="Post Content"
                           />
                         </div>
                       )}

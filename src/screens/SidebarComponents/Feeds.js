@@ -8,6 +8,7 @@ import { IoMdHome, IoMdCart } from "react-icons/io";
 import LockIcon from "@mui/icons-material/Lock";
 import { formatDistanceToNow } from 'date-fns';
 import axios from "axios";
+import VideoComponent from "./VideoComponent";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -215,9 +216,10 @@ const Feeds = () => {
                   className={`w-full h-full rounded-md ${post.isPrivate ? "blur-md" : ""}`}
                   alt="Post Content"
                 />}
-                {post.video && <video autoPlay loop controls
+                {post.video && <VideoComponent
                   src={`${BASE_URL}${post.video}`}
-                  className={`w-full h-full rounded-md ${post.isPrivate ? "blur-md" : ""}`}
+                  className={`w-full h-full mx-auto rounded-md ${post.isPrivate ? "blur-md" : ""}`}
+                  poster={`https://gratisography.com/photo/reindeer-dog/`}
                   alt="Post Content"
                 />}
                 {post.isPrivate && (
