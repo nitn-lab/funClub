@@ -110,7 +110,7 @@ const Suggestions = () => {
         </button>
       </div>
 
-      <div className="scrollable-div grid grid-cols-5 gap-4 mx-4 xs:mx-1 my-1 items-center h-[100vh] overflow-auto xs:mt-3">
+      <div className="scrollable-div grid grid-cols-5 md:grid-cols-3 gap-4 mx-4 xs:mx-1 my-1 items-center h-[100vh] overflow-y-auto xs:mt-3 md:pb-44">
         {filteredNearby.map((item, index) => (
           <div key={item._id} className="relative">
             <div

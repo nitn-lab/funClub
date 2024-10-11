@@ -4,8 +4,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import camera from '../Global/icons/camera.png'
 import video from '../Global/icons/video.png';
+import tick from '../Global/icons/tick.png';
 import { formatDistanceToNow } from 'date-fns';
 import {useNavigate} from 'react-router-dom'
+import VideoComponent from "./VideoComponent";
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Profile = () => {
@@ -29,6 +31,7 @@ const Profile = () => {
       fetchUserData(id);
     }
     const fetchPosts = async () => {
+     try{
       const res = await axios.get(
         `${BASE_URL}/api/v1/user/${id}/posts`,
         {
@@ -36,6 +39,13 @@ const Profile = () => {
         }
       );
       setPosts(res.data.data)
+     }
+     catch(err){
+      if(err.response.status === 403){
+        localStorage.removeItem('jwtToken')
+        navigate('/')
+      }
+     }
     }
     fetchPosts();
   }, []);
@@ -55,7 +65,8 @@ const Profile = () => {
       setUser(response.data.data);
     } catch (error) {
       console.error("Failed to fetch user data", error);
-      if(error.response.status){
+      if(error.response.status === 403){
+        toast.error('Session expired. Please login again!')
         localStorage.removeItem('jwtToken')
         navigate('/')
       }
@@ -136,22 +147,39 @@ const Profile = () => {
 
     }
   }
+   
+  const deletePost = async (postId) => {
+    try {
+      const res = await axios.delete(`${BASE_URL}/api/v1/deletePost/${postId}`, {
+        headers: { Authorization: `${token}` }
+      });
+      console.log(res, "100")
+      toast.success("Post deleted successfully!");
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+    } catch (error) {
+      toast.error("Error deleting post. Please try again later.");
+      console.error("Error deleting post:", error);
+    }
+  };
 
   return (
-    <div className="flex-col items-center w-full md:w-full mx-auto h-[100vh] scrollable-div overflow-y-auto font-gotham font-light bg-black">
-      {user ? <div className="w-full px-5 xs:px-0 py-3  text-white">
+    <div className="flex-col items-center w-full md:w-full mx-auto h-[100vh] scrollable-div overflow-y-auto font-gotham font-light bg-black md:pb-32">
+      {user ? <div className="w-full px-5 sm:px-0 py-3  text-white">
         <div className="h-[320px] relative">
-          <img src="https://gratisography.com/wp-content/uploads/2023/10/gratisography-pumpkin-scarecrow-1170x780.jpg" alt="cover photo" className="w-[100%] h-[250px] object-cover" />
+          <img src="https://gratisography.com/wp-content/uploads/2023/10/gratisography-pumpkin-scarecrow-1170x780.jpg" alt="cover photo" className="w-[100%] h-64 xs:h-44 object-cover" />
           <button className="float-right mt-3 bg-main-gradient px-2 py-1 rounded-md xs:mr-1" onClick={() => navigate('/dashboard/update')}>Edit Profile</button>
           <input type="file" id="fileInput" className="hidden" onChange={uploadImage} />
           <label htmlFor="fileInput">
-            <img src={user.profileImage} alt="user img" className="w-[150px] h-[150px] rounded-full object-cover absolute left-0 right-0 m-auto top-[150px] border-2 border-white bg-black cursor-pointer" />
+            <img src={user.profileImage} alt="user img" className="w-36 h-36 xs:w-24 xs:h-24  rounded-full object-cover absolute left-0 right-0 m-auto top-[150px] border-2 border-white bg-black cursor-pointer" />
           </label>
         </div>
         <div>
           <div>
             <div className="w-full flex flex-col items-center justify-center">
-              <h2 className="text-xl font-semibold">{user.username}</h2>
+              <div className="flex items-start gap-1">
+              <h2 className="text-xl font-medium">{user.username}</h2>
+              {user.role === 'creator' && <img src={tick} className="h-5"/>}
+              </div>
               <div className="flex items-center gap-3 my-2 text-fuchsia-500">
                 <p>{posts.length} posts</p>
                 <p>{user.followers.length} followers</p>
@@ -191,29 +219,28 @@ const Profile = () => {
                     />
                     <label htmlFor="video-input" className="cursor-pointer text-main-gradient flex items-center w-fit gap-2"><img src={video} className="h-7" />
                     Videos</label>
-                    
                   </div>
                   {loading ? <span className="loading loading-spinner loading-md"></span> : <button className="px-3 py-1.5 rounded-md bg-main-gradient" onClick={createPost}>Share</button>}
-                  
                 </div>
               </div>
             </div>
           </div>
           {/* Right Sidebar */}
-          <div className="w-1/3 sm:hidden text-white h-fit bg-main-gradient p-2 rounded-lg">
-            <div className="mb-2 flex justify-between items-center">
+          <div className="w-1/3 sm:hidden text-white h-fit bg-main-gradient p-2 rounded-md">
+            <div className="mb-2">
               <div className=" flex gap-1 items-center">
                 <PaidIcon className="text-yellow-300" style={{ fontSize: "2.5rem" }} />
                 <p className="text-base my-2">200</p>
               </div>
-              <button className="bg-black px-2 rounded-lg float-right">Buy Credits</button>
+              <button className="bg-black px-2 rounded-lg py-1 mt-4">Buy Credits</button>
             </div>
             <div>
+           
 
-              <h3 className="text-lg">Activity Score</h3>
-              <p className="mt-0.5">Your score is {calculateProgress().toFixed(0)}% </p>
+            
+              <p className="mt-0.5">Your profile is {calculateProgress().toFixed(0)}% complete</p>
               <div className="h-2 bg-gray-700 rounded-full">
-                <div className="h-2 bg-white  rounded-full my-2" style={{ width: `${calculateProgress()}%` }}></div>
+                <div className="h-2 bg-white  rounded-full my-2.5" style={{ width: `${calculateProgress()}%` }}></div>
               </div>
               <div className="my-4">
               </div>
@@ -229,15 +256,28 @@ const Profile = () => {
                     <div className="flex items-center gap-3 mb-4 justify-between">
                       <div className="flex items-center gap-3">
                         <img src={user.profileImage} alt="user img" className="w-[60px] h-[60px] rounded-full object-cover  border-2 border-white" />
-                        {console.log(post)}
-                        <p>{user.username}</p>
+                        <div>
+                        <p className="text-xl">{user.username}</p>
+                        <p className="font-light text-sm">{timeAgo(post.createdAt)}</p>
+                        </div>
                       </div>
-                      <p className="font-light text-sm">{timeAgo(post.createdAt)}</p>
+                     <div className="flex items-center gap-3">
+                   
+                    <button className="bg-main-gradient rounded-md hover:scale-105 px-1.5 py-1" onClick={() => deletePost(post._id)}>Delete</button>
+                  
+                     </div>
                     </div>
                     <p className="truncate">{post.content}</p>
-                    <div className="h-[350px] mt-4 border-2 border-white w-full overflow-hidden">
-                      {post.image && <img src={`${BASE_URL}${post.image}`} alt="image" className="w-full h-full object-cover transition-all hover:scale-110 cursor-pointer" />}
-                      {post.video && <video alt="image" autoPlay loop className="w-full h-full object-cover transition-all hover:scale-110 cursor-pointer"><source src={`${BASE_URL}${post.video}`}/></video>}
+                    <div className="h-[350px] mt-4  w-full overflow-hidden">
+                      {post.image && <img src={`${BASE_URL}${post.image}`} alt="image" className="w-full h-full object-contain transition-all hover:scale-110 cursor-pointer border-2 border-white" />}
+                      {post.video && (
+                          <VideoComponent
+                            src={`${BASE_URL}${post.video}`}
+                            className="w-full h-full cursor-pointer"
+                            poster={`https://gratisography.com/photo/reindeer-dog/`}
+                            alt="Post Content"
+                          />
+                      )}
                     </div>
                   </div>)
               }

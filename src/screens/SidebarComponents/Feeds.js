@@ -8,6 +8,9 @@ import { IoMdHome, IoMdCart } from "react-icons/io";
 import LockIcon from "@mui/icons-material/Lock";
 import { formatDistanceToNow } from 'date-fns';
 import axios from "axios";
+import VideoComponent from "./VideoComponent";
+import { useNavigate } from "react-router-dom";
+import Skeleton from '@mui/material/Skeleton';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -21,6 +24,8 @@ const Feeds = () => {
   const [savedPosts, setSavedPosts] = useState([]);
   const token = localStorage.getItem("jwtToken");
   const loggedInUser = localStorage.getItem("id");
+  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate();
 
   useEffect(() => {
     const logedInuserData = async () => {
@@ -62,8 +67,10 @@ const Feeds = () => {
           })
         );
         setData(usersWithPosts);
+        setLoading(false)
       } catch (err) {
         console.error("Error fetching users or posts:", err);
+        setLoading(false)
       }
     };
     getUsersAndPosts();
@@ -191,10 +198,27 @@ const Feeds = () => {
       {/* Feeds Content */}
       <div className="flex w-full">
 
-        <div className="scrollable-div text-white overflow-y-auto h-[100vh] w-2/3 xs:w-full mx-5 md:mx-2 pb-24 grid">
-
-          {renderContent().length > 0 ? (renderContent().map((post) => {
-            return (post ? (<div className="bg-black p-4 xs:px-2 rounded-md mb-3 h-fit" key={post._id}>
+        <div className="scrollable-div text-white overflow-y-auto h-[100vh] w-2/3 sm:w-full mx-5 sm:mx-0 pb-32 xs:pb-44 grid">
+          {loading ? <div>
+            <div className="bg-black rounded-md w-full h-full shadow-lg p-6 mb-5">
+              <div className="flex gap-3 items-center mb-5">
+                <Skeleton variant="circular" width={50} height={50} sx={{ bgcolor: 'grey.900' }} animation="wave" />
+                <Skeleton variant="text" width={150} height={25} sx={{ bgcolor: 'grey.900' }} animation="wave" />
+              </div>
+              <Skeleton variant="rectangular" width="100%" height="65%" sx={{ bgcolor: 'grey.900', borderRadius: "5px" }} animation="wave" />
+              <Skeleton variant="text" width={150} height={25} sx={{ bgcolor: 'grey.900', marginTop: "20px", marginBottom: "10px" }} animation="wave" />
+              <Skeleton variant="text" width="50%" height={25} sx={{ bgcolor: 'grey.900' }} animation="wave" />
+            </div> <div className="bg-black rounded-md w-full h-full shadow-lg p-6">
+              <div className="flex gap-3 items-center mb-5">
+                <Skeleton variant="circular" width={50} height={50} sx={{ bgcolor: 'grey.900' }} animation="wave" />
+                <Skeleton variant="text" width={150} height={25} sx={{ bgcolor: 'grey.900' }} animation="wave" />
+              </div>
+              <Skeleton variant="rectangular" width="100%" height="65%" sx={{ bgcolor: 'grey.900', borderRadius: "5px" }} animation="wave" />
+              <Skeleton variant="text" width={150} height={25} sx={{ bgcolor: 'grey.900', marginTop: "20px", marginBottom: "10px" }} animation="wave" />
+              <Skeleton variant="text" width="50%" height={25} sx={{ bgcolor: 'grey.900' }} animation="wave" />
+            </div>
+          </div> : renderContent().length > 0 ? (renderContent().map((post) => (
+            <div className="bg-black p-4 xs:px-2 rounded-md mb-3 h-fit" key={post._id}>
               <div className="flex justify-between items-center">
                 <div className="flex gap-x-3 items-center">
                   <img
@@ -208,16 +232,16 @@ const Feeds = () => {
                   {timeAgo(post.createdAt)}
                 </p>
               </div>
-
               <div className="relative w-full h-[27rem] mt-4 mb-2 rounded-md border-2 border-gray-200">
                 {post.image && <img
                   src={`${BASE_URL}${post.image}`}
-                  className={`w-full h-full rounded-md ${post.isPrivate ? "blur-md" : ""}`}
+                  className={`w-full h-full object-contain rounded-md ${post.isPrivate ? "blur-md" : ""}`}
                   alt="Post Content"
                 />}
-                {post.video && <video autoPlay loop controls
+                {post.video && <VideoComponent
                   src={`${BASE_URL}${post.video}`}
-                  className={`w-full h-full rounded-md ${post.isPrivate ? "blur-md" : ""}`}
+                  className={`w-full h-full mx-auto rounded-md ${post.isPrivate ? "blur-md" : ""}`}
+                  poster={`https://gratisography.com/photo/reindeer-dog/`}
                   alt="Post Content"
                 />}
                 {post.isPrivate && (
@@ -252,21 +276,18 @@ const Feeds = () => {
                   )}
                 </div>
               </div>
-
               <div className="mt-2 mx-2">
                 <p className="text-sm">
                   {post.likes.length} {post.likes.length === 1 ? "like" : "likes"}
                 </p>
                 <div className="flex items-center gap-x-2">
-
                   <p className="text-sm font-lighter">{post.content}</p>
-
                 </div>
               </div>
-            </div>) : (<div className="text-center">
-              <h2>hello</h2>
-            </div>))
-          })) : (<div className="flex justify-center items-center w-full h-full">
+            </div>)
+
+
+          )) : (<div className="flex justify-center items-center w-full h-full">
             <div>
               <div className="ml-7 mb-3">
                 <svg aria-label="When you share photos, they will appear on your profile." class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="62" role="img" viewBox="0 0 96 96" width="62"><title>When you share photos, they will appear on your profile.</title><circle cx="48" cy="48" fill="none" r="47" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"></circle><ellipse cx="48.002" cy="49.524" fill="none" rx="10.444" ry="10.476" stroke="currentColor" stroke-linejoin="round" stroke-width="2.095"></ellipse><path d="M63.994 69A8.02 8.02 0 0 0 72 60.968V39.456a8.023 8.023 0 0 0-8.01-8.035h-1.749a4.953 4.953 0 0 1-4.591-3.242C56.61 25.696 54.859 25 52.469 25h-8.983c-2.39 0-4.141.695-5.181 3.178a4.954 4.954 0 0 1-4.592 3.242H32.01a8.024 8.024 0 0 0-8.012 8.035v21.512A8.02 8.02 0 0 0 32.007 69Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg></div>
@@ -276,7 +297,7 @@ const Feeds = () => {
         </div>
 
 
-        <div className="online-users bg-black rounded-md p-4 text-white h-fit w-1/3 mr-3 xs:hidden">
+        <div className="online-users bg-black rounded-md p-4 text-white h-fit w-1/3 mr-3 sm:hidden">
           {/* Tabs */}
           <div className="flex justify-around mb-2">
             <button
@@ -305,12 +326,15 @@ const Feeds = () => {
                     : following.includes(user._id)
                 )
                 .map((user) => (
-                  <div className="flex items-center gap-3 mt-2  px-10 py-4 rounded-md transition-all hover:bg-fuchsia-800 hover:scale-105">
+                  <div className="flex items-center gap-3 mt-2  px-10 py-4 rounded-md transition-all cursor-pointer hover:bg-fuchsia-800 hover:scale-105" onClick={() => navigate(`/dashboard/user/${user._id}`)}>
                     <img src={user.profileImage} alt="img" className="h-10 w-10 rounded-full object-cover bg-white" />
                     <h4>{user.username}</h4>
                   </div>
                 ))}
+              {tab === 'followers' && followers.length === 0 && <p className="text-center py-10">No followers yet.</p>}
+              {tab === 'following' && following.length === 0 && <p className="text-center py-10">You don't follow anyone yet.</p>}
             </div>
+
           )}
         </div>
       </div>

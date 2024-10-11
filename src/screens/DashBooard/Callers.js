@@ -6,6 +6,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -52,7 +53,7 @@ const Callers = () => {
         });
         const followedUsersList = userRes.data.data.following;
         const filteredData = res.data.data
-          .filter(user => user._id !== loggedInUserId)
+          .filter(user => user._id !== loggedInUserId && user.role === 'user')
           .map(user => ({
             ...user,
             isFollowing: followedUsersList.includes(user._id),
@@ -62,6 +63,7 @@ const Callers = () => {
       } catch (error) {
         console.error("Error fetching users or followed list:", error);
         if (error.response.status === 403) {
+          toast.error('Session expired. Please login again!')
           localStorage.removeItem("jwtToken")
           navigate('/')
         }

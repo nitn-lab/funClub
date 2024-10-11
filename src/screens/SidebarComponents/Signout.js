@@ -32,8 +32,8 @@ console.log(isSignOutPopupOpen)
           modal: "customModal",
         }}
       >
-        <div className="modal-content">
-          <h2 className="text-xl font-semibold mb-4 text-center">Confirm Logout</h2>
+        <div className="modal-content text-black">
+          <h2 className="text-xl font-semibold mb-4 text-center text-black">Confirm Logout</h2>
           <p className="text-center mb-4">Are you sure you want to logout?</p>
           <div className="flex justify-center">
             <button

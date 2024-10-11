@@ -55,8 +55,8 @@ const PersonalityForm = ({ onInputChange, data }) => {
       <div >
         
         {/* Main container with flex layout */}
-        <div className="flex justify-start items-center w-full md:w-full h-64 md:h-44 overflow-auto xs:mt-10">
-          <div className="grid grid-cols-4 gap-1 xs:flex xs:flex-wrap xs:mt-3">
+        <div className="flex justify-start items-center w-full md:w-full h-64 md:h-44 overflow-auto xs:pt-10">
+          <div className="grid grid-cols-4 gap-1 xs:flex xs:flex-wrap xs:mt-3 xs:pt-5">
             {PersonalityTypes &&
               PersonalityTypes.map((item, index) => (
                 <div
