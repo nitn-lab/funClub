@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebarr from "../Global/Sidebar";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import CoinIcon from "@mui/icons-material/MonetizationOn"; 
 import Signout from "../SidebarComponents/Signout";
 import { useSignOut } from "../../components/context/SignOutContext";
+import menu from '../Global/icons/menu.png'
 
 const MainLayout = () => {
   const [open, setOpen] = useState(false);
@@ -15,10 +14,7 @@ const MainLayout = () => {
   const token = localStorage.getItem("jwtToken");
   const navigate = useNavigate();
   const {isSignOutPopupOpen, closeSignOutPopup} = useSignOut();
-
-  const handleScreenClick = () => {
-    setShowCoin(false);
-  };
+  const location = useLocation();
 
   useEffect(() => {
     if(!token){
@@ -26,8 +22,7 @@ const MainLayout = () => {
     }
     else{
       closeSignOutPopup();
-    }
-   
+    }   
     setTimeout(() => {
       setPageAnimation("opacity-100 blur-0"); 
     }, 100);
@@ -39,17 +34,38 @@ const MainLayout = () => {
     }, 700); 
   }, []);
 
+  useEffect(() => {
+    const handleDocumentClick = (event) => {
+      if (open && !event.target.closest(`[class*=".md:flex"]`)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('click', handleDocumentClick);
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, [open]);
+
+  
+  const handleScreenClick = () => {
+    setShowCoin(false);
+  };
+
+  useEffect(() => {
+    setOpen(false)
+  }, [location])
+
   return (
     <div
       className={`fixed inset-0 md:p-0 bg-main-gradient flex md:block items-start w-full transition-opacity duration-700 ease-out ${pageAnimation}`}
     >
       {/* Sidebar and header */}
-      <div className="md:flex w-full my-2 md:my-0 hidden bg-black">
+      <div className=" md:flex w-full my-2 md:my-0 hidden bg-black">
         <button
           className="hidden md:block text-white"
-          onClick={() => setOpen(!open)}
+          onClick={(e) => {e.stopPropagation(); setOpen(!open)}}
         >
-          {open ? <ArrowCircleLeftIcon /> : <ArrowCircleRightIcon />}
+          <img src={menu} className="h-6 mt-1 ml-1"/>
         </button>
       </div>
       

@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import React, { useState, useEffect } from "react";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import bell from '../screens/Global/icons/bell.png';
+import tick from '../screens/Global/icons/tick.png';
+import crown from '../screens/Global/icons/crown.png';
 import axios from 'axios';
 // import { Typography } from './Typography';
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -67,24 +69,26 @@ const fetchUserData = async (id) => {
 };
   return (
     <StyledSidebarHeader {...rest}>
-      <div className="flex items-center justify-between">
-        <StyledLogo rtl={rtl}>
-          <div className="flex items-center gap-x-2 ml-3">
+      <div className="flex items-center justify-between mx-3 py-5">
+       
+          <div className="flex items-center gap-x-1.5">
             <img
               src={user.profileImage}
-              className="h-10 w-10 rounded-full"
+              className="h-8 w-8 rounded-full"
             />
 
+            <div className="flex items-center gap-1">
             <h2>{user.username}</h2>
+            {user.role === 'creator' && <img src={tick} className="h-4"/>}
+            {user.role === 'vip creator' && <img src={crown} className="h-4"/>}
+            </div>
           </div>
-        </StyledLogo>
+        
         {/* <Typography variant="subtitle1" fontWeight={700} color="#0098e5">
             Pro Sidebar
           </Typography> */}
 
-        <div className="bg-main-gradient p-1 rounded-full mr-2">
-        <NotificationsIcon />
-        </div>
+       <img src={bell} className="h-7"/>
       </div>
     </StyledSidebarHeader>
   );

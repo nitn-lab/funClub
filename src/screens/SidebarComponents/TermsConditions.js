@@ -9,14 +9,14 @@ const TermsAndConditions = () => {
     };
 
     return (
-        <div className="mx-auto p-4 md:p-6 lg:p-8 h-[100vh] bg-black scrollable-div overflow-y-auto text-white font-gotham font-light w-full">
+        <div className="mx-auto p-8 md:p-2 h-[100vh] bg-black scrollable-div overflow-y-auto text-white font-gotham font-light w-full xs:pb-24">
            <div className='bg-main-gradient py-24 xs:py-8 px-16 xs:px-4 mb-8'>
            <h1 className="text-3xl font-bold mb-2">Terms & Conditions</h1>
-            <p className="text-lg">
+            <p>
                 By using FunClub, you acknowledge that you have read and understand the information in this Policy.
             </p>
            </div>
-            <div className="flex flex-col mb-8 items-start">
+            <div className="flex flex-col mb-8 items-start font-medium">
                 <button
                     className="text-fuchsia-600 hover:text-fuchsia-800 mb-2"
                     onClick={() => scrollToSection('introduction')}

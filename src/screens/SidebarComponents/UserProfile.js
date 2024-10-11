@@ -1,21 +1,29 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { formatDistanceToNow } from 'date-fns';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import VideoComponent from "./VideoComponent";
+import tick from '../Global/icons/tick.png';
+import crown from '../Global/icons/crown.png';
+import { toast } from "react-toastify";
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const UserProfile = () => {
   const { id } = useParams();
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
+  const [following, setFollowing] = useState(false);
   const token = localStorage.getItem('jwtToken');
+  const navigate = useNavigate();
+  const loggedInUserId = localStorage.getItem('id');
 
   useEffect(() => {
     if (id) {
       fetchUserData(id);
     }
-  }, [id]);
+  }, [id, user, posts]);
 
   const timeAgo = (createdAt) => {
     const time = formatDistanceToNow(new Date(createdAt), { addSuffix: true });
@@ -30,40 +38,78 @@ const UserProfile = () => {
       });
       const userData = userResponse.data.data;
       setUser(userData);
-
-      // Fetch posts for this user
+      if (userResponse.data.data.followers.includes(loggedInUserId)) {
+        setFollowing(true);
+      }
       const postResponse = await axios.get(`${BASE_URL}/api/v1/user/${id}/posts`, {
         headers: { Authorization: `${token}` },
       });
-      console.log(postResponse.data)
       setPosts(postResponse.data.data);
 
     } catch (error) {
+      if(error.response.status == 403){
+        toast.error('Session expired. Please login again!')
+        localStorage.removeItem('jwtToken')
+        navigate('/')
+      }
       console.error("Failed to fetch user data or posts", error);
     }
   };
-  console.log(posts)
+
+  const toggleFollow = async () => {
+    try {
+      const endpoint = following
+        ? `${BASE_URL}/api/v1/unfollow/${id}`
+        : ` ${BASE_URL}/api/v1/follow/${id}`;
+
+      await axios.put(endpoint, {}, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+      setFollowing(prevState => !prevState);
+    } catch (error) {
+      console.error("Error updating follow status:", error);
+    }
+  };
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="flex-col items-center w-full md:w-full mx-auto h-[100vh] scrollable-div overflow-y-auto font-gotham font-light bg-black">
+    <div className="flex-col items-center w-full mx-auto h-[100vh] scrollable-div overflow-y-auto font-gotham font-light bg-black md:pb-32 xs:overflow-x-hidden">
       {user && (
         <div className="w-full px-5 xs:px-0 py-3 text-white">
           <div className="h-[320px] relative">
             <img
               src="https://gratisography.com/wp-content/uploads/2023/10/gratisography-pumpkin-scarecrow-1170x780.jpg"
               alt="cover photo"
-              className="w-[100%] h-[250px] object-cover"
+              className="w-[100%] h-64 xs:h-44 object-cover"
             />
+            <button className="float-right mt-3 bg-main-gradient px-2 py-1 rounded-md xs:mr-1" onClick={toggleFollow}>  {following ? (
+                <DoneAllIcon style={{ fontSize: "1rem" }} />
+              ) : (
+                <GroupAddIcon style={{ fontSize: "1rem" }} />
+              )}
+              <span className="ml-1 text-sm">
+                {following ? "Following" : "Follow"}
+              </span></button>
             <label htmlFor="fileInput">
               <img
                 src={user.profileImage}
                 alt="user img"
-                className="w-[150px] h-[150px] rounded-full object-cover absolute left-0 right-0 m-auto top-[150px] border-2 border-white bg-black"
+                className="w-36 h-36 xs:w-24 xs:h-24 rounded-full object-cover absolute left-0 right-0 m-auto top-[150px] border-2 border-white bg-black mx-auto"
               />
             </label>
           </div>
           <div>
             <div className="w-full flex flex-col items-center justify-center">
-              <h2 className="text-xl font-semibold">{user.username}</h2>
+              <div className="flex items-start gap-1">
+                <h2 className="text-xl font-medium">{user.username}</h2>
+                {user.role === 'creator' && <img src={tick} className="h-5" />}
+                {user.role === 'vip creator' && <img src={crown} className="h-5" />}
+              </div>
               <div className="flex items-center gap-3 my-2 text-fuchsia-500">
                 <p>{user.posts && user.posts.length} posts</p>
                 <p>{user.followers && user.followers.length} followers</p>
@@ -95,19 +141,19 @@ const UserProfile = () => {
                       </div>
                       <p className="truncate">{post.content}</p>
                       {post.image && (
-                        <div className="h-[350px] mt-4 border-2 border-white w-full overflow-hidden">
+                        <div className="h-[350px] mt-4  w-full overflow-hidden">
                           <img
                             src={`${BASE_URL}${post.image}`}
                             alt="post image"
-                            className="w-full h-full object-cover transition-all hover:scale-110 cursor-pointer"
+                            className="w-full h-full object-contain border-2 border-white transition-all hover:scale-110 cursor-pointer"
                           />
                         </div>
                       )}
                       {post.video && (
-                        <div className="h-[350px] mt-4 border-2 border-white w-full overflow-hidden">
+                        <div className="h-[350px] mt-4 w-full overflow-hidden">
                           <VideoComponent
                             src={`${BASE_URL}${post.video}`}
-                            className="w-full h-full object-cover transition-all hover:scale-110 cursor-pointer"
+                            className="w-full h-full "
                             poster={`https://gratisography.com/photo/reindeer-dog/`}
                             alt="Post Content"
                           />

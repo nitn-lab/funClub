@@ -1,3 +1,6 @@
+body{
+  font-family: 'Gotham', sans-serif;
+}
 input::placeholder{
   color: black !important;
 }
@@ -10,14 +13,13 @@ input[type="password"]::-ms-clear {
 input[type="password"]::-webkit-textfield-decoration-container {
   display: none;
 }
-/* For Webkit browsers (Chrome, Safari, Edge) */
+
 input:-webkit-autofill {
-  background-color: white !important; /* Keeps the background white */
-  -webkit-box-shadow: 0 0 0 1000px white inset !important; /* Ensures background stays white */
-  -webkit-text-fill-color: black !important; /* Keeps the text color black */
+  background-color: white !important; 
+  -webkit-box-shadow: 0 0 0 1000px white inset !important; 
+  -webkit-text-fill-color: black !important; 
 }
 
-/* For Firefox */
 input:-moz-autofill {
   background-color: white !important;
   box-shadow: 0 0 0 1000px white inset !important;
@@ -30,14 +32,16 @@ input:-moz-autofill {
   }
 }
 
+.ps-menu-button {
+  padding-left: 20px !important;
+}
+
 .active {
   background-color: white !important;
   color: black !important;
   margin: 0 6px 0 6px !important;
   border-radius: 5px !important;
 }
-
-
 
 .pulse-button {
   position: relative;
@@ -81,17 +85,9 @@ input:-moz-autofill {
 .customModal{
   border-radius: 15px;
   font-family: 'Gotham', sans-serif;
+  color: black;
 }
 
-.customPostModal{
-  width: 900px;
-  height: 500px;
-  background-color: #86198f !important;
-  box-shadow: 5px gray !important;
-  color: white !important;
-  border-radius: 15px;
-  font-family: 'Gotham', sans-serif;
-}
 
 .slick-prev{
   z-index: 1;

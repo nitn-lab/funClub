@@ -40,7 +40,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="w-full h-[100vh] mx-auto p-10 bg-black text-white font-gotham font-light">
+    <div className="w-full h-[100vh] mx-auto p-10 md:p-2 bg-black text-white font-gotham font-light">
       <h2 className="mb-5 text-2xl font-medium">Settings and activity</h2>
       <button
         className="bg-gray-800 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center w-full justify-between"

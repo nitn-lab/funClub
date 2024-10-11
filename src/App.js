@@ -19,6 +19,7 @@ import UpdateProfile from './screens/SidebarComponents/UpdateProfile';
 import PrivacyPolicy from "./screens/SidebarComponents/PrivacyPolicy";
 import TermsAndConditions from "./screens/SidebarComponents/TermsConditions";
 import Settings from "./screens/SidebarComponents/Settings";
+import BecomeCreator from "./screens/SidebarComponents/BecomeCreator";
 
 const router = createBrowserRouter([
   
@@ -100,6 +101,11 @@ const router = createBrowserRouter([
       {
         path: "settings",
         element: <Settings />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "creator",
+        element: <BecomeCreator />,
         errorElement: <NotFound />,
       },
     ],

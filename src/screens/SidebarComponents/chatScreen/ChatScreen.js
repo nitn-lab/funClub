@@ -77,7 +77,7 @@ const ChatScreen = ({showChatScreen}) => {
                     )
                   ))}
                 </div>
-                <div className={`absolute w-[93%] ${!showChatScreen ? "bottom-44" : "bottom-28"}`}>
+                <div className={`absolute w-[93%] sm:bottom-44 ${!showChatScreen ? "bottom-44" : "bottom-28"}`}>
                 <div className="flex items-center ">
                   <div className="bg-fuchsia-800 text-white p-2 rounded-full cursor-pointer">
                     <FaImage />

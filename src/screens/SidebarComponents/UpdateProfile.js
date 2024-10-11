@@ -77,12 +77,12 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="w-full md:w-full mx-auto h-[100vh] font-gotham font-light rounded-lg md:rounded-none bg-black text-white p-8 scrollable-div overflow-y-auto">
+    <div className="w-full md:w-full mx-auto h-[100vh] font-gotham font-light rounded-lg md:rounded-none bg-black text-white p-8 scrollable-div overflow-y-auto md:pb-24">
       <h2 className="text-center font-medium italic text-xl underline underline-offset-4">Edit Profile</h2>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <form onSubmit={handleSubmit} className="w-4/5 mx-auto my-12 sm:w-full sm:mx-3">
+        <form onSubmit={handleSubmit} className="w-4/5 mx-auto my-12 md:my-6 sm:w-full sm:mx-3">
 
           <label className=" w-full">
             Username
