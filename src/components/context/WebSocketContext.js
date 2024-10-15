@@ -1,44 +1,39 @@
-// import React, { createContext, useEffect, useState } from 'react';
-// import { io } from 'socket.io-client';
+// WebSocketContext.js
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { CreateWebSocketConnection } from '../../services/websocket';
 
-// export const WebSocketContext = createContext();
+// Create WebSocket Context
+const WebSocketContext = createContext();
 
-// const WebSocketProvider = ({ children }) => {
-//   const [socket, setSocket] = useState(null);
-//   const [messages, setMessages] = useState([]);
+// WebSocket Provider Component
+export const WebSocketProvider = ({ children }) => {
+  const [socket, setSocket] = useState(null);
+  useEffect(() => {
+    const handleIncomingMessage = (event) => {
+      const receivedData = JSON.parse(event.data);
+      console.log("Message received:", receivedData);
+      // Handle incoming messages here
+    };
 
-//   useEffect(() => {
-//     const token = localStorage.getItem('authToken');
+    const ws = CreateWebSocketConnection(handleIncomingMessage);
+    setSocket(ws);
 
-//     if (token) {
-//       const newSocket = io('ws://backendapifunclub.yourwebstore.org.in:4000', {
-//         query: { token },
-//       });
+    // Cleanup WebSocket on unmount
+    return () => {
+      if (ws) {
+        ws.close();
+      }
+    };
+  }, []);
 
-//       newSocket.on('connect', () => {
-//         console.log('Connected to WebSocket server');
-//       });
+  return (
+    <WebSocketContext.Provider value={socket}>
+      {children}
+    </WebSocketContext.Provider>
+  );
+};
 
-//       newSocket.on('message', (message) => {
-//         const data = JSON.parse(message);
-//         if (data.type === 'chatMessage') {
-//           setMessages((prevMessages) => [...prevMessages, data]);
-//         }
-//       });
-
-//       setSocket(newSocket);
-
-//       return () => {
-//         newSocket.disconnect();
-//       };
-//     }
-//   }, []);
-
-//   return (
-//     <WebSocketContext.Provider value={{ socket, messages }}>
-//       {children}
-//     </WebSocketContext.Provider>
-//   );
-// };
-
-// export default WebSocketProvider;
+// Custom Hook to use WebSocket Context
+export const useWebSocket = () => {
+  return useContext(WebSocketContext);
+};

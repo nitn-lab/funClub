@@ -2,19 +2,20 @@ import React, { useState, useEffect } from "react";
 import VideoCarousel from "./VideoCarousel";
 import Callers from "./Callers";
 import VideoData from "./Videos.json";
-import UserInfo from './RightSidebar/UserInfo';
+import UserInfo from "./RightSidebar/UserInfo";
 import Suggestions from "./RightSidebar/Suggestions";
 import CallerProfile from "./RightSidebar/CallerProfile";
-import Chats from "../SidebarComponents/chatScreen/Chats"; 
-import chat from '../Global/icons/live-chat.png'
+import Chats from "../SidebarComponents/chatScreen/Chats";
+import chat from "../Global/icons/live-chat.png";
 
-const Dashboard = () => {
+const Dashboard = ({socket}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [videos, setVideos] = useState([]);
   const [selectedCaller, setSelectedCaller] = useState(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isChatClosing, setIsChatClosing] = useState(false);
-
+  // console.log("dash sok", socket);
+  
   useEffect(() => {
     setVideos(VideoData);
   }, []);
@@ -36,7 +37,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    document.body.style.overflow = isChatOpen ? 'hidden' : 'auto';
+    document.body.style.overflow = isChatOpen ? "hidden" : "auto";
   }, [isChatOpen]);
 
   return (
@@ -46,13 +47,19 @@ const Dashboard = () => {
           <VideoCarousel videos={videos} onSlideChange={handleSlideChange} />
         </div>
         <div>
-          <Callers/>
+          <Callers />
         </div>
       </div>
       {/* Right Sidebar */}
-      <div className={`relative w-[250px] bg-black h-[100vh] md:hidden p-2 transition-opacity duration-500 ease-in-out`}>
+      <div
+        className={`relative w-[250px] bg-black h-[100vh] md:hidden p-2 transition-opacity duration-500 ease-in-out`}
+      >
         {/* Chat Icon */}
-        <img src={chat}  onClick={toggleChat} className="absolute h-12 z-10 bottom-4 right-5 cursor-pointer"/>
+        <img
+          src={chat}
+          onClick={toggleChat}
+          className="absolute h-12 z-10 bottom-4 right-5 cursor-pointer"
+        />
         {selectedCaller ? (
           <CallerProfile caller={selectedCaller} />
         ) : (
@@ -70,10 +77,22 @@ const Dashboard = () => {
         )}
       </div>
       {/* Chat Component */}
-      <div className={`fixed bottom-0 right-2 md:hidden w-[728px] h-[calc(100vh-12vh)] rounded-t-lg transition-transform duration-500 ease-in-out ${isChatOpen ? (isChatClosing ? 'translate-y-full' : 'translate-y-0') : 'translate-y-full'} `}>
+      <div
+        className={`fixed bottom-0 right-2 md:hidden w-[728px] h-[calc(100vh-12vh)] rounded-t-lg transition-transform duration-500 ease-in-out ${
+          isChatOpen
+            ? isChatClosing
+              ? "translate-y-full"
+              : "translate-y-0"
+            : "translate-y-full"
+        } `}
+      >
         {(isChatOpen || isChatClosing) && (
           <div className="h-full ">
-            <Chats showChatScreen={false} shouldNavigate={true}/>
+            <Chats
+              socket={socket}
+              showChatScreen={false}
+              shouldNavigate={true}
+            />
           </div>
         )}
       </div>
