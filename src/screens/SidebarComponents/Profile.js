@@ -8,6 +8,7 @@ import tick from '../Global/icons/tick.png';
 import { formatDistanceToNow } from 'date-fns';
 import {useNavigate} from 'react-router-dom'
 import VideoComponent from "./VideoComponent";
+import EmojiPicker from 'emoji-picker-react';
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Profile = () => {
@@ -163,10 +164,11 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex-col items-center w-full md:w-full mx-auto h-[100vh] scrollable-div overflow-y-auto font-gotham font-light bg-black md:pb-32">
+  <div className="w-full h-[100vh]  bg-black">
+      <div className="flex-col items-center  h-full scrollable-div overflow-y-auto overflow-x-hidden font-gotham font-light ">
       {user ? <div className="w-full px-5 sm:px-0 py-3  text-white">
         <div className="h-[320px] relative">
-          <img src="https://gratisography.com/wp-content/uploads/2023/10/gratisography-pumpkin-scarecrow-1170x780.jpg" alt="cover photo" className="w-[100%] h-64 xs:h-44 object-cover" />
+          <img src="https://gratisography.com/wp-content/uploads/2023/10/gratisography-pumpkin-scarecrow-1170x780.jpg" alt="cover photo" className="w-[100%]  h-64 xs:h-44 object-cover" />
           <button className="float-right mt-3 bg-main-gradient px-2 py-1 rounded-md xs:mr-1" onClick={() => navigate('/dashboard/update')}>Edit Profile</button>
           <input type="file" id="fileInput" className="hidden" onChange={uploadImage} />
           <label htmlFor="fileInput">
@@ -192,11 +194,13 @@ const Profile = () => {
         <div className="w-full mt-6 rounded-full shadow-lg flex gap-x-4 h-full">
           <div className="w-2/3 sm:w-full">
             <div
-              className="relative h-auto w-full bg-gray-900 rounded-md text-white  cursor-pointer p-5">
+              className="relative h-auto w-full bg-gray-900 rounded-md text-white  p-5">
               <div>
                 <p>Want to share something?</p>
+               
                 <textarea autoFocus className="w-full h-auto break-words my-3 bg-transparent outline-none border-none  font-light text-sm" value=
                   {caption} onChange={(e) => setCaption(e.target.value)}/>
+                   
                 {postImage && <div className="flex items-start text-white gap-1"><img src={URL.createObjectURL(postImage)} /><div onClick={() => setPostImage("")}>&times;</div></div>}
                  {postVideo && <div className="flex items-start text-white gap-1"><video src={URL.createObjectURL(postVideo)} autoPlay loop/><div onClick={() => setPostVideo("")}>&times;</div></div>}
                 <div className="flex items-center justify-between mt-2">
@@ -255,7 +259,7 @@ const Profile = () => {
                   <div className="h-auto p-4 w-full shadow-lg rounded-md bg-gray-900">
                     <div className="flex items-center gap-3 mb-4 justify-between">
                       <div className="flex items-center gap-3">
-                        <img src={user.profileImage} alt="user img" className="w-[60px] h-[60px] rounded-full object-cover  border-2 border-white" />
+                        <img src={user.profileImage} alt="user img" className="w-[60px] h-[60px] sm:h-[40px] rounded-full object-cover  border-2 border-white" />
                         <div>
                         <p className="text-xl">{user.username}</p>
                         <p className="font-light text-sm">{timeAgo(post.createdAt)}</p>
@@ -294,6 +298,7 @@ const Profile = () => {
         </div>
       </div> : <div>Login first to see profile.</div>}
     </div>
+  </div>
   );
 };
 

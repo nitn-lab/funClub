@@ -7,6 +7,8 @@ import Popup from "./Popup";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { sendMessage } from "../../../services/websocket";
+import tick from '../../Global/icons/tick.png';
+import crown from '../../Global/icons/crown.png';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -90,10 +92,10 @@ const Chats = ({ showChatScreen, socket }) => {
           <div className="sm:hidden w-full text-black"></div>
         )}
         <div
-          className="chats scrollable-div w-[350px] bg-black h-[100vh] text-white sm:w-full pb-2 overflow-y-auto shadow-lg"
+          className="chats font-gotham font-light scrollable-div w-[350px] bg-black h-[100vh] text-white sm:w-full pb-2 overflow-y-auto shadow-lg"
           id="user-list"
         >
-          <div className="flex gap-2 items-center px-4 py-2 bg-fuchsia-800">
+          <div className="flex gap-2 items-center px-4 py-2 bg-fuchsia-800 sm:hidden">
             <img src={logo} alt="FunClub" className="w-12" />
             <h2 className="text-xl font-medium italic">CHATS</h2>
           </div>
@@ -121,7 +123,13 @@ const Chats = ({ showChatScreen, socket }) => {
                   <div className="online-status h-3 w-3 bg-[#05fc4f] rounded-full absolute top-1"></div>
                 </div>
                 <div>
-                  <h3 className="font-base text-base">{user.username}</h3>
+                <div className="flex items-start gap-1">
+                     <h3 className="text-base">
+                        {user.username}
+                      </h3>
+                      {user.role === 'creator' && <img src={tick} className="h-5"/>}
+                      {user.role === 'vip creator' && <img src={crown} className="h-5"/>}
+                     </div>
                   <p className="text-gray-200 text-sm font-light">Last seen</p>
                 </div>
               </div>

@@ -35,14 +35,14 @@ const featureRows = [
 
 const Subscription = () => {
     return (
-        <div className="h-[100vh]  overflow-y-auto scrollable-div font-light bg-black text-white mx-auto w-full font-gotham pt-8 "
+        <div className="h-[100vh]  overflow-y-auto scrollable-div font-light bg-black text-white mx-auto w-full font-gotham pt-8 xs:pt-4"
         >
             <h2 className=" text-[#f0f2f4] text-3xl font-bold italic text-center" >Subscription Tiers</h2>
-            <h3 className="text-[#c1c3c5] text-center mt-8 font-light">Upgrade to Plus, Gold, or Platinum for an enhanced Tinder experience.</h3>
+            <h3 className="text-[#c1c3c5] text-center mt-8 font-light xs:mt-4">Upgrade to Plus, Gold, or Platinum for an enhanced Tinder experience.</h3>
             {/* Cards - centered horizontally */}
             <div
             >
-                <div className="flex justify-center gap-6  my-16 mx-6 md:block">
+                <div className="flex justify-center gap-6  my-16 xs:my-8 mx-6 md:block md:mb-3">
                     {tiers.map((tier, index) => (
                         <div
                             key={index}
@@ -62,8 +62,8 @@ const Subscription = () => {
             </div>
 
             {/* Table - Not scrollable */}
-            <div className="bg-[#111418] border-t-2 border-gray-600 pb-10">
-                <h3 className="text-[#f0f2f4] text-2xl font-bold text-center mt-8 mb-16">Subscription Tier at a Glance</h3>
+            <div className="bg-[#111418] border-t-2 border-gray-600 pb-10 xs:pb-24">
+                <h3 className="text-[#f0f2f4] text-2xl font-bold text-center mt-8 mb-16 xs:mb-8">Subscription Tier at a Glance</h3>
                 <div className="flex justify-center">
                     <table className="w-[85%] md:w-98% border-collapse text-center">
                         <thead>

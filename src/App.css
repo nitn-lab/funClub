@@ -26,6 +26,11 @@ input:-moz-autofill {
   color: black !important;
 }
 
+.sidebar{
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch !important;
+}
+
 @media (max-width: 560px) {
   .signup {
     height: 78%;
@@ -83,21 +88,22 @@ input:-moz-autofill {
 }
 
 .customModal{
-  border-radius: 15px;
+  border-radius: 5px;
   font-family: 'Gotham', sans-serif;
-  color: black;
+  color: black !important;
 }
 
-
-.slick-prev{
-  z-index: 1;
-  left: -13px !important;
+.customSearchModal{
+  padding: 0 !important;
+  border-radius: 5px;
+  font-family: 'Gotham', sans-serif;
+  font-weight: 300;
+  color: white !important;
+  background-color:  #2a2b31 !important;
+  width: 600px;
+  height: 450px;
 }
-.slick-next{
-  z-index: 1;
-  right: -19px !important;
 
-}
 /* Blob animation keyframes */
 @keyframes blob {
   0%, 100%{

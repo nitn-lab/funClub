@@ -54,7 +54,7 @@ const Callers = () => {
         const followedUsersList = userRes.data.data.following;
         const filteredData = res.data.data
           .filter(user => user._id !== loggedInUserId && user.role === 'user')
-          .map(user => ({
+          .slice().reverse().map(user => ({
             ...user,
             isFollowing: followedUsersList.includes(user._id),
           }));
@@ -109,7 +109,7 @@ const Callers = () => {
       {displayedCallers.map((caller) => {
         return (
           <div
-            key={caller.id}
+            key={caller.id} 
             className="caller-profile rounded-md h-48 cursor-pointer relative overflow-hidden group"
           >
             <img

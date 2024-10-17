@@ -7,6 +7,8 @@ import Suggestions from "./RightSidebar/Suggestions";
 import CallerProfile from "./RightSidebar/CallerProfile";
 import Chats from "../SidebarComponents/chatScreen/Chats";
 import chat from "../Global/icons/live-chat.png";
+import search from "../Global/icons/search.png";
+import SearchModal from "../SidebarComponents/Search";
 
 const Dashboard = ({socket}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -14,6 +16,7 @@ const Dashboard = ({socket}) => {
   const [selectedCaller, setSelectedCaller] = useState(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isChatClosing, setIsChatClosing] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
   // console.log("dash sok", socket);
   
   useEffect(() => {
@@ -41,7 +44,7 @@ const Dashboard = ({socket}) => {
   }, [isChatOpen]);
 
   return (
-    <div className="w-full flex justify-between items-start md:justify-normal md:gap-x-2 md:block font-gotham font-light">
+    <div className="w-full flex justify-between items-start md:justify-normal md:gap-x-2 md:block font-gotham font-light bg-main-gradient">
       <div className="relative w-[calc(100vw-520px)] md:w-[100vw] h-[100vh] md:h-[87vh] mx-auto my-2 md:my-0 ">
         <div>
           <VideoCarousel videos={videos} onSlideChange={handleSlideChange} />
@@ -54,12 +57,19 @@ const Dashboard = ({socket}) => {
       <div
         className={`relative w-[250px] bg-black h-[100vh] md:hidden p-2 transition-opacity duration-500 ease-in-out`}
       >
-        {/* Chat Icon */}
-        <img
+        {/* Icons */}
+       <div className="flex items-center gap-3">
+       <img
+          src={search}
+          onClick={() => setIsSearch(true)}
+          className="absolute h-11 z-10 bottom-4 right-24 cursor-pointer"
+        />
+         <img
           src={chat}
           onClick={toggleChat}
           className="absolute h-12 z-10 bottom-4 right-5 cursor-pointer"
         />
+       </div>
         {selectedCaller ? (
           <CallerProfile caller={selectedCaller} />
         ) : (
@@ -96,6 +106,7 @@ const Dashboard = ({socket}) => {
           </div>
         )}
       </div>
+      <SearchModal isOpen={isSearch} onClose={() => setIsSearch(false)}/>
     </div>
   );
 };

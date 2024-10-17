@@ -9,7 +9,7 @@ const PrivacyPolicy = () => {
     };
 
     return (
-        <div className="mx-auto p-8 md:p-2 h-[100vh] bg-black scrollable-div overflow-y-auto text-white font-gotham w-full font-light xs:pb-24">
+        <div className="mx-auto p-8 md:p-2 h-[100vh] md:h-[calc(100vh-110px)] bg-black scrollable-div overflow-y-auto text-white font-gotham w-full font-light xs:pb-32">
            <div className='bg-main-gradient py-24 xs:py-8 px-16 xs:px-4 mb-8'>
            <h1 className="text-3xl font-normal mb-2">Privacy Policy</h1>
             <p className="">

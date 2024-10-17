@@ -9,7 +9,7 @@ const TermsAndConditions = () => {
     };
 
     return (
-        <div className="mx-auto p-8 md:p-2 h-[100vh] bg-black scrollable-div overflow-y-auto text-white font-gotham font-light w-full xs:pb-24">
+        <div className="mx-auto p-8 md:p-2 h-[100vh] md:h-[calc(100vh-110px)] bg-black scrollable-div overflow-y-auto text-white font-gotham font-light w-full xs:pb-32">
            <div className='bg-main-gradient py-24 xs:py-8 px-16 xs:px-4 mb-8'>
            <h1 className="text-3xl font-bold mb-2">Terms & Conditions</h1>
             <p>

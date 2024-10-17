@@ -77,7 +77,7 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="w-full md:w-full mx-auto h-[100vh] font-gotham font-light rounded-lg md:rounded-none bg-black text-white p-8 scrollable-div overflow-y-auto md:pb-24">
+    <div className="w-full mx-auto h-[100vh] md:h-[calc(100vh-20px)] font-gotham font-light rounded-lg md:rounded-none bg-black text-white p-8 scrollable-div overflow-y-auto md:pb-32">
       <h2 className="text-center font-medium italic text-xl underline underline-offset-4">Edit Profile</h2>
       {loading ? (
         <p>Loading...</p>

@@ -82,7 +82,7 @@ function Sidebarr(props) {
         display: "flex",
         direction: "ltr",
       }}
-      className=" h-[100vh] font-gotham font-light"
+      className="font-gotham h-[100vh] md:h-[calc(100vh-80px)] font-light"
     >
       <Sidebar
         toggled={toggled}
@@ -93,9 +93,8 @@ function Sidebarr(props) {
         )}
         rootStyles={{
           color: themes[theme].sidebar.color,
-          
         }}
-       
+       className="sidebar"
       >
         <SidebarHeader />
         <div style={{ flex: 1, marginBottom: "2px" }}>

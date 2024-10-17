@@ -13,7 +13,7 @@ const Live = () => {
         <div className="grid grid-cols-2 xs:grid-cols-1 gap-4 md:gap-2  w-[calc(100vw-30vw)] md:w-full mx-auto">
           {/* First User: Live Ended Overlay */}
           <div className="relative p-4 md:p-2 rounded-md bg-black">
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#292929] bg-opacity-70 text-white rounded-md">
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#292929] bg-opacity-70 text-white rounded-md xs:rounded-none">
               
               <p className="text-xl">Live Ended</p>
             </div>
@@ -34,7 +34,7 @@ const Live = () => {
 
           {/* Second User: Join Live Button */}
           <div className="relative p-4 md:p-2 rounded-md bg-black">
-            <div className="absolute inset-0 flex items-center justify-center  bg-[#292929] bg-opacity-70 text-white rounded-md">
+            <div className="absolute inset-0 flex items-center justify-center  bg-[#292929] bg-opacity-70 text-white rounded-md xs:rounded-none">
               <button className="bg-main-gradient text-white px-4 py-2 rounded-full ">
                Join Live
               </button>
@@ -89,7 +89,7 @@ const Live = () => {
       </div>
 
       {/* Content */}
-      <div className=" rounded-md scrollable-div overflow-y-auto h-[calc(100vh-18vh)] md:h-[77vh] mx-auto">
+      <div className=" rounded-md scrollable-div overflow-y-auto h-[calc(100vh-18vh)] md:h-[77vh] mx-auto bg-main-gradient">
         {renderContent()}
       </div>
     </div>
