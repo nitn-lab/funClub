@@ -103,7 +103,7 @@ const Chats = ({ showChatScreen, socket }) => {
           {users.length > 0 &&
             users.map((user) => (
               <div
-                className="flex gap-8 xs:gap-3 items-center pb-3 hover:bg-fuchsia-800 hover:scale-105 transition-all py-3 px-6 cursor-pointer"
+                className="flex gap-4 xs:gap-3 items-center pb-3 hover:bg-fuchsia-800 hover:scale-105 transition-all py-3 px-6 cursor-pointer"
                 onClick={() => {
                   setReceiver(user);
                   handleWindow(user);
@@ -124,7 +124,7 @@ const Chats = ({ showChatScreen, socket }) => {
                 </div>
                 <div>
                 <div className="flex items-start gap-1">
-                     <h3 className="text-base">
+                     <h3 className="text-base truncate">
                         {user.username}
                       </h3>
                       {user.role === 'creator' && <img src={tick} className="h-5"/>}

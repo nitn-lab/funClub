@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import camera from '../Global/icons/camera.png'
 import video from '../Global/icons/video.png';
 import tick from '../Global/icons/tick.png';
+import pen from '../Global/icons/pen.png';
+import crown from '../Global/icons/crown.png'
 import { formatDistanceToNow } from 'date-fns';
 import {useNavigate} from 'react-router-dom'
 import VideoComponent from "./VideoComponent";
@@ -120,6 +122,7 @@ const Profile = () => {
 
   const uploadImage = async (e) => {
     const imageFile = e.target.files[0];
+    
     const formData = new FormData()
     formData.append("profileImage", imageFile);
     try {
@@ -129,6 +132,7 @@ const Profile = () => {
          }
       }
       )
+      console.log(res.data)
       updateProfileImage(res.data.imageUrl);
       e.target.value = ''
     }
@@ -142,6 +146,7 @@ const Profile = () => {
       const res = await axios.put(`${BASE_URL}/api/v1/updateUsers/${id}`, { profileImage: image }, {
         headers: { Authorization: `${token}` },
       })
+      console.log(res.data, image)
       setUser(res.data.data)
     } catch (error) {
       console.error('Failed to update user data!!', error);
@@ -171,8 +176,10 @@ const Profile = () => {
           <img src="https://gratisography.com/wp-content/uploads/2023/10/gratisography-pumpkin-scarecrow-1170x780.jpg" alt="cover photo" className="w-[100%]  h-64 xs:h-44 object-cover" />
           <button className="float-right mt-3 bg-main-gradient px-2 py-1 rounded-md xs:mr-1" onClick={() => navigate('/dashboard/update')}>Edit Profile</button>
           <input type="file" id="fileInput" className="hidden" onChange={uploadImage} />
-          <label htmlFor="fileInput">
-            <img src={user.profileImage} alt="user img" className="w-36 h-36 xs:w-24 xs:h-24  rounded-full object-cover absolute left-0 right-0 m-auto top-[150px] border-2 border-white bg-black cursor-pointer" />
+          <img src={user.profileImage} alt="user img" className="w-36 h-36 xs:w-24 xs:h-24  rounded-full object-cover absolute left-0 right-0 m-auto top-[150px] border-2 border-white bg-black" />
+          <label htmlFor="fileInput" className=" absolute left-0 right-0 m-auto " >
+          <img src={pen} className="h-7 "/>
+            
           </label>
         </div>
         <div>
@@ -181,6 +188,7 @@ const Profile = () => {
               <div className="flex items-start gap-1">
               <h2 className="text-xl font-medium">{user.username}</h2>
               {user.role === 'creator' && <img src={tick} className="h-5"/>}
+              {user.role === 'vip creator' && <img src={crown} className="h-5"/>}
               </div>
               <div className="flex items-center gap-3 my-2 text-fuchsia-500">
                 <p>{posts.length} posts</p>
@@ -239,9 +247,6 @@ const Profile = () => {
               <button className="bg-black px-2 rounded-lg py-1 mt-4">Buy Credits</button>
             </div>
             <div>
-           
-
-            
               <p className="mt-0.5">Your profile is {calculateProgress().toFixed(0)}% complete</p>
               <div className="h-2 bg-gray-700 rounded-full">
                 <div className="h-2 bg-white  rounded-full my-2.5" style={{ width: `${calculateProgress()}%` }}></div>
@@ -273,10 +278,10 @@ const Profile = () => {
                     </div>
                     <p className="truncate">{post.content}</p>
                     <div className="h-[350px] mt-4  w-full overflow-hidden">
-                      {post.image && <img src={`${BASE_URL}${post.image}`} alt="image" className="w-full h-full object-contain transition-all hover:scale-110 cursor-pointer border-2 border-white" />}
+                      {post.image && <img src={post.image} alt="image" className="w-full h-full object-contain transition-all hover:scale-110 cursor-pointer border-2 border-white" />}
                       {post.video && (
                           <VideoComponent
-                            src={`${BASE_URL}${post.video}`}
+                            src={post.video}
                             className="w-full h-full cursor-pointer"
                             poster={`https://gratisography.com/photo/reindeer-dog/`}
                             alt="Post Content"

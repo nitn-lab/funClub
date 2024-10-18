@@ -7,8 +7,8 @@ import Suggestions from "./RightSidebar/Suggestions";
 import CallerProfile from "./RightSidebar/CallerProfile";
 import Chats from "../SidebarComponents/chatScreen/Chats";
 import chat from "../Global/icons/live-chat.png";
-import search from "../Global/icons/search.png";
-import SearchModal from "../SidebarComponents/Search";
+
+
 
 const Dashboard = ({socket}) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -16,7 +16,7 @@ const Dashboard = ({socket}) => {
   const [selectedCaller, setSelectedCaller] = useState(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isChatClosing, setIsChatClosing] = useState(false);
-  const [isSearch, setIsSearch] = useState(false);
+
   // console.log("dash sok", socket);
   
   useEffect(() => {
@@ -58,12 +58,8 @@ const Dashboard = ({socket}) => {
         className={`relative w-[250px] bg-black h-[100vh] md:hidden p-2 transition-opacity duration-500 ease-in-out`}
       >
         {/* Icons */}
-       <div className="flex items-center gap-3">
-       <img
-          src={search}
-          onClick={() => setIsSearch(true)}
-          className="absolute h-11 z-10 bottom-4 right-24 cursor-pointer"
-        />
+       <div>
+      
          <img
           src={chat}
           onClick={toggleChat}
@@ -106,7 +102,7 @@ const Dashboard = ({socket}) => {
           </div>
         )}
       </div>
-      <SearchModal isOpen={isSearch} onClose={() => setIsSearch(false)}/>
+   
     </div>
   );
 };

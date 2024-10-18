@@ -95,13 +95,13 @@ const UserProfile = () => {
               <span className="ml-1 text-sm">
                 {following ? "Following" : "Follow"}
               </span></button>
-            <label htmlFor="fileInput">
+            
               <img
                 src={user.profileImage}
                 alt="user img"
                 className="w-36 h-36 xs:w-24 xs:h-24 rounded-full object-cover absolute left-0 right-0 m-auto top-[150px] border-2 border-white bg-black mx-auto"
               />
-            </label>
+            
           </div>
           <div>
             <div className="w-full flex flex-col items-center justify-center">
@@ -143,7 +143,7 @@ const UserProfile = () => {
                       {post.image && (
                         <div className="h-[350px] mt-4  w-full overflow-hidden">
                           <img
-                            src={`${BASE_URL}${post.image}`}
+                            src={post.image}
                             alt="post image"
                             className="w-full h-full object-contain border-2 border-white transition-all hover:scale-110 cursor-pointer"
                           />
@@ -152,7 +152,7 @@ const UserProfile = () => {
                       {post.video && (
                         <div className="h-[350px] mt-4 w-full overflow-hidden">
                           <VideoComponent
-                            src={`${BASE_URL}${post.video}`}
+                            src={post.video}
                             className="w-full h-full "
                             poster={`https://gratisography.com/photo/reindeer-dog/`}
                             alt="Post Content"

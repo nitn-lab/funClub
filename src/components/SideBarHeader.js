@@ -7,6 +7,8 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import axios from 'axios';
 import { Box } from '@mui/material';
+import SearchModal from "../screens/SidebarComponents/Search";
+import search from "../screens/Global/icons/search.png";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -62,6 +64,7 @@ export const SidebarHeader = ({ children, rtl, ...rest }) => {
   const token = localStorage.getItem('jwtToken');
 
   const [user, setUser] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -93,49 +96,61 @@ export const SidebarHeader = ({ children, rtl, ...rest }) => {
           </div>
         </div>
 
-        <Tooltip
-          title={
-            <Box className='scrollable-div' sx={{ p: 0.5, width: '200px', height:'150px', overflowY:'auto' }}>
-              <ul style={{listStyleType: 'disc', paddingLeft: '20px', margin:0}}>
-                {mockNotifications.map((notification, index) => (
-                  <li key={index} className="text-sm py-1 hover:scale-105 cursor-pointer transition-all">{notification}</li>
-                ))}
-              </ul>
-            </Box>
-          }
-          arrow
-          placement="bottom"
-          PopperProps={{
-            modifiers: [
-              {
-                name: 'offset',
-                options: {
-                  offset: [0, -15], 
+        <div className="flex items-center">
+          <Tooltip
+            title={
+              <Box className='scrollable-div' sx={{ width: '200px', height: '160px', overflowY: 'auto' }}>
+                <ul>
+                  {mockNotifications.length > 0 ? mockNotifications.map((notification, index) => (
+                    <div className="text-sm py-1 px-2 hover:scale-105 bg-white text-black cursor-pointer transition-all rounded-sm my-1">
+                      <h4>Name</h4>
+                      <li key={index}>{notification}</li>
+                    </div>
+
+                  ) ): <div className="flex items-center justify-center text-base h-40">No new notification</div>}
+                </ul>
+              </Box>
+            }
+            arrow
+            placement="bottom"
+            PopperProps={{
+              modifiers: [
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, -15],
+                  },
+                },
+              ],
+            }}
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  backgroundImage: 'linear-gradient(to top right, #8b5cf6, #ec4899)',
+                  color: 'white',  // Tooltip text color
+                  boxShadow: 3,
+                  borderRadius: 1,
                 },
               },
-            ],
-          }}
-          componentsProps={{
-            tooltip: {
-              sx: {
-                backgroundImage:'linear-gradient(to top right, #8b5cf6, #ec4899)',
-                color: 'white',  // Tooltip text color
-                boxShadow: 3,
-                borderRadius: 1,
+              arrow: {
+                sx: {
+                  color: 'linear-gradient(to top right, #8b5cf6, #ec4899)',
+                },
               },
-            },
-            arrow: {
-              sx: {
-                color:'linear-gradient(to top right, #8b5cf6, #ec4899)',
-              },
-            },
-          }}
-        >
-          <IconButton>
-            <img src={bell} className="h-7 cursor-pointer" />
-          </IconButton>
-        </Tooltip>
+            }}
+          >
+            <IconButton>
+              <img src={bell} className="h-5 cursor-pointer" />
+            </IconButton>
+          </Tooltip>
+          <img
+            src={search}
+            onClick={() => setIsSearch(true)}
+            className=" h-5 cursor-pointer"
+          />
+        </div>
       </div>
+      <SearchModal isOpen={isSearch} onClose={() => setIsSearch(false)} />
     </StyledSidebarHeader>
   );
 };

@@ -41,7 +41,7 @@ const Login = () => {
   };
 
   return (
-    <div className="relative h-screen w-screen xs:h-[93vh] font-gotham overflow-hidden">
+    <div className="relative h-screen w-screen xs:h-[93vh] font-gotham overflow-hidden font-light">
       <img
         src="https://images.pond5.com/pink-neon-heart-sign-reflection-footage-167595258_iconl.jpeg"
         className="w-full h-full object-cover bg-no-repeat"
