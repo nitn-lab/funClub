@@ -260,7 +260,7 @@ const Feeds = () => {
             <div className="flex gap-x-3 items-center cursor-pointer" onClick={() => navigate(`/dashboard/user/${post.createdBy._id}`)}>
               <img
                 src={post.createdBy.profileImage}
-                className="h-11 w-11 rounded-full border-2 border-[#9c8fd0] p-1"
+                className="h-11 w-11 rounded-full border-2 border-[#9c8fd0] p-1 object-cover"
                 alt="User avatar"
               />
                <div className="flex items-start gap-1">
@@ -276,7 +276,7 @@ const Feeds = () => {
           <div className="relative w-full h-[27rem] mt-4 mb-2 rounded-md border-2 border-gray-200">
             {post.image && <img
               src={post.image}
-              className={`w-full h-full object-contain rounded-md ${post.isPrivate ? "blur-md" : ""}`}
+              className={`w-full h-full object-cover sm:object-contain rounded-md ${post.isPrivate ? "blur-md" : ""}`}
               alt="Post Content"
             />}
             {post.video && <VideoComponent
@@ -295,6 +295,7 @@ const Feeds = () => {
               </div>
             )}
           </div>
+          {console.log(post)}
           <div className="flex items-center justify-between mx-2">
           <div className="flex items-center gap-6">
           <div
@@ -345,7 +346,7 @@ const Feeds = () => {
       </div>
 
 
-      <div className="overflow-y-auto scrollable-div bg-black rounded-md p-4 text-white h-[62vh] w-1/3 mr-3 sm:hidden">
+      <div className="overflow-y-auto scrollable-div bg-black rounded-md p-4 text-white h-fit max-h-[67vh] w-1/3 mr-3 sm:hidden">
         {/* Tabs */}
         <div className="flex justify-around mb-2">
           <button

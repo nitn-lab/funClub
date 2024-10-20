@@ -76,7 +76,7 @@ const UserProfile = () => {
   if (!user) {
     return <div>Loading...</div>;
   }
-
+{console.log(posts)}
   return (
     <div className="flex-col items-center w-full mx-auto h-[100vh] scrollable-div overflow-y-auto font-gotham font-light bg-black md:pb-32 xs:overflow-x-hidden">
       {user && (
@@ -111,7 +111,7 @@ const UserProfile = () => {
                 {user.role === 'vip creator' && <img src={crown} className="h-5" />}
               </div>
               <div className="flex items-center gap-3 my-2 text-fuchsia-500">
-                <p>{user.posts && user.posts.length} posts</p>
+                <p>{posts && posts.length} posts</p>
                 <p>{user.followers && user.followers.length} followers</p>
                 <p>{user.following && user.following.length} following</p>
               </div>
@@ -145,7 +145,7 @@ const UserProfile = () => {
                           <img
                             src={post.image}
                             alt="post image"
-                            className="w-full h-full object-contain border-2 border-white transition-all hover:scale-110 cursor-pointer"
+                            className="w-full h-full object-cover sm:object-contain border-2 border-white transition-all hover:scale-110 cursor-pointer"
                           />
                         </div>
                       )}

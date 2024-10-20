@@ -88,7 +88,7 @@ export const SidebarHeader = ({ children, rtl, ...rest }) => {
     <StyledSidebarHeader {...rest}>
       <div className="flex items-center justify-between mx-3 py-5">
         <div className="flex items-center gap-x-1.5">
-          <img src={user.profileImage} className="h-8 w-8 rounded-full" />
+          <img src={user.profileImage} className="h-8 w-8 rounded-full object-cover" />
           <div className="flex items-center gap-1">
             <h2>{user.username}</h2>
             {user.role === 'creator' && <img src={tick} className="h-4" />}

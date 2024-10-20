@@ -1,3 +1,7 @@
+html{
+   scroll-behavior: smooth;
+}
+
 body {
   font-family: "Gotham", sans-serif;
 }
@@ -103,10 +107,17 @@ textarea{
   font-family: "Gotham", sans-serif;
   font-weight: 300;
   color: white !important;
-  background-color: #1a1a1a !important;
-  width: 400px;
-  max-height: 400px;
-  overflow-y: auto;
+  background-color: #0f0e0e !important;
+  width: 400px !important;
+  max-width: 400px !important;
+  max-height: 400px !important;
+}
+
+@media (max-width:438px){
+
+  .customSearchModal {
+    width: 300px !important;
+  }
 }
 
 .customCommentModal {
@@ -120,10 +131,7 @@ textarea{
   width: 80vw !important;
   max-width: 80vw !important;
 }
-.comment-container{
-  max-height: calc(80vh - 20vh);
-  overflow-y: auto;
-}
+
 /* Blob animation keyframes */
 @keyframes blob {
   0%,

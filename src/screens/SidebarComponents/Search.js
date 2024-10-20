@@ -99,7 +99,8 @@ const SearchModal = ({ isOpen, onClose }) => {
                     modal: "customSearchModal",
                 }}
             >
-                <div className="flex items-center gap-2 py-4 pl-3">
+               <div className="w-full">
+               <div className="flex items-center gap-2 py-4 pl-3">
                     <IoIosSearch style={{ fontSize: "1.5rem" }} />
                     <h3 className=" text-xl">Search</h3>
                 </div>
@@ -115,18 +116,18 @@ const SearchModal = ({ isOpen, onClose }) => {
                     {isLoading && <p>Loading...</p>}
 
                     {searchResults.length > 0 && searchTerm !== "" && !isLoading && (
-                        <ul>
+                        <ul className="">
                             {searchResults.map((user, index) => (
                                 <li key={index} className="px-3 py-4  cursor-pointer flex justify-between items-center" onClick={() => {navigate(`/dashboard/user/${user._id}`)}}>
                                     <div className="flex gap-3 items-center">
-                                        <img src={user.profileImage} alt={user.username} className="w-8 h-8 rounded-full bg-black" />
+                                        <img src={user.profileImage} alt={user.username} className="w-8 h-8 rounded-full bg-black object-cover" />
                                         <div className="flex items-start gap-1">
-                                            <h2>{user.username}</h2>
-                                            {user.role === 'creator' && <img src={tick} className="h-5" />}
-                                            {user.role === 'vip creator' && <img src={crown} className="h-5" />}
+                                            <h2 className='truncate'>{user.username}</h2>
+                                            {user.role === 'creator' && <img src={tick} className="h-4" />}
+                                            {user.role === 'vip creator' && <img src={crown} className="h-4" />}
                                         </div>
                                     </div>
-                                    <button
+                                   {user._id !== loggedInUserId && <button
                                         className="bg-main-gradient px-1 py-0.5 rounded-md"
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -141,7 +142,7 @@ const SearchModal = ({ isOpen, onClose }) => {
                                         <span className="ml-1 text-sm">
                                             {user.following ? "Following" : "Follow"}
                                         </span>
-                                    </button>
+                                    </button>}
                                 </li>
                             ))}
                         </ul>
@@ -173,6 +174,7 @@ const SearchModal = ({ isOpen, onClose }) => {
                         </div>
                     )}
                 </div>
+               </div>
             </Modal>
         </>
     );
