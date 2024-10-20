@@ -77,7 +77,7 @@ const Suggestions = () => {
   };
   return (
     <div className="font-light">
-      <h2 className="font-medium text-lg text-primary-dark mt-2 mb-2">
+      <h2 className="font-medium text-lg text-primary-dark xl:mt-2 mt-5 mb-2">
         Suggested for you
       </h2>                                                           
       <div className="grid grid-cols-2 gap-3">
@@ -88,7 +88,7 @@ const Suggestions = () => {
             
               <div className="flex-col items-center justify-center">
                 <div className="ml-6 gap-3 flex justify-center">
-                
+                {console.log(item, 'item')}
                   <img
                     src={item.profileImage}
                     alt={item.username}

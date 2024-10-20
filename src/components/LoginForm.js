@@ -59,7 +59,7 @@ export default function LoginForm({onForgotPassword}) {
   }
 
   return (
-    <div className="w-full h-full text-primary-light dark:text-primary-dark px-6 xs:px-3 py-6 ">
+    <div className="w-full h-full text-primary-light dark:text-primary-dark px-6 xs:px-3 xl:py-6 py-24 font-light">
       <h1 className="text-4xl font-semibold text-center">Welcome Back</h1>
       <p className="font-medium text-lg md:text-md mt-4 text-center">
         Welcome back! Please enter your details
@@ -97,7 +97,7 @@ export default function LoginForm({onForgotPassword}) {
               checked={rememberMe}
               onChange={() => setRememberMe(!rememberMe)} 
             />
-            <label className="ml-2 font-medium text-base md:text-sm" htmlFor="remember">
+            <label className="ml-2  text-base md:text-sm" htmlFor="remember">
               Remember for now
             </label>
           </div>
@@ -111,15 +111,15 @@ export default function LoginForm({onForgotPassword}) {
         <div className="mt-4 flex flex-col gap-y-4">
           <button
             onClick={handleLogin}
-            className="active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 rounded-xl bg-main-gradient text-md font-bold text-primary-dark text-center"
+            className="active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 rounded-xl bg-main-gradient text-md font-medium text-primary-dark text-center"
           >
             {loading ? <span className="loading loading-spinner loading-md"></span> : "Sign In"}
           </button>
         </div>
         <div className="mt-4 flex justify-center items-center">
-          <p className="font-medium text-base md:text-sm">Don't have an account?</p>
+          <p className=" text-base md:text-sm">Don't have an account?</p>
           <button
-            className="text-violet-500 text-base md:text-sm font-medium ml-2"
+            className="text-violet-500 text-base md:text-sm  ml-2"
             onClick={() => { navigate('/register'); }}
           >
             Sign up

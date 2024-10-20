@@ -49,7 +49,7 @@ const VideoComponent = ({ src, poster }) => {
         preload="metadata"
         controls
         loop
-        className="h-full w-full border-2 border-white cursor-pointer object-contain"
+        className="h-full w-full  cursor-pointer object-cover sm:object-contain"
       />
     
   );

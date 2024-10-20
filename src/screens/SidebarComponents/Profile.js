@@ -5,10 +5,14 @@ import { toast } from "react-toastify";
 import camera from '../Global/icons/camera.png'
 import video from '../Global/icons/video.png';
 import tick from '../Global/icons/tick.png';
+import pen from '../Global/icons/pen.png';
+import crown from '../Global/icons/crown.png'
 import { formatDistanceToNow } from 'date-fns';
 import {useNavigate} from 'react-router-dom'
 import VideoComponent from "./VideoComponent";
 import EmojiPicker from 'emoji-picker-react';
+import FollowersModal from "./FollowersModal";
+
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Profile = () => {
@@ -26,6 +30,9 @@ const Profile = () => {
   const [postImage, setPostImage] = useState('');
   const [postVideo, setPostVideo] = useState('');
   const [caption, setCaption] = useState("");
+  const [currentLikes, setCurrentLikes] = useState([]);
+  const [likesModalOpen, setLikesModalOpen] = useState(false);
+  const [heading, setHeading] = useState("")
 
   useEffect(() => {
     if (id) {
@@ -49,7 +56,7 @@ const Profile = () => {
      }
     }
     fetchPosts();
-  }, []);
+  }, [id]);
 
   const timeAgo = (createdAt) => {
     const time = formatDistanceToNow(new Date(createdAt), { addSuffix: true })
@@ -120,6 +127,7 @@ const Profile = () => {
 
   const uploadImage = async (e) => {
     const imageFile = e.target.files[0];
+    
     const formData = new FormData()
     formData.append("profileImage", imageFile);
     try {
@@ -129,6 +137,7 @@ const Profile = () => {
          }
       }
       )
+      console.log(res.data)
       updateProfileImage(res.data.imageUrl);
       e.target.value = ''
     }
@@ -142,6 +151,7 @@ const Profile = () => {
       const res = await axios.put(`${BASE_URL}/api/v1/updateUsers/${id}`, { profileImage: image }, {
         headers: { Authorization: `${token}` },
       })
+      console.log(res.data, image)
       setUser(res.data.data)
     } catch (error) {
       console.error('Failed to update user data!!', error);
@@ -163,16 +173,41 @@ const Profile = () => {
     }
   };
 
+  const handleLikesClick = (data, heading) => {
+    if(!likesModalOpen){
+      setHeading(heading)
+      setCurrentLikes(data);
+       setLikesModalOpen(true);
+    }
+  }
+
+  const closeLikesModal = () => {
+    setLikesModalOpen(false);
+  }
+
+  const scrollToSection = () => {
+    const section = document.getElementById("posts");
+    if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+};
+
   return (
   <div className="w-full h-[100vh]  bg-black">
       <div className="flex-col items-center  h-full scrollable-div overflow-y-auto overflow-x-hidden font-gotham font-light ">
       {user ? <div className="w-full px-5 sm:px-0 py-3  text-white">
-        <div className="h-[320px] relative">
+        <div className="h-80 xs:h-64 relative">
           <img src="https://gratisography.com/wp-content/uploads/2023/10/gratisography-pumpkin-scarecrow-1170x780.jpg" alt="cover photo" className="w-[100%]  h-64 xs:h-44 object-cover" />
           <button className="float-right mt-3 bg-main-gradient px-2 py-1 rounded-md xs:mr-1" onClick={() => navigate('/dashboard/update')}>Edit Profile</button>
           <input type="file" id="fileInput" className="hidden" onChange={uploadImage} />
-          <label htmlFor="fileInput">
-            <img src={user.profileImage} alt="user img" className="w-36 h-36 xs:w-24 xs:h-24  rounded-full object-cover absolute left-0 right-0 m-auto top-[150px] border-2 border-white bg-black cursor-pointer" />
+          <img src={user.profileImage} alt="user img" className="w-36 h-36 xs:w-24 xs:h-24  rounded-full object-cover absolute left-0 right-0 m-auto top-[150px] border-2 border-white bg-black" />
+          <label htmlFor="fileInput" className=" absolute right-4 m-auto top-4 p-1.5 xs:p-1 bg-white rounded-full cursor-pointer">
+          <img src={pen} className="h-6 xs:h-5 object-cover"/>
+            
+          </label>
+          <label htmlFor="fileInput" className="absolute left-32 xs:left-24 right-0 m-auto top-[170px] xs:top-40 bg-white p-1.5 xs:p-1 w-fit rounded-full  cursor-pointer">
+          <img src={pen} className="h-6 xs:h-5 object-cover "/>
+            
           </label>
         </div>
         <div>
@@ -181,11 +216,12 @@ const Profile = () => {
               <div className="flex items-start gap-1">
               <h2 className="text-xl font-medium">{user.username}</h2>
               {user.role === 'creator' && <img src={tick} className="h-5"/>}
+              {user.role === 'vip creator' && <img src={crown} className="h-5"/>}
               </div>
               <div className="flex items-center gap-3 my-2 text-fuchsia-500">
-                <p>{posts.length} posts</p>
-                <p>{user.followers.length} followers</p>
-                <p>{user.following.length} following </p>
+                <a onClick={scrollToSection}  className="cursor-pointer">{posts.length} posts</a>
+                <p onClick={() => handleLikesClick(user.followers, 'Followers')} className="cursor-pointer">{user.followers.length} followers</p>
+                <p onClick={() => handleLikesClick(user.following, 'Following')} className="cursor-pointer">{user.following.length} following </p>
               </div>
               <h3 className="w-1/2 xs:w-full text-center">{user.bio}</h3>
             </div>
@@ -239,9 +275,6 @@ const Profile = () => {
               <button className="bg-black px-2 rounded-lg py-1 mt-4">Buy Credits</button>
             </div>
             <div>
-           
-
-            
               <p className="mt-0.5">Your profile is {calculateProgress().toFixed(0)}% complete</p>
               <div className="h-2 bg-gray-700 rounded-full">
                 <div className="h-2 bg-white  rounded-full my-2.5" style={{ width: `${calculateProgress()}%` }}></div>
@@ -251,7 +284,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        <div className="posts-container w-full mx-auto shadow-lg ">
+        <div id="posts" className="posts-container w-full mx-auto shadow-lg ">
           <div className="w-full mt-3 text-white  my-3 sm:w-full ">
             {posts.length > 0 ? (<div className=" my-8 w-full grid grid-cols-2 xs:grid-cols-1 mx-auto h-full gap-5">
               {posts && posts.slice().reverse().map(post => {
@@ -273,10 +306,10 @@ const Profile = () => {
                     </div>
                     <p className="truncate">{post.content}</p>
                     <div className="h-[350px] mt-4  w-full overflow-hidden">
-                      {post.image && <img src={`${BASE_URL}${post.image}`} alt="image" className="w-full h-full object-contain transition-all hover:scale-110 cursor-pointer border-2 border-white" />}
+                      {post.image && <img src={post.image} alt="image" className="w-full h-full object-cover sm:object-contain transition-all hover:scale-110 cursor-pointer border-2 border-white" />}
                       {post.video && (
                           <VideoComponent
-                            src={`${BASE_URL}${post.video}`}
+                            src={post.video}
                             className="w-full h-full cursor-pointer"
                             poster={`https://gratisography.com/photo/reindeer-dog/`}
                             alt="Post Content"
@@ -297,7 +330,9 @@ const Profile = () => {
           </div>
         </div>
       </div> : <div>Login first to see profile.</div>}
+
     </div>
+    <FollowersModal open={likesModalOpen} onClose={closeLikesModal} likes={currentLikes} heading={heading}/>
   </div>
   );
 };

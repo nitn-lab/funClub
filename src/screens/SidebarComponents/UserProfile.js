@@ -76,7 +76,7 @@ const UserProfile = () => {
   if (!user) {
     return <div>Loading...</div>;
   }
-
+{console.log(posts)}
   return (
     <div className="flex-col items-center w-full mx-auto h-[100vh] scrollable-div overflow-y-auto font-gotham font-light bg-black md:pb-32 xs:overflow-x-hidden">
       {user && (
@@ -95,13 +95,13 @@ const UserProfile = () => {
               <span className="ml-1 text-sm">
                 {following ? "Following" : "Follow"}
               </span></button>
-            <label htmlFor="fileInput">
+            
               <img
                 src={user.profileImage}
                 alt="user img"
                 className="w-36 h-36 xs:w-24 xs:h-24 rounded-full object-cover absolute left-0 right-0 m-auto top-[150px] border-2 border-white bg-black mx-auto"
               />
-            </label>
+            
           </div>
           <div>
             <div className="w-full flex flex-col items-center justify-center">
@@ -111,7 +111,7 @@ const UserProfile = () => {
                 {user.role === 'vip creator' && <img src={crown} className="h-5" />}
               </div>
               <div className="flex items-center gap-3 my-2 text-fuchsia-500">
-                <p>{user.posts && user.posts.length} posts</p>
+                <p>{posts && posts.length} posts</p>
                 <p>{user.followers && user.followers.length} followers</p>
                 <p>{user.following && user.following.length} following</p>
               </div>
@@ -143,16 +143,16 @@ const UserProfile = () => {
                       {post.image && (
                         <div className="h-[350px] mt-4  w-full overflow-hidden">
                           <img
-                            src={`${BASE_URL}${post.image}`}
+                            src={post.image}
                             alt="post image"
-                            className="w-full h-full object-contain border-2 border-white transition-all hover:scale-110 cursor-pointer"
+                            className="w-full h-full object-cover sm:object-contain border-2 border-white transition-all hover:scale-110 cursor-pointer"
                           />
                         </div>
                       )}
                       {post.video && (
                         <div className="h-[350px] mt-4 w-full overflow-hidden">
                           <VideoComponent
-                            src={`${BASE_URL}${post.video}`}
+                            src={post.video}
                             className="w-full h-full "
                             poster={`https://gratisography.com/photo/reindeer-dog/`}
                             alt="Post Content"

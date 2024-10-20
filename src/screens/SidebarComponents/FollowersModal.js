@@ -11,7 +11,7 @@ import crown from '../Global/icons/crown.png';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const LikesModal = ({ open, onClose, likes }) => {
+const FollowersModal = ({ open, onClose, likes, heading }) => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const token = localStorage.getItem('jwtToken');
@@ -77,8 +77,8 @@ const LikesModal = ({ open, onClose, likes }) => {
                 overlay: { background: "rgba(0, 0, 0, 0.462)" },
                 modal: "customSearchModal",
             }}>
-            <div className='py-3'>
-                <h2 className="text-center pb-3 border-b-2 border-[#363636] font-medium">Likes</h2>
+            <div className='py-3 w-full h-full'>
+                <h2 className="text-center pb-3 border-b-2 border-[#363636] font-medium">{heading}</h2>
                 <ul>
                     {loading && <p>Loading...</p>}
                     {users.length > 0 ? (
@@ -92,7 +92,7 @@ const LikesModal = ({ open, onClose, likes }) => {
                                         {user.role === 'vip creator' && <img src={crown} className="h-4" />}
                                     </div>
                                 </div>
-                               {user._id !== loggedInUserId && <button
+                               {/* {user._id !== loggedInUserId && <button
                                     className="bg-main-gradient px-1 py-0.5 rounded-md"
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -107,7 +107,7 @@ const LikesModal = ({ open, onClose, likes }) => {
                                     <span className="ml-1 text-sm">
                                         {user.following ? "Following" : "Follow"}
                                     </span>
-                                </button>}
+                                </button>} */}
                             </li>
                         ))
                     ) : (
@@ -119,4 +119,4 @@ const LikesModal = ({ open, onClose, likes }) => {
     );
 };
 
-export default LikesModal;
+export default FollowersModal;

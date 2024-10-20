@@ -15,6 +15,9 @@ import { FaRegComment } from "react-icons/fa";
 import LikesModal from "./LikesModal";
 import CommentsModal from "./CommentsModal";
 import { toast } from "react-toastify";
+import tick from '../Global/icons/tick.png';
+import crown from '../Global/icons/crown.png';
+
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Feeds = () => {
@@ -186,7 +189,7 @@ const Feeds = () => {
 
   const handleCommentsClick = (post) => {
     if(!commentsModalOpen){
-      setCurrentComments(post.comments);
+      setCurrentComments(post);
     setCommentsModalOpen(true);
     }
   }
@@ -257,10 +260,14 @@ const Feeds = () => {
             <div className="flex gap-x-3 items-center cursor-pointer" onClick={() => navigate(`/dashboard/user/${post.createdBy._id}`)}>
               <img
                 src={post.createdBy.profileImage}
-                className="h-11 w-11 rounded-full border-2 border-[#9c8fd0] p-1"
+                className="h-11 w-11 rounded-full border-2 border-[#9c8fd0] p-1 object-cover"
                 alt="User avatar"
               />
-              <h3>{post.createdBy.username}</h3>
+               <div className="flex items-start gap-1">
+                <h2>{post.createdBy.username}</h2>
+                {/* {post.createdBy.role === 'creator' && <img src={tick} className="h-4" />}
+                {post.createdBy.role === 'vip creator' && <img src={crown} className="h-4" />} */}
+              </div>
             </div>
             <p className=" text-sm">
               {timeAgo(post.createdAt)}
@@ -268,12 +275,12 @@ const Feeds = () => {
           </div>
           <div className="relative w-full h-[27rem] mt-4 mb-2 rounded-md border-2 border-gray-200">
             {post.image && <img
-              src={`${BASE_URL}${post.image}`}
-              className={`w-full h-full object-contain rounded-md ${post.isPrivate ? "blur-md" : ""}`}
+              src={post.image}
+              className={`w-full h-full object-cover sm:object-contain rounded-md ${post.isPrivate ? "blur-md" : ""}`}
               alt="Post Content"
             />}
             {post.video && <VideoComponent
-              src={`${BASE_URL}${post.video}`}
+              src={post.video}
               className={`w-full h-full mx-auto rounded-md ${post.isPrivate ? "blur-md" : ""}`}
               poster={`https://gratisography.com/photo/reindeer-dog/`}
               alt="Post Content"
@@ -288,6 +295,7 @@ const Feeds = () => {
               </div>
             )}
           </div>
+          {console.log(post)}
           <div className="flex items-center justify-between mx-2">
           <div className="flex items-center gap-6">
           <div
@@ -323,8 +331,8 @@ const Feeds = () => {
               <p className="text-sm font-lighter">{post.content}</p>
             </div>
           </div>
-          <LikesModal open={likesModalOpen} onClose={closeLikesModal} likes={currentLikes}/>
-          <CommentsModal open={commentsModalOpen} onClose={closeCommentsModal} comments={currentComments}/>
+         
+          
         </div>)
 
 
@@ -338,7 +346,7 @@ const Feeds = () => {
       </div>
 
 
-      <div className="online-users bg-black rounded-md p-4 text-white h-fit w-1/3 mr-3 sm:hidden">
+      <div className="overflow-y-auto scrollable-div bg-black rounded-md p-4 text-white h-fit max-h-[67vh] w-1/3 mr-3 sm:hidden">
         {/* Tabs */}
         <div className="flex justify-around mb-2">
           <button
@@ -367,9 +375,13 @@ const Feeds = () => {
                   : following.includes(user._id)
               )
               .map((user) => (
-                <div className="flex items-center gap-3 mt-2  px-10 py-4 rounded-md transition-all cursor-pointer hover:bg-fuchsia-800 hover:scale-105" onClick={() => navigate(`/dashboard/user/${user._id}`)}>
+                <div className="flex items-center gap-3 mt-2  px-5 py-4 rounded-md transition-all cursor-pointer hover:bg-fuchsia-800 hover:scale-105" onClick={() => navigate(`/dashboard/user/${user._id}`)}>
                   <img src={user.profileImage} alt="img" className="h-10 w-10 rounded-full object-cover bg-white" />
-                  <h4>{user.username}</h4>
+                  <div className="flex items-start gap-1">
+              <h2 className='truncate'>{user.username}</h2>
+              {user.role === 'creator' && <img src={tick} className="h-4"/>}
+              {user.role === 'vip creator' && <img src={crown} className="h-4"/>}
+              </div>
                 </div>
               ))}
             {tab === 'followers' && followers.length === 0 && <p className="text-center py-10">No followers yet.</p>}
@@ -379,7 +391,9 @@ const Feeds = () => {
         )}
       </div>
     </div>
-    </div >
+    <LikesModal open={likesModalOpen} onClose={closeLikesModal} likes={currentLikes}/>
+    <CommentsModal open={commentsModalOpen} onClose={closeCommentsModal} post={currentComments}/>
+    </div>
   );
 };
 

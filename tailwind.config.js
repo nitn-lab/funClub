@@ -13,7 +13,7 @@ module.exports = {
       "sm" : { "max" : "768px"},
       "md" : { "max" : "976px"},
       "lg" : {"max" : "1200px"},
-      "xl" : {"max" : "1536px"}
+      "xl" : {"max" : "1477px"}
     },
     extend: {
       fontFamily : {
