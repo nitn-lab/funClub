@@ -70,17 +70,17 @@ const VideoCarousel = ({ videos, onSlideChange }) => {
   };
 
   return (
-    <div className="video-carousel relative flex justify-center items-center mx-auto">
-      <Slider ref={sliderRef} {...settings} className="w-full h-full">
+    <div className="video-carousel relative flex justify-center items-center mx-auto transition-all">
+      <Slider ref={sliderRef} {...settings} className="w-full h-full transition-all">
         {videos.map((video, index) => (
-          <div key={index} className="relative w-full h-full">
+          <div key={index} className="relative w-full h-full transition-all">
             <video
               src={video.src}
               controls
               autoPlay
               muted
               loop
-              className="w-full h-[calc(95vh-184px)] md:h-[60vh] object-cover rounded-md md:rounded-none"
+              className="w-full h-[calc(95vh-184px)] md:h-[60vh] object-cover rounded-md md:rounded-none transition-all"
             />
             <div className="absolute inset-0 flex justify-center items-center">
               <div className="pulse-button relative">

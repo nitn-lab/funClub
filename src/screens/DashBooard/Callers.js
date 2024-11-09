@@ -62,11 +62,11 @@ const Callers = () => {
         setFollowedUsers(followedUsersList);
       } catch (error) {
         console.error("Error fetching users or followed list:", error);
-        if (error.response.status === 403) {
-          toast.error('Session expired. Please login again!')
-          localStorage.removeItem("jwtToken")
-          navigate('/')
-        }
+        // if (error.response.status === 403) {
+        //   toast.error('Session expired. Please login again!')
+        //   localStorage.removeItem("jwtToken")
+        //   navigate('/')
+        // }
       }
     };
     fetchUsersAndFollowedList();

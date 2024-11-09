@@ -39,7 +39,7 @@ const SignUp = ({ data, onInputChange }) => {
     if (confirm_password && confirm_password !== password) {
       toast.error('Passwords do not match!');
     }
-  };
+  }; 
 
   return (
     <div className="w-full py-5 text-primary-light">
@@ -51,6 +51,7 @@ const SignUp = ({ data, onInputChange }) => {
           <input
             className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 text-black bg-white"
             placeholder="Username"
+            required
             type="text"
             name="username"
             value={username || ''}

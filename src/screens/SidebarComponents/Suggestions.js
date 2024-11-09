@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // For making API requests
+import axios from "axios";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import PhoneIcon from "@mui/icons-material/Phone";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
@@ -30,7 +30,7 @@ const Suggestions = () => {
         const initializedData = res.data.data.map((item) => ({
           ...item,
           isFollowing: followedUsersList.includes(item._id),
-          isOnline: Math.random() > 0.5, // Randomly assign online status
+          isOnline: Math.random() > 0.5,
         }));
         const filteredData = initializedData.filter((item) =>
           ["creator", "vip creator", "verified creator"].includes(item.role)
@@ -84,26 +84,19 @@ const Suggestions = () => {
     <>
       <div className="flex justify-end mx-6 xs:mx-1 gap-x-2 mb-3 mt-2">
         <button
-          className={`px-3 rounded-md ${filter === "all" ? "bg-violet-500 text-white" : "bg-white text-black"
-            }`}
+          className={`px-3 rounded-md ${filter === "all" ? "bg-violet-500 text-white" : "bg-white text-black"}`}
           onClick={() => setFilter("all")}
         >
           All
         </button>
         <button
-          className={`px-4 rounded-md ${filter === "online"
-              ? "bg-lime-500 text-white"
-              : "bg-white text-black"
-            }`}
+          className={`px-4 rounded-md ${filter === "online" ? "bg-lime-500 text-white" : "bg-white text-black"}`}
           onClick={() => setFilter("online")}
         >
           Online
         </button>
         <button
-          className={`px-4 rounded-md ${filter === "offline"
-              ? "bg-red-500 text-white"
-              : "bg-white text-black"
-            }`}
+          className={`px-4 rounded-md ${filter === "offline" ? "bg-red-500 text-white" : "bg-white text-black"}`}
           onClick={() => setFilter("offline")}
         >
           Offline
@@ -112,16 +105,13 @@ const Suggestions = () => {
 
       <div className="scrollable-div grid grid-cols-5 md:grid-cols-3 gap-4 mx-4 xs:mx-1 my-1 items-center h-[100vh] overflow-y-auto xs:mt-3 md:pb-44">
         {filteredNearby.map((item, index) => (
-          <div key={item._id} className="relative">
-            <div
-              className={`relative h-44 w-44 xs:h-28 xs:w-28 cursor-pointer overflow-hidden  animate-blob group`}
-              style={{ animationDelay: `${index * 0.4}s`}}
-            >
+          <div key={item._id} className={`relative slide-up`}>
+            <div className="relative h-44 w-44 xs:h-28 xs:w-28 cursor-pointer overflow-hidden animate-blob group" style={{ animationDelay:` ${index * 0.4}s` }}>
               <div
                 className="absolute top-4 left-14 transform -translate-y-1/2 bg-main-gradient text-white rounded-md px-1 cursor-pointer follow-btn hidden group-hover:flex items-center duration-700"
                 onClick={(e) => {
                   e.stopPropagation();
-toggleFollow(item._id, item.isFollowing);
+                  toggleFollow(item._id, item.isFollowing);
                 }}
               >
                 {item.isFollowing ? (
@@ -142,10 +132,7 @@ toggleFollow(item._id, item.isFollowing);
               />
 
               <div
-                className={`absolute bottom-4 right-4 w-4 h-4 rounded-full border-2 ${item.isOnline
-                    ? "bg-lime-500 border-lime-500"
-                    : "bg-red-500 border-red-500"
-                  }`}
+                className={`absolute bottom-4 right-4 w-4 h-4 rounded-full border-2 ${item.isOnline ? "bg-lime-500 border-lime-500" : "bg-red-500 border-red-500"}`}
               />
 
               <div className="h-[50%] w-[100%] absolute right-0 -bottom-[100%] bg-[#1f3d4738] opacity-100 backdrop-blur-sm group-hover:bottom-0 duration-700 flex flex-col items-center justify-center">

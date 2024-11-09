@@ -24,8 +24,9 @@ const SearchModal = ({ isOpen, onClose }) => {
     useEffect(() => {
         // Check if the path is a profile path
         const isProfilePath = location.pathname.startsWith("/dashboard/user/");
+        const isMyProfilePath = location.pathname.endsWith('/dashboard/profile')
         
-        if (isProfilePath && isOpen) {
+        if (isProfilePath || isMyProfilePath && isOpen) {
           onClose(); // Close modal if navigating to a profile
         }
       }, [location.pathname, onClose, isOpen]);
@@ -118,7 +119,14 @@ const SearchModal = ({ isOpen, onClose }) => {
                     {searchResults.length > 0 && searchTerm !== "" && !isLoading && (
                         <ul className="">
                             {searchResults.map((user, index) => (
-                                <li key={index} className="px-3 py-4  cursor-pointer flex justify-between items-center" onClick={() => {navigate(`/dashboard/user/${user._id}`)}}>
+                                <li key={index} className="px-3 py-4  cursor-pointer flex justify-between items-center" onClick={() => {
+                                if(user._id !== loggedInUserId){
+                                    navigate(`/dashboard/user/${user._id}`)
+                                }
+                                else{
+                                    navigate('/dashboard/profile')
+                                }
+                            }}>
                                     <div className="flex gap-3 items-center">
                                         <img src={user.profileImage} alt={user.username} className="w-8 h-8 rounded-full bg-black object-cover" />
                                         <div className="flex items-start gap-1">

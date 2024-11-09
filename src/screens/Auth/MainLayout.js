@@ -71,9 +71,7 @@ const MainLayout = () => {
       
       {/* Sidebar transition */}
       <div
-        className={`z-30 md:flex md:gap-x-3 items-start md:absolute transition-transform duration-300 ${
-          open ? "md:translate-x-0" : "md:-translate-x-full"
-        } `}
+      
       >
         <Sidebarr />
       </div>
