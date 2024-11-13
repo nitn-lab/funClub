@@ -84,9 +84,9 @@ const Chats = ({ showChatScreen, socket }) => {
           {showChatScreen && <div className="bg-black py-4 font-gotham font-light flex justify-around items-center text-white border-b-2 border-gray-800">
             <p>Groups</p>
             <p>Message Requests</p>
-          </div>}
+          </div>} 
           {chatScreen ? (
-            <div >
+            <div class>
               <ChatScreen
                 showChatScreen={showChatScreen}
                 socket={socket} // Passing the WebSocket instance

@@ -80,7 +80,7 @@ const VideoCarousel = ({ videos, onSlideChange }) => {
               autoPlay
               muted
               loop
-              className="w-full h-[calc(95vh-184px)] md:h-[60vh] object-cover rounded-md md:rounded-none transition-all"
+              className="w-full h-[calc(95vh-184px)]  object-cover rounded-md md:rounded-none transition-all"
             />
             <div className="absolute inset-0 flex justify-center items-center">
               <div className="pulse-button relative">

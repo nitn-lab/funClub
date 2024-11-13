@@ -11,6 +11,7 @@ import { SignOutProvider } from "./components/context/SignOutContext";
 import Theme from "../src/Theme.js";
 import store from "./store/userStore.js";
 import { WebSocketProvider } from "../src/components/context/WebSocketContext.js";
+import { GoogleOAuthProvider} from '@react-oauth/google';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -19,6 +20,7 @@ root.render(
       <SignOutProvider>
         <PrimeReactProvider>
           <WebSocketProvider>
+          <GoogleOAuthProvider clientId="403139165421-duq9a81purrj9ibcpuejji90v5qopcmj.apps.googleusercontent.com">
             <App />
             <ToastContainer
               autoClose={3000}
@@ -31,6 +33,7 @@ root.render(
               draggable
               pauseOnHover
             />
+              </GoogleOAuthProvider>
           </WebSocketProvider>
         </PrimeReactProvider>
       </SignOutProvider>

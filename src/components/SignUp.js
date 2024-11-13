@@ -4,8 +4,8 @@ import { toast } from 'react-toastify';
 import Dropdown from './MultiStepForms/Dropdown';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-const SignUp = ({ data, onInputChange }) => {
-  const { username, email, birthdate, password, confirm_password, gender, role, active } = data;
+const SignUp = ({ data, onInputChange, signupInfo }) => {
+  const { username, email, birthdate, password, confirm_password, gender } = data;
   const [selectedDate, setSelectedDate] = useState(birthdate ? new Date(birthdate.split('/').reverse().join('/')) : null);
   const [showPassword, setShowPassword] = useState(false); 
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -54,7 +54,7 @@ const SignUp = ({ data, onInputChange }) => {
             required
             type="text"
             name="username"
-            value={username || ''}
+            value={username || signupInfo.name || ""}
             onChange={handleChange}
           />
         </div>
@@ -64,7 +64,7 @@ const SignUp = ({ data, onInputChange }) => {
             placeholder="Email"
             type="email"
             name="email"
-            value={email || ''}
+            value={email || signupInfo.email || ''}
             onChange={handleChange}
           />
         </div>

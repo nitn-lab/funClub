@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import camera from '../Global/icons/camera.png'
 import video from '../Global/icons/video.png';
 import axios from "axios";
@@ -24,6 +24,12 @@ const FeedsModal = () => {
         profileImage: ""
     });
     const token = localStorage.getItem('jwtToken');
+    const emojiPickerRef = useRef(null); 
+
+    const toggleEmojiPicker = () => {
+        setShowEmojiPicker(!showEmojiPicker);
+    };
+
 
     const onEmojiClick = (emojiObject) => {
         setCaption((prevCaption) => prevCaption + emojiObject.emoji);
@@ -53,28 +59,36 @@ const FeedsModal = () => {
         }
     };
 
-    const toggleEmojiPicker = () => {
-        setShowEmojiPicker((prev) => !prev);
-    };
-
     const closeModal = () => {
         setOpen(false);
         setPostImage("")
-    }
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+                setShowEmojiPicker(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <div>
             <div>
                 <div
-                    className="relative h-auto w-full bg-gray-900 rounded-md text-white  p-5">
+                    className="relative h-auto w-full  bg-black rounded-md text-white  p-5">
                     <div>
                         <p>Want to share something?</p>
-                        <div className="flex items-start mt-1 mb-3 bg-black px-2 pt-3 rounded-md">
+                        <div className="flex items-start mt-1 mb-3 bg-gray-900 px-2 pt-3 rounded-md">
                             <button onClick={toggleEmojiPicker} className="text-main-gradient">
                                 😊
                             </button>
                             {showEmojiPicker && (
-                                <div className="absolute z-10 top-20">
+                                <div ref={emojiPickerRef} className="absolute z-10 top-[5rem]">
                                     <Picker onEmojiClick={onEmojiClick} height={300} width={300} searchDisabled={true} previewConfig={{ showPreview: false }} />
                                 </div>
                             )}

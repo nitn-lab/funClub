@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { SidebarHeader } from "../../components/SideBarHeader";
@@ -20,16 +20,24 @@ import info from './icons/info.png';
 import tick from './icons/tick.png';
 import logout from './icons/logout.png';
 import menu from '../Global/icons/menu.png';
-import Dashboard from "../DashBooard/Dashboard";
 
 function Sidebarr(props) {
-  const Theme = "light" | "dark";
   const [toggled, setToggled] = React.useState(false);
   const [hasImage, setHasImage] = React.useState(false);
   const [theme, setTheme] = React.useState("light");
-  const [collapsed, setCollapsed] = React.useState(false); // Add collapsed state
+  const [collapsed, setCollapsed] = React.useState(window.innerWidth <= 976); // Set initial collapse state based on screen size
   const { openSignOutPopup } = useSignOut();
   localStorage.setItem("collapsed", !collapsed)
+
+  // Update collapsed state on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setCollapsed(window.innerWidth <= 976);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const themes = {
     light: {
       sidebar: {
@@ -76,16 +84,22 @@ function Sidebarr(props) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
 
+  // Collapse sidebar if user navigates to any menu item on medium or smaller screens
+  const handleMenuItemClick = () => {
+    if (window.innerWidth < 976) {
+      setCollapsed(true);
+    }
+  };
+
   return (
     <div
       style={{
         direction: "ltr",
       }}
-      className="font-gotham h-[100vh] md:h-[calc(100vh-80px)] font-light items-start flex overflow-y-auto scrollable-div"
+      className="font-gotham h-[100vh] font-light items-start flex overflow-y-auto scrollable-div"
     >
-
       <Sidebar
-        collapsed={collapsed} // Set collapsed based on state
+        collapsed={collapsed}
         toggled={toggled}
         onBackdropClick={() => setToggled(false)}
         backgroundColor={hexToRgba(
@@ -98,7 +112,7 @@ function Sidebarr(props) {
         className="sidebar"
       >
         <div className="flex items-center justify-between">
-          <IconButton onClick={() => {setCollapsed(!collapsed); }}>
+          <IconButton onClick={() => { setCollapsed(!collapsed); }}>
             <img src={menu} className="h-6 ml-5" />
           </IconButton>
           <SidebarHeader />
@@ -119,28 +133,27 @@ function Sidebarr(props) {
               },
             }}
           >
-            <MenuItem component={<NavLink to="/dashboard" end />} icon={<Box component="img" src={home} alt={home} className="h-6" />}> Home </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/live" end />} icon={<Box component="img" src={live} alt={live} className="h-6" />}> Live </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/nearby" end />} icon={<Box component="img" src={nearby} alt={nearby} className="h-6" />}> Nearby </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/feeds" end />} icon={<Box component="img" src={grid} alt={grid} className="h-6" />}> Feeds </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/suggestions" end />} icon={<Box component="img" src={suggestions} alt={suggestions} className="h-6" />}> Suggestions </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/chats" end />} icon={<Box component="img" src={chat} alt={chat} className="h-6" />}>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard" end />} icon={<Box component="img" src={home} alt={home} className="h-6" />}> Home </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard/live" end />} icon={<Box component="img" src={live} alt={live} className="h-6" />}> Live </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard/nearby" end />} icon={<Box component="img" src={nearby} alt={nearby} className="h-6" />}> Nearby </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard/feeds" end />} icon={<Box component="img" src={grid} alt={grid} className="h-6" />}> Feeds </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard/suggestions" end />} icon={<Box component="img" src={suggestions} alt={suggestions} className="h-6" />}> Suggestions </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard/chats" end />} icon={<Box component="img" src={chat} alt={chat} className="h-6" />}>
               Chats <span className="bg-main-gradient text-sm rounded-full px-1.5 py-0.5 ml-2">11</span>
             </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/subscription" end />} icon={<Box component="img" src={dollar} alt={dollar} className="h-6" />}> Subscriptions </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/profile" end />} icon={<Box component="img" src={user} alt={user} className="h-6" />}> My Profile </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/privacy-policy" end />} icon={<Box component="img" src={privacy} alt={privacy} className="h-6" />}> Privacy Policy </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/terms" end />} icon={<Box component="img" src={terms} alt={terms} className="h-6" />}> Terms & Condition </MenuItem>
-            <MenuItem component={<NavLink to="/dashboard/settings" end />} icon={<Box component="img" src={settings} alt={settings} className="h-6" />}> Settings </MenuItem>
-            <MenuItem icon={<Box component="img" src={info} alt={info} className="h-6" />}> Help & Support </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard/subscription" end />} icon={<Box component="img" src={dollar} alt={dollar} className="h-6" />}> Subscriptions </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard/profile" end />} icon={<Box component="img" src={user} alt={user} className="h-6" />}> My Profile </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard/privacy-policy" end />} icon={<Box component="img" src={privacy} alt={privacy} className="h-6" />}> Privacy Policy </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard/terms" end />} icon={<Box component="img" src={terms} alt={terms} className="h-6" />}> Terms & Condition </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} component={<NavLink to="/dashboard/settings" end />} icon={<Box component="img" src={settings} alt={settings} className="h-6" />}> Settings </MenuItem>
+            <MenuItem onClick={handleMenuItemClick} icon={<Box component="img" src={info} alt={info} className="h-6" />}> Help & Support </MenuItem>
             <SubMenu label="More">
-              <MenuItem className="bg-black" component={<NavLink to="/dashboard/creator" end />} icon={<Box component="img" src={tick} alt={tick} className="h-6" />}>Become a creator</MenuItem>
+              <MenuItem onClick={handleMenuItemClick} className="bg-black" component={<NavLink to="/dashboard/creator" end />} icon={<Box component="img" src={tick} alt={tick} className="h-6" />}>Become a creator</MenuItem>
             </SubMenu>
-            <MenuItem icon={<Box component="img" src={logout} alt={logout} className="h-7" />} onClick={openSignOutPopup}> Sign Out </MenuItem>
+            <MenuItem onClick={() => { openSignOutPopup(); handleMenuItemClick(); }} icon={<Box component="img" src={logout} alt={logout} className="h-7" />}> Sign Out </MenuItem>
           </Menu>
         </div>
       </Sidebar>
-       
     </div>
   );
 }

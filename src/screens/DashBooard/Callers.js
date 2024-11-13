@@ -110,7 +110,7 @@ const Callers = () => {
         return (
           <div
             key={caller.id} 
-            className="caller-profile rounded-md h-48 cursor-pointer relative overflow-hidden group"
+            className="caller-profile rounded-md md:rounded-none h-48 md:h-52 cursor-pointer relative overflow-hidden group"
           >
             <img
               src={caller.profileImage}

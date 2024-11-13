@@ -77,11 +77,11 @@ const Dashboard = ({ socket }) => {
       {/* Main Content with adjusted width based on sidebar state */}
       <div
         className={`relative 
-  ${isSidebarExpanded && leftSidebarCollapsed ? "w-[calc(100vw-520px)]" :
-            isSidebarExpanded ? "w-[calc(100vw-345px)]" :
-              leftSidebarCollapsed ? "w-[calc(100vw-345px)]" :
+  ${isSidebarExpanded && leftSidebarCollapsed ? "w-[calc(100vw-520px)] md:w-full" :
+            isSidebarExpanded ? "w-[calc(100vw-345px)] md:w-full " :
+              leftSidebarCollapsed ? "w-[calc(100vw-345px)] md:w-full" :
                 "w-[calc(100vw-167px)]"} 
-  md:w-[100vw] h-[100vh] md:h-[87vh] mx-auto my-2 md:my-0 transition-all`}
+ h-[100vh]  mx-auto my-2 md:my-0 transition-all`}
       >
         <div>
           <VideoCarousel videos={videos} onSlideChange={handleSlideChange} className="transition-all" />
@@ -129,24 +129,23 @@ const Dashboard = ({ socket }) => {
         )}
       </div>
       {/* Chat Component */}
-      <div
-        className={`fixed bottom-0 ${isSidebarExpanded ? "right-2" : "right-0"} md:hidden w-[728px] h-[calc(100vh-12vh)] rounded-t-lg transition-transform duration-500 ease-in-out ${isChatOpen
-          ? isChatClosing
-            ? "translate-y-full"
-            : "translate-y-0"
-          : "translate-y-full"
-          } `}
-      >
-        {(isChatOpen || isChatClosing) && (
-          <div className="h-full float-right w-[305px]">
-            <Chats
-              className=""
-              socket={socket}
-              showChatScreen={false}
-              shouldNavigate={true}
-            />
-          </div>
-        )}
+      <div className={`fixed bottom-0 ${isSidebarExpanded ? "right-2" : "right-0"} md:hidden w-[728px] h-[calc(100vh-12vh)] rounded-t-lg transition-transform duration-500 ease-in-out ${isChatOpen
+        ? isChatClosing
+          ? "translate-y-full"
+          : "translate-y-0"
+        : "translate-y-full"
+        } `}>
+        <div>
+          {(isChatOpen || isChatClosing) && (
+            <div className="h-full float-right w-[305px] ">
+              <Chats
+                socket={socket}
+                showChatScreen={false}
+                shouldNavigate={true}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

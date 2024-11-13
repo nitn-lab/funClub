@@ -57,21 +57,21 @@ const MainLayout = () => {
 
   return (
     <div
-      className={`fixed inset-0 md:p-0 bg-main-gradient flex md:block items-start w-full transition-opacity duration-700 ease-out ${pageAnimation}`}
+      className={`fixed inset-0 md:p-0 bg-main-gradient flex items-start w-full transition-opacity duration-700 ease-out ${pageAnimation}`}
     >
       {/* Sidebar and header */}
-      <div className=" md:flex w-full my-2 md:my-0 hidden bg-black">
+      {/* <div className=" md:flex w-full my-2 md:my-0 hidden bg-black">
         <button
           className="hidden md:block text-white"
           onClick={(e) => {e.stopPropagation(); setOpen(!open)}}
         >
           <img src={menu} className="h-6 mt-1 ml-1"/>
         </button>
-      </div>
+      </div> */}
       
       {/* Sidebar transition */}
       <div
-      
+    className="md:absolute z-20"
       >
         <Sidebarr />
       </div>

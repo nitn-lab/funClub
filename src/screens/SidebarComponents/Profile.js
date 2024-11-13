@@ -33,8 +33,20 @@ const Profile = () => {
   const [currentLikes, setCurrentLikes] = useState([]);
   const [likesModalOpen, setLikesModalOpen] = useState(false);
   const [heading, setHeading] = useState("");
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const emojiButtonRef = useRef(null); 
+  const emojiPickerRef = useRef(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false); 
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+        if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+            setShowEmojiPicker(false);
+        }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+}, []);
 
   const onEmojiClick = (emojiObject) => {
     setCaption((prevCaption) => prevCaption + emojiObject.emoji);
@@ -249,7 +261,7 @@ const Profile = () => {
                     😊
                   </button>
                   {showEmojiPicker && (
-                    <div className="absolute z-10 top-20">
+                    <div ref={emojiPickerRef} className="absolute z-10 top-20">
                       <Picker onEmojiClick={onEmojiClick} height={300} width={300} searchDisabled={true} previewConfig={{showPreview: false}}/>
                     </div> 
                   )}

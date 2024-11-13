@@ -121,17 +121,18 @@ const ChatScreen = ({ showChatScreen, socket }) => {
 
 
   return (
-    <div className={`flip-container relative w-full h-full font-gotham font-light`}>
+    <div className={`flip-container relative w-full h-full font-gotham font-light `}>
       <div
         className={`flip-card  w-full h-full transition-transform duration-500 ${callActive ? "flip" : ""
           }`}
       >
+
         <div className="front absolute top-0 left-0 w-full h-full text-white">
           {receiver ? (
             <div className="chat-screen w-full bg-fuchsia-400 h-[100vh]">
-              <div className="header bg-black text-white  py-3 px-5">
+              <div className="header bg-black text-white  py-[9px] px-5">
                 <div className="flex justify-between items-center">
-                  <div className="flex gap-5 items-center xs:gap-3">
+                  <div className="flex gap-3 items-center">
                     <div>
                       <img
                         src={receiver.profileImage}
@@ -141,7 +142,7 @@ const ChatScreen = ({ showChatScreen, socket }) => {
                     </div>
                     <div>
                      <div className="flex items-start gap-1">
-                     <h3 className=" text-lg xs:text-base">
+                     <h3 className=" text-lg xs:text-base truncate">
                         {receiver.username}
                       </h3>
                       {receiver.role === 'creator' && <img src={tick} className="h-5"/>}
@@ -150,7 +151,7 @@ const ChatScreen = ({ showChatScreen, socket }) => {
                      {isTyping && <h4>Typing...</h4>}
                     </div>
                   </div>
-                  <div className="flex gap-6">
+                  <div className="flex gap-3">
                     <IoMdCall
                       className="text-white text-2xl hover:scale-125 transition-all cursor-pointer"
                       onClick={() => alert("Voice call not implemented yet")}
