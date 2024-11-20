@@ -11,10 +11,7 @@ const AdvanceForm = ({ onInputChange, data }) => {
     sexual_orientation:data.sexual_orientation || ""
   });
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
+ 
   useEffect(() => {
     onInputChange(formData);
   }, [formData]);
@@ -45,6 +42,7 @@ const AdvanceForm = ({ onInputChange, data }) => {
           <label className="text-base font-medium text-primary-dark">Ethnicity</label>
           <input
             name="ethnicity"
+            required
             className="w-full border-2 rounded-lg p-2 mt-1 focus:outline-violet-500 focus:ring-violet-500 placeholder-black bg-white"
             placeholder="Enter Ethnicity"
             value={formData.ethnicity}

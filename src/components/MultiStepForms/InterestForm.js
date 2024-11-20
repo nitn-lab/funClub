@@ -49,13 +49,13 @@ const InterestForm = ({ onInputChange, data }) => {
   };
 
   return (
-    <div className="w-full py-5 text-primary-dark relative">
+    <div className="w-full py-5 md:py-3 text-primary-dark relative">
       <h1 className="text-4xl font-bold xs:text-3xl">Interest Details!</h1>
       <p className="font-medium text-lg mt-2">
         Please Choose your interests!!
       </p>
       <div
-        className="scrollable-div h-64 mt-1 flex flex-wrap overflow-auto"
+        className="scrollable-div md:h-[calc(100vh-50vh)] h-[calc(100vh-42vh)] mt-1 flex flex-wrap overflow-auto"
         ref={scrollContainerRef}
       >
         {interests &&
@@ -80,7 +80,7 @@ const InterestForm = ({ onInputChange, data }) => {
       {/* Arrow for scrolling to bottom */}
       {!isAtBottom && (
         <div
-          className="absolute -bottom-8 xs:bottom-2 bg-primary-dark right-0 p-1 cursor-pointer animate-bounce rounded-full"
+          className="absolute bottom-0 xs:bottom-2 bg-primary-dark right-0 p-1 cursor-pointer animate-bounce rounded-full"
           onClick={scrollToBottom}
         >
           <ArrowDownwardIcon className="text-primary-light" fontSize="medium" />
@@ -90,7 +90,7 @@ const InterestForm = ({ onInputChange, data }) => {
       {/* Arrow for scrolling to top */}
       {isAtBottom && (
         <div
-          className="absolute -bottom-8 xs:bottom-2 bg-primary-dark animate-bounce rounded-full right-0 cursor-pointer p-1"
+          className="absolute bottom-0 xs:bottom-2 bg-primary-dark animate-bounce rounded-full right-0 cursor-pointer p-1"
           onClick={scrollToTop}
         >
           <ArrowUpwardIcon className="text-primary-light" fontSize="medium" />

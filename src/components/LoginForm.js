@@ -59,7 +59,7 @@ export default function LoginForm({onForgotPassword}) {
   }
 
   return (
-    <div className="w-full h-full text-primary-light dark:text-primary-dark px-6 xs:px-3 xl:py-6 py-24 font-light">
+    <div className="w-full h-full text-primary-light dark:text-primary-dark px-6 xs:px-3 xl:py-6 py-24 font-gotham font-light">
       <h1 className="text-4xl font-semibold text-center">Welcome Back</h1>
       <p className="font-medium text-lg md:text-md mt-4 text-center">
         Welcome back! Please enter your details
