@@ -84,8 +84,6 @@ const ChatScreen = ({ showChatScreen, socket }) => {
     }
   }, [socket, senderId, receiver._id]);
 
-  
-
   const handleTyping = () => {
     if (socket) {
       const typingData = {
@@ -126,7 +124,7 @@ const ChatScreen = ({ showChatScreen, socket }) => {
 
   return (
     <div
-      className={`flip-container relative w-full h-full font-gotham font-light`}
+      className={`flip-container relative w-full h-full font-gotham font-light `}
     >
       <div
         className={`flip-card  w-full h-full transition-transform duration-500 ${
@@ -136,14 +134,14 @@ const ChatScreen = ({ showChatScreen, socket }) => {
         <div className="front absolute top-0 left-0 w-full h-full text-white">
           {receiver ? (
             <div className="chat-screen w-full bg-fuchsia-400 h-[100vh]">
-              <div className="header bg-black text-white px-10 py-2.5 xs:px-5">
+              <div className="header bg-black text-white  py-[9px] px-5">
                 <div className="flex justify-between items-center">
-                  <div className="flex gap-5 items-center xs:gap-3">
+                  <div className="flex gap-3 items-center">
                     <div>
                       <img
                         src={receiver.profileImage}
                         alt="user"
-                        className="rounded-full h-12 w-12 xs:h-12 xs:w-12 object-cover"
+                        className="rounded-full h-10 w-10 xs:h-7 xs:w-7 object-cover"
                       />
                     </div>
                     <div>
@@ -159,9 +157,21 @@ const ChatScreen = ({ showChatScreen, socket }) => {
                         )}
                       </div>
                       {isTyping && <h4>Typing...</h4>}
+                      <div className="flex items-start gap-1">
+                        <h3 className=" text-lg xs:text-base truncate">
+                          {receiver.username}
+                        </h3>
+                        {receiver.role === "creator" && (
+                          <img src={tick} className="h-5" />
+                        )}
+                        {receiver.role === "vip creator" && (
+                          <img src={crown} className="h-5" />
+                        )}
+                      </div>
+                      {isTyping && <h4>Typing...</h4>}
                     </div>
                   </div>
-                  <div className="flex gap-10 xs:gap-6">
+                  <div className="flex gap-3">
                     <IoMdCall
                       className="text-white text-2xl hover:scale-125 transition-all cursor-pointer"
                       onClick={() => alert("Voice call not implemented yet")}

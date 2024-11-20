@@ -72,31 +72,38 @@ const Chats = ({ showChatScreen, socket }) => {
   return (
     <>
       <div className="flex items-start rounded-md">
-        {!showChatScreen && chatScreen && (
+        {/* {!showChatScreen && chatScreen && (
           <button
             className="text-white bg-main-gradient text-sm rounded-full p-1"
             onClick={() => setChatScreen(false)}
           >
             <CloseIcon />
           </button>
-        )}
-        {chatScreen ? (
-          <div className={`sm:hidden w-full z-50`}>
-            <ChatScreen
-              showChatScreen={showChatScreen}
-              socket={socket} // Passing the WebSocket instance
-              sendMessage={sendMessage} // Passing the sendMessage function
-            />
-          </div>
-        ) : (
-          <div className="sm:hidden w-full text-black"></div>
-        )}
+        )} */}
+
+        <div className={`${chatScreen || showChatScreen ? "sm:hidden w-full z-50" : ""}`}>
+          {showChatScreen && <div className="bg-black py-4 font-gotham font-light flex justify-around items-center text-white border-b-2 border-gray-800">
+            <p>Groups</p>
+            <p>Message Requests</p>
+          </div>} 
+          {chatScreen ? (
+            <div class>
+              <ChatScreen
+                showChatScreen={showChatScreen}
+                socket={socket} // Passing the WebSocket instance
+                sendMessage={sendMessage} // Passing the sendMessage function
+              />
+            </div>
+          ) : (
+            showChatScreen && (<div className="sm:hidden w-full text-black"></div>)
+          )}
+        </div>
         <div
-          className="chats font-gotham font-light scrollable-div w-[350px] bg-black h-[100vh] text-white sm:w-full pb-2 overflow-y-auto shadow-lg"
+          className={`chats flex-grow font-gotham font-light scrollable-div w-[400px] ${!showChatScreen && chatScreen ? "hidden" : ""}  bg-black h-[100vh] text-white sm:w-full pb-2 overflow-y-auto shadow-lg`}
           id="user-list"
         >
           <div className="flex gap-2 items-center px-4 py-2 bg-fuchsia-800 sm:hidden">
-            <img src={logo} alt="FunClub" className="w-12" />
+            <img src={logo} alt="FunClub" className="w-10 h-10" />
             <h2 className="text-xl font-medium italic">CHATS</h2>
           </div>
 
@@ -123,13 +130,13 @@ const Chats = ({ showChatScreen, socket }) => {
                   <div className="online-status h-3 w-3 bg-[#05fc4f] rounded-full absolute top-1"></div>
                 </div>
                 <div>
-                <div className="flex items-start gap-1">
-                     <h3 className="text-base truncate">
-                        {user.username}
-                      </h3>
-                      {user.role === 'creator' && <img src={tick} className="h-5"/>}
-                      {user.role === 'vip creator' && <img src={crown} className="h-5"/>}
-                     </div>
+                  <div className="flex items-start gap-1">
+                    <h3 className="text-base truncate">
+                      {user.username}
+                    </h3>
+                    {user.role === 'creator' && <img src={tick} className="h-5" />}
+                    {user.role === 'vip creator' && <img src={crown} className="h-5" />}
+                  </div>
                   <p className="text-gray-200 text-sm font-light">Last seen</p>
                 </div>
               </div>

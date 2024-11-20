@@ -62,11 +62,11 @@ const Callers = () => {
         setFollowedUsers(followedUsersList);
       } catch (error) {
         console.error("Error fetching users or followed list:", error);
-        if (error.response.status === 403) {
-          toast.error('Session expired. Please login again!')
-          localStorage.removeItem("jwtToken")
-          navigate('/')
-        }
+        // if (error.response.status === 403) {
+        //   toast.error('Session expired. Please login again!')
+        //   localStorage.removeItem("jwtToken")
+        //   navigate('/')
+        // }
       }
     };
     fetchUsersAndFollowedList();
@@ -110,7 +110,7 @@ const Callers = () => {
         return (
           <div
             key={caller.id} 
-            className="caller-profile rounded-md h-48 cursor-pointer relative overflow-hidden group"
+            className="caller-profile rounded-md md:rounded-none h-48 md:h-52 cursor-pointer relative overflow-hidden group"
           >
             <img
               src={caller.profileImage}

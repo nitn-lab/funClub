@@ -12,6 +12,8 @@ import Theme from "../src/Theme.js";
 import store from "./store/userStore.js";
 import { WebSocketProvider } from "../src/components/context/WebSocketContext.js";
 import AgoraRTC, { AgoraRTCProvider } from "agora-rtc-react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
@@ -22,18 +24,20 @@ root.render(
         <PrimeReactProvider>
           <WebSocketProvider>
             <AgoraRTCProvider client={client}>
-              <App />
-              <ToastContainer
-                autoClose={3000}
-                position="bottom-right"
-                theme="dark"
-                hideProgressBar={true}
-                newestOnTop={false}
-                closeButton={false}
-                closeOnClick
-                draggable
-                pauseOnHover
-              />
+              <GoogleOAuthProvider clientId="403139165421-duq9a81purrj9ibcpuejji90v5qopcmj.apps.googleusercontent.com">
+                <App />
+                <ToastContainer
+                  autoClose={3000}
+                  position="bottom-right"
+                  theme="dark"
+                  hideProgressBar={true}
+                  newestOnTop={false}
+                  closeButton={false}
+                  closeOnClick
+                  draggable
+                  pauseOnHover
+                />
+              </GoogleOAuthProvider>
             </AgoraRTCProvider>
           </WebSocketProvider>
         </PrimeReactProvider>

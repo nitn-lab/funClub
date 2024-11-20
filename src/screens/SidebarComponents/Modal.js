@@ -13,19 +13,20 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const FollowersModal = ({ open, onClose, likes, heading }) => {
     const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const token = localStorage.getItem('jwtToken');
     const navigate = useNavigate();
     const loggedInUserId = localStorage.getItem('id');  // ID of the logged-in user
 
     useEffect(() => {
         const fetchUsers = async () => {
+            setLoading(true)
             try {
                 const userPromises = likes.map(async (userId) => {
                     const res = await axios.get(`${BASE_URL}/api/v1/userById/${userId}`, {
                         headers: { authorization: `${token}` },
                     });
-
+                    setLoading(false)
                     const user = res.data.data;
                     // Add the following status based on whether the logged-in user follows this user
                     user.following = user.followers.includes(loggedInUserId);
@@ -35,16 +36,16 @@ const FollowersModal = ({ open, onClose, likes, heading }) => {
                 const usersData = await Promise.all(userPromises); // Wait for all promises to resolve
                 setUsers(usersData);
             } catch (err) {
+                setLoading(false)
                 console.error("Error fetching users:", err);
-            } finally {
-                setLoading(false);
-            }
+            } 
         };
 
         if (likes.length > 0) {
             fetchUsers();
         } else {
-            setLoading(false); // No likes to fetch
+            setUsers([]);
+            setLoading(false);
         }
     }, [likes, token, loggedInUserId]);
 
@@ -67,7 +68,7 @@ const FollowersModal = ({ open, onClose, likes, heading }) => {
             toast.error("Error updating follow status.");
         }
     };
-
+console.log(users)
     return (
         <Modal open={open} onClose={onClose} center
             closeIcon={
@@ -83,7 +84,14 @@ const FollowersModal = ({ open, onClose, likes, heading }) => {
                     {loading && <p>Loading...</p>}
                     {users.length > 0 ? (
                         users.map((user, index) => (
-                            <li key={index} className='flex items-center justify-between p-3 cursor-pointer rounded-sm mt-3' onClick={() => navigate(`/dashboard/user/${user._id}`)}>
+                            <li key={index} className='flex items-center justify-between p-3 cursor-pointer rounded-sm mt-3' onClick={() => {
+                                if(user._id !== loggedInUserId){
+                                    navigate(`/dashboard/user/${user._id}`)
+                                }
+                                else{
+                                    navigate('/dashboard/profile')
+                                }
+                            }}>
                                 <div className='flex items-center gap-3'>
                                     <img src={user.profileImage} alt={user.username} className='h-8 w-8 rounded-full object-cover' />
                                     <div className="flex items-start gap-1">
@@ -92,7 +100,7 @@ const FollowersModal = ({ open, onClose, likes, heading }) => {
                                         {user.role === 'vip creator' && <img src={crown} className="h-4" />}
                                     </div>
                                 </div>
-                               {/* {user._id !== loggedInUserId && <button
+                               {heading === 'Likes' && user._id !== loggedInUserId && <button
                                     className="bg-main-gradient px-1 py-0.5 rounded-md"
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -107,11 +115,11 @@ const FollowersModal = ({ open, onClose, likes, heading }) => {
                                     <span className="ml-1 text-sm">
                                         {user.following ? "Following" : "Follow"}
                                     </span>
-                                </button>} */}
+                                </button>}
                             </li>
                         ))
                     ) : (
-                        <li>No users found.</li>
+                        <li className='h-72 flex items-center justify-center'>No users found.</li>
                     )}
                 </ul>
             </div>

@@ -164,7 +164,7 @@ const App = () => {
         },
         {
           path: "feeds",
-          element: <Feeds />,
+          element: <Feeds socket={socket}/>,
         },
         {
           path: "live",

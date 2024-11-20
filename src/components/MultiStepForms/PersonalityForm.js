@@ -48,7 +48,7 @@ const PersonalityForm = ({ onInputChange, data }) => {
 
   return (
     <div className="w-full py-5 text-primary-dark relative">
-      <h1 className="text-4xl font-bold xs:text-3xl">Personality Details!</h1>
+      <h1 className="text-4xl font-bold xs:text-3xl">Personality Type!</h1>
       <p className="font-medium text-lg text-primary-dark mt-2">
         Please fill your Personality Type Details!
       </p>

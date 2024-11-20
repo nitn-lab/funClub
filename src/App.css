@@ -1,3 +1,7 @@
+*{
+  scrollbar-width: auto;
+}
+
 html{
    scroll-behavior: smooth;
 }
@@ -115,7 +119,7 @@ textarea{
 
 @media (max-width:438px){
 
-  .customSearchModal {
+  .customSearchModal, .customPostModal {
     width: 300px !important;
   }
 }
@@ -132,6 +136,16 @@ textarea{
   max-width: 80vw !important;
 }
 
+.customPostModal{
+  padding: 10px !important;
+  border-radius: 10px;
+  font-family: "Gotham", sans-serif;
+  font-weight: 300;
+  color: white !important;
+  background-color: #0f0e0e !important;
+  width: 400px !important;
+  max-width: 400px !important;
+}
 /* Blob animation keyframes */
 @keyframes blob {
   0%,
@@ -251,4 +265,20 @@ textarea{
 
 .slide-out-right {
   animation: slideOutRight 0.5s forwards;
+}
+
+/* Add this CSS to your main CSS file */
+@keyframes slideUp {
+  from {
+   
+    transform: translateY(100%);
+  }
+  to {
+  
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.9s ease-out ;
 }
