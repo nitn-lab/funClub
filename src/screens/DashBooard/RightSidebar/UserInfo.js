@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UserInfo = ({ username, profileImage }) => {
+const UserInfo = React.memo(({ username, profileImage }) => {
   return (
     <div className="font-gotham font-light flex items-center gap-x-3 bg-main-gradient px-3 py-2 rounded-sm">
     <img
@@ -14,6 +14,6 @@ const UserInfo = ({ username, profileImage }) => {
       
     </div>
   );
-};
+});
 
 export default UserInfo;
