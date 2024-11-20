@@ -11,26 +11,30 @@ import { SignOutProvider } from "./components/context/SignOutContext";
 import Theme from "../src/Theme.js";
 import store from "./store/userStore.js";
 import { WebSocketProvider } from "../src/components/context/WebSocketContext.js";
-
+import AgoraRTC, { AgoraRTCProvider } from "agora-rtc-react";
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 root.render(
   <React.StrictMode>
     <UserProvider>
       <SignOutProvider>
         <PrimeReactProvider>
           <WebSocketProvider>
-            <App />
-            <ToastContainer
-              autoClose={3000}
-              position="bottom-right"
-              theme="dark"
-              hideProgressBar={true}
-              newestOnTop={false}
-              closeButton={false}
-              closeOnClick
-              draggable
-              pauseOnHover
-            />
+            <AgoraRTCProvider client={client}>
+              <App />
+              <ToastContainer
+                autoClose={3000}
+                position="bottom-right"
+                theme="dark"
+                hideProgressBar={true}
+                newestOnTop={false}
+                closeButton={false}
+                closeOnClick
+                draggable
+                pauseOnHover
+              />
+            </AgoraRTCProvider>
           </WebSocketProvider>
         </PrimeReactProvider>
       </SignOutProvider>

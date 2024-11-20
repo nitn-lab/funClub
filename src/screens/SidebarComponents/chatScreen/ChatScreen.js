@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InputEmoji from "react-input-emoji";
 import { FaImage } from "react-icons/fa6";
 import ScrollToBottom from "react-scroll-to-bottom";
@@ -7,12 +7,11 @@ import { IoMdCall } from "react-icons/io";
 import { FaVideo } from "react-icons/fa";
 import CallingInterface from "./CallingInterface";
 import { sendMessage } from "../../../services/websocket";
-import tick from '../../Global/icons/tick.png';
-import crown from '../../Global/icons/crown.png';
+import tick from "../../Global/icons/tick.png";
+import crown from "../../Global/icons/crown.png";
 import { SignalCellularConnectedNoInternet1BarOutlined } from "@mui/icons-material";
-import axios from 'axios';
-const BASE_URL = process.env.REACT_APP_API_BASE_URL; 
-
+import axios from "axios";
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const ChatScreen = ({ showChatScreen, socket }) => {
   const [message, setMessage] = useState("");
@@ -22,22 +21,26 @@ const ChatScreen = ({ showChatScreen, socket }) => {
   const receiver = JSON.parse(localStorage.getItem("receiver"));
   const senderId = localStorage.getItem("id");
   const token = localStorage.getItem("jwtToken");
+  const [agoraToken, setAgoraToken] = useState();
 
   const fetchChatHistory = async () => {
     try {
-
-      const response = await axios.post(`${BASE_URL}/api/v1/chatHistory`, {
-        token,
-        userId2: receiver._id,
-      }, {
-        headers: {
-          Authorization: ` ${token}`,
+      const response = await axios.post(
+        `${BASE_URL}/api/v1/chatHistory`,
+        {
+          token,
+          userId2: receiver._id,
+        },
+        {
+          headers: {
+            Authorization: ` ${token}`,
+          },
         }
-      });
+      );
 
       if (response.data.data) {
         setChatMessages(response.data.data);
-        console.log("Chat history fetched:", response.data.data);
+        // console.log("Chat history fetched:", response.data.data);
       } else {
         console.error("Failed to fetch chat history");
       }
@@ -48,7 +51,6 @@ const ChatScreen = ({ showChatScreen, socket }) => {
 
   // Handle receiving messages from WebSocket
   useEffect(() => {
-
     if (socket) {
       socket.onmessage = (event) => {
         const newMessage = JSON.parse(event.data);
@@ -57,7 +59,10 @@ const ChatScreen = ({ showChatScreen, socket }) => {
         // check typing status
         if (newMessage.type === "typing" && newMessage.from === receiver._id) {
           setIsTyping(true);
-        } else if (newMessage.type === "stopTyping" && newMessage.from === receiver._id) {
+        } else if (
+          newMessage.type === "stopTyping" &&
+          newMessage.from === receiver._id
+        ) {
           setIsTyping(false);
         }
 
@@ -79,6 +84,8 @@ const ChatScreen = ({ showChatScreen, socket }) => {
     }
   }, [socket, senderId, receiver._id]);
 
+  
+
   const handleTyping = () => {
     if (socket) {
       const typingData = {
@@ -87,7 +94,6 @@ const ChatScreen = ({ showChatScreen, socket }) => {
         to: receiver._id,
       };
       sendMessage(socket, typingData);
-   
     }
   };
 
@@ -99,7 +105,6 @@ const ChatScreen = ({ showChatScreen, socket }) => {
         to: receiver._id,
       };
       sendMessage(socket, stopTypingData);
-    
     }
   };
 
@@ -119,12 +124,14 @@ const ChatScreen = ({ showChatScreen, socket }) => {
     }
   };
 
-
   return (
-    <div className={`flip-container relative w-full h-full font-gotham font-light`}>
+    <div
+      className={`flip-container relative w-full h-full font-gotham font-light`}
+    >
       <div
-        className={`flip-card  w-full h-full transition-transform duration-500 ${callActive ? "flip" : ""
-          }`}
+        className={`flip-card  w-full h-full transition-transform duration-500 ${
+          callActive ? "flip" : ""
+        }`}
       >
         <div className="front absolute top-0 left-0 w-full h-full text-white">
           {receiver ? (
@@ -140,14 +147,18 @@ const ChatScreen = ({ showChatScreen, socket }) => {
                       />
                     </div>
                     <div>
-                     <div className="flex items-start gap-1">
-                     <h3 className=" text-lg xs:text-base">
-                        {receiver.username}
-                      </h3>
-                      {receiver.role === 'creator' && <img src={tick} className="h-5"/>}
-                      {receiver.role === 'vip creator' && <img src={crown} className="h-5"/>}
-                     </div>
-                     {isTyping && <h4>Typing...</h4>}
+                      <div className="flex items-start gap-1">
+                        <h3 className=" text-lg xs:text-base">
+                          {receiver.username}
+                        </h3>
+                        {receiver.role === "creator" && (
+                          <img src={tick} className="h-5" />
+                        )}
+                        {receiver.role === "vip creator" && (
+                          <img src={crown} className="h-5" />
+                        )}
+                      </div>
+                      {isTyping && <h4>Typing...</h4>}
                     </div>
                   </div>
                   <div className="flex gap-10 xs:gap-6">
@@ -162,95 +173,131 @@ const ChatScreen = ({ showChatScreen, socket }) => {
                 </div>
               </div>
 
-              <ScrollToBottom ScrollToBottom={false} className={`chat-body px-2 ${!showChatScreen ? "h-[65%]" : "h-[75%] xs:h-45%"
-                } `}>
-               {receiver.following.includes(senderId) ?  <div>
-                  {chatMessages.map((content, key) => {
-                    if (
-                      (content.to === receiver._id && content.from === senderId) ||
-                      (content.from === receiver._id && content.to === senderId)
-                    ) {
-                      // Format the timestamp to 12-hour time
-                      const messageDate = new Date(content.timestamp || Date.now());
-                      const hours = messageDate.getHours();
-                      const minutes = messageDate.getMinutes();
-                      const ampm = hours >= 12 ? "PM" : "AM";
-                      const formattedTime = `${hours % 12 || 12}:${minutes
-                        .toString()
-                        .padStart(2, "0")} ${ampm}`;
-                      const today = new Date();
-                      const yesterday = new Date(today);
-                      yesterday.setDate(today.getDate() - 1);
+              <ScrollToBottom
+                ScrollToBottom={false}
+                className={`chat-body px-2 ${
+                  !showChatScreen ? "h-[65%]" : "h-[75%] xs:h-45%"
+                } `}
+              >
+                {receiver.following.includes(senderId) ? (
+                  <div>
+                    {chatMessages.map((content, key) => {
+                      if (
+                        (content.to === receiver._id &&
+                          content.from === senderId) ||
+                        (content.from === receiver._id &&
+                          content.to === senderId)
+                      ) {
+                        // Format the timestamp to 12-hour time
+                        const messageDate = new Date(
+                          content.timestamp || Date.now()
+                        );
+                        const hours = messageDate.getHours();
+                        const minutes = messageDate.getMinutes();
+                        const ampm = hours >= 12 ? "PM" : "AM";
+                        const formattedTime = `${hours % 12 || 12}:${minutes
+                          .toString()
+                          .padStart(2, "0")} ${ampm}`;
+                        const today = new Date();
+                        const yesterday = new Date(today);
+                        yesterday.setDate(today.getDate() - 1);
 
-                      const formatDate = (date) => {
-                        const day = date.getDate().toString().padStart(2, "0");
-                        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-                        const year = date.getFullYear();
-                        return ` ${day}-${month}-${year}`;
-                      };
+                        const formatDate = (date) => {
+                          const day = date
+                            .getDate()
+                            .toString()
+                            .padStart(2, "0");
+                          const month = (date.getMonth() + 1)
+                            .toString()
+                            .padStart(2, "0");
+                          const year = date.getFullYear();
+                          return ` ${day}-${month}-${year}`;
+                        };
 
-                      let dateTag = "";
-                       if (messageDate.toDateString() === yesterday.toDateString()) {
-                        dateTag = "Yesterday";
-                      } else {
-                        dateTag = formatDate(messageDate);
-                      }
+                        let dateTag = "";
+                        if (
+                          messageDate.toDateString() ===
+                          yesterday.toDateString()
+                        ) {
+                          dateTag = "Yesterday";
+                        } else {
+                          dateTag = formatDate(messageDate);
+                        }
 
-                      return (
-                        <div key={key}>
-                          {/* Display date tags when a new day starts */}
-                          {/* {key === 0 || (key > 0 && messageDate.toDateString() !== new Date(chatMessages[key - 1].timestamp).toDateString()) && (
+                        return (
+                          <div key={key}>
+                            {/* Display date tags when a new day starts */}
+                            {/* {key === 0 || (key > 0 && messageDate.toDateString() !== new Date(chatMessages[key - 1].timestamp).toDateString()) && (
                             <div className="date-tag text-center text-white my-2">
                               {dateTag}
                             </div>
                           )} */}
 
-                          {/* Message bubble */}
-                          <div
-                            className={`chat ${content.from === senderId ? "chat-end" : "chat-start"
+                            {/* Message bubble */}
+                            <div
+                              className={`chat ${
+                                content.from === senderId
+                                  ? "chat-end"
+                                  : "chat-start"
                               }`}
-                          >
-                            <div className={`chat-bubble text-white  ${content.from === senderId ? "bg-fuchsia-900" : "bg-fuchsia-800"
-                              } break-words max-w-[70%]`}>
-                            <p className="text-base text-left"> {content.message || content.chatMessage}</p>
-                              <span className="timestamp text-xs block mt-1 text-right text-gray-300">
-                                {formattedTime}
-                              </span>
+                            >
+                              <div
+                                className={`chat-bubble text-white  ${
+                                  content.from === senderId
+                                    ? "bg-fuchsia-900"
+                                    : "bg-fuchsia-800"
+                                } break-words max-w-[70%]`}
+                              >
+                                <p className="text-base text-left">
+                                  {" "}
+                                  {content.message || content.chatMessage}
+                                </p>
+                                <span className="timestamp text-xs block mt-1 text-right text-gray-300">
+                                  {formattedTime}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    } else {
-                      return null;
-                    }
-                  })}
-                </div> : <div className="justify-center text-black text-xl h-full flex items-center">You can't send messages as {receiver.username} doesn't follow you</div>}
-              </ScrollToBottom>
-             {receiver.following.includes(senderId) ? <div
-                className={`h-auto`}
-              >
-                <div className="flex mx-auto items-center justify-center">
-                  <div className="bg-fuchsia-800 text-white p-2 rounded-full cursor-pointer">
-                    <FaImage />
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
                   </div>
-                 <div className="w-[80%]">
-                 <InputEmoji
-                    background="#edecfb"
-                    value={message}
-                    onChange={setMessage}
-                    onEnter={handleSend}
-                   onKeyDown={handleTyping} // Detect typing
-                   onKeyUp={handleStopTyping}
-                  />
-                 </div>
-                  <button
-                    className="py-1 px-1.5 rounded-lg bg-fuchsia-800 text-white text-bsse  hover:border-2 hover:border-fuchsia-800 hover:bg-white hover:text-fuchsia-800"
-                    onClick={handleSend}
-                  >
-                    Send
-                  </button>
+                ) : (
+                  <div className="justify-center text-black text-xl h-full flex items-center">
+                    You can't send messages as {receiver.username} doesn't
+                    follow you
+                  </div>
+                )}
+              </ScrollToBottom>
+              {receiver.following.includes(senderId) ? (
+                <div className={`h-auto`}>
+                  <div className="flex mx-auto items-center justify-center">
+                    <div className="bg-fuchsia-800 text-white p-2 rounded-full cursor-pointer">
+                      <FaImage />
+                    </div>
+                    <div className="w-[80%]">
+                      <InputEmoji
+                        background="#edecfb"
+                        value={message}
+                        onChange={setMessage}
+                        onEnter={handleSend}
+                        onKeyDown={handleTyping} // Detect typing
+                        onKeyUp={handleStopTyping}
+                      />
+                    </div>
+                    <button
+                      className="py-1 px-1.5 rounded-lg bg-fuchsia-800 text-white text-bsse  hover:border-2 hover:border-fuchsia-800 hover:bg-white hover:text-fuchsia-800"
+                      onClick={handleSend}
+                    >
+                      Send
+                    </button>
+                  </div>
                 </div>
-              </div> : <div></div>}
+              ) : (
+                <div></div>
+              )}
             </div>
           ) : (
             <div className="p-6 sm:hidden">
@@ -263,10 +310,18 @@ const ChatScreen = ({ showChatScreen, socket }) => {
         </div>
 
         <div
-          className={`back transition-transform duration-500 ${callActive ? "transform rotate-y-180" : ""
-            }`}
+          className={`back transition-transform duration-500 ${
+            callActive ? "transform rotate-y-180" : ""
+          }`}
         >
-          <CallingInterface endVideoCall={() => setCallActive(false)} />
+          {callActive && (
+            <CallingInterface
+              channelName="abcd"
+              token="asdfghj"
+              endVideoCall={() => setCallActive(false)}
+              socket={socket}
+            />
+          )}
         </div>
       </div>
     </div>

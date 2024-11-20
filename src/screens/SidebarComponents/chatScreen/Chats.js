@@ -21,14 +21,14 @@ const Chats = ({ showChatScreen, socket }) => {
   const id = localStorage.getItem("id");
   const token = localStorage.getItem("jwtToken");
   const [following, setFollowing] = useState([]);
-  console.log("Chats", socket);
+  // console.log("Chats", socket);
 
   const handlePopup = () => {
     setOpen(!open);
   };
 
   const handleWindow = (user) => {
-    console.log("recccc", user);
+    // console.log("recccc", user);
     localStorage.setItem("receiver", JSON.stringify(user));
     setChatScreen(true);
     if (window.innerWidth < 768) {
@@ -136,7 +136,7 @@ const Chats = ({ showChatScreen, socket }) => {
             ))}
         </div>
       </div>
-      <Popup open={open} handlePopup={handlePopup} logo={logo} />
+      {/* <Popup open={open} handlePopup={handlePopup} logo={logo} /> */}
     </>
   );
 };

@@ -21,7 +21,6 @@ import TermsAndConditions from "./screens/SidebarComponents/TermsConditions";
 import Settings from "./screens/SidebarComponents/Settings";
 import BecomeCreator from "./screens/SidebarComponents/BecomeCreator";
 import { useWebSocket } from "../src/components/context/WebSocketContext";
-
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -114,7 +113,7 @@ import { useWebSocket } from "../src/components/context/WebSocketContext";
 
 const App = () => {
   const socket = useWebSocket(); // get socket from WebSocketContext
-  // console.log("from App", socket);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -137,11 +136,23 @@ const App = () => {
       children: [
         {
           path: "/dashboard",
-          element: <Dashboard showChatScreen={true} shouldNavigate={false} socket={socket} />,
+          element: (
+            <Dashboard
+              showChatScreen={true}
+              shouldNavigate={false}
+              socket={socket}
+            />
+          ),
         },
         {
           path: "chats",
-          element: <Chats showChatScreen={true} shouldNavigate={false} socket={socket} />, // pass socket here
+          element: (
+            <Chats
+              showChatScreen={true}
+              shouldNavigate={false}
+              socket={socket}
+            />
+          ), // pass socket here
         },
         {
           path: "chat/:id",

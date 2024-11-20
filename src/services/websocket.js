@@ -1,6 +1,8 @@
 // services/websocket.js
 
-const WEBSOCKET_URL = "wss://backendapifunclub.yourwebstore.org.in/ws/";
+// const WEBSOCKET_URL = "wss://backendapifunclub.yourwebstore.org.in/ws/";
+const WEBSOCKET_URL = "ws://localhost:4000";
+
 
 export const CreateWebSocketConnection = (onMessage) => {
   const ws = new WebSocket(WEBSOCKET_URL);
