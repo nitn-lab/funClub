@@ -1,5 +1,6 @@
+import React , {useEffect} from 'react';
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
 import Login from "./screens/Auth/Login";
 import Register from "./screens/Auth/SignUp";
 import NotFound from "./screens/Error/NotFound";
@@ -21,6 +22,9 @@ import TermsAndConditions from "./screens/SidebarComponents/TermsConditions";
 import Settings from "./screens/SidebarComponents/Settings";
 import BecomeCreator from "./screens/SidebarComponents/BecomeCreator";
 import { useWebSocket } from "../src/components/context/WebSocketContext";
+import { useCallContext } from "../src/components/context/CallContext";
+import IncomingCallModal from "../src/components/IncomingCallModal";
+import {CreateWebSocketConnection, sendMessage} from "../src/services/websocket"
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -112,9 +116,56 @@ import { useWebSocket } from "../src/components/context/WebSocketContext";
 // ]);
 
 const App = () => {
+  // const navigate = useNavigate();
   const socket = useWebSocket(); // get socket from WebSocketContext
+  const { incomingCall, acceptCall, rejectCall, callState, setIncomingCall, setCallState } = useCallContext();
+console.log("dddd", socket);
+  useEffect(() => {
+    const socket = CreateWebSocketConnection();
 
-  const router = createBrowserRouter([
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      console.log("Received message fro AAApppp:", message);
+      if (message.type === "incomingCall") {
+        setIncomingCall(message); // Set incoming call globally
+        setCallState("incoming");
+        console.log("Incoming call set:", message);
+      } else if (message.type === "callEnded") {
+        setIncomingCall(null); // Reset state if the call ends
+        setCallState(null);
+        console.log("Call ended");
+      }
+    };
+
+    return () => socket.close();
+  }, [setIncomingCall]);
+
+  const onAcceptCall = () => {
+    acceptCall(); // Change global state to reflect the call has been accepted.
+    // navigate(`/dashboard/chats/${incomingCall.callerId}`, { state: { showCallingInterface: true } }); // Navigate to ChatScreen with calling interface flipped.
+  };
+  
+  const onRejectCall = () => {
+    // const socket = CreateWebSocketConnection();
+    rejectCall(); // End the call on this user's end.
+    // Optionally send a WebSocket message to inform the caller.
+    const userId = localStorage.getItem("id");
+    const receiver = JSON.parse(localStorage.getItem("receiver"));
+    const message = {
+      type: "endCall",
+      from: userId,
+      to: receiver._id,
+    };
+    console.log("APPPPP Ending call with message:", message);
+    sendMessage(socket, message);
+    // socket.send(
+    //   JSON.stringify({
+    //     type: "callEnded",
+    //     recipientId: incomingCall.callerId, // Notify the caller.
+    //   })
+    // );
+  };
+const router = createBrowserRouter([
     {
       path: "/",
       element: <Login />,
@@ -215,7 +266,33 @@ const App = () => {
       ],
     },
   ]);
-  return <RouterProvider router={router} />;
+  return(
+    <>
+    {/* Render the incoming call modal globally */}
+    {/* <button
+      style={{ position: "fixed", top: "10px", left: "10px", zIndex: 1000 }}
+      onClick={() => {
+        setCallState("incoming");
+        setIncomingCall({ callerId: "User123" });
+      }}
+    >
+      Trigger Modal
+    </button> */}
+    {callState === "incoming" && incomingCall && (
+      <IncomingCallModal
+        // callerId={incomingCall.callerId}
+        onAccept={() => {
+          onAcceptCall();
+          // Add logic to navigate to the relevant chat/call screen
+        }}
+        onReject={() => onRejectCall()}
+      />
+     )}
+
+    {/* Provide the router */}
+    <RouterProvider router={router} />
+  </>
+  )
 };
 
 export default App;

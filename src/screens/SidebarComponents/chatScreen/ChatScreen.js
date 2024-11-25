@@ -13,10 +13,10 @@ import { SignalCellularConnectedNoInternet1BarOutlined } from "@mui/icons-materi
 import axios from "axios";
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const ChatScreen = ({ showChatScreen, socket }) => {
+const ChatScreen = ({ showChatScreen, socket, location  }) => {
   const [message, setMessage] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
-  const [callActive, setCallActive] = useState(false);
+  const [callActive, setCallActive] = useState(location?.state?.callActive || false);
   const [isTyping, setIsTyping] = useState(false); // To track typing status
   const receiver = JSON.parse(localStorage.getItem("receiver"));
   const senderId = localStorage.getItem("id");
