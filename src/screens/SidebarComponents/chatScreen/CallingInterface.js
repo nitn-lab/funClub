@@ -166,7 +166,7 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
       if (localTracks.video) localTracks.video.close();
       client.leave();
     };
-  }, [hasEnded]);
+  }, [hasEnded, socket]);
 
   const initiateCall = () => {
     if (isCalling) {

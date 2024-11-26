@@ -13,7 +13,7 @@ import store from "./store/userStore.js";
 import { WebSocketProvider } from "../src/components/context/WebSocketContext.js";
 import AgoraRTC, { AgoraRTCProvider } from "agora-rtc-react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-
+import { CallProvider } from "./components/context/CallContext.js";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
@@ -22,24 +22,27 @@ root.render(
     <UserProvider>
       <SignOutProvider>
         <PrimeReactProvider>
-          <WebSocketProvider>
-            <AgoraRTCProvider client={client}>
-              <GoogleOAuthProvider clientId="403139165421-duq9a81purrj9ibcpuejji90v5qopcmj.apps.googleusercontent.com">
-                <App />
-                <ToastContainer
-                  autoClose={3000}
-                  position="bottom-right"
-                  theme="dark"
-                  hideProgressBar={true}
-                  newestOnTop={false}
-                  closeButton={false}
-                  closeOnClick
-                  draggable
-                  pauseOnHover
-                />
-              </GoogleOAuthProvider>
-            </AgoraRTCProvider>
-          </WebSocketProvider>
+          <AgoraRTCProvider client={client}>
+            <CallProvider>
+              <WebSocketProvider>
+                <GoogleOAuthProvider clientId="403139165421-duq9a81purrj9ibcpuejji90v5qopcmj.apps.googleusercontent.com">
+                    <App />
+
+                  <ToastContainer
+                    autoClose={3000}
+                    position="bottom-right"
+                    theme="dark"
+                    hideProgressBar={true}
+                    newestOnTop={false}
+                    closeButton={false}
+                    closeOnClick
+                    draggable
+                    pauseOnHover
+                  />
+                </GoogleOAuthProvider>
+              </WebSocketProvider>
+            </CallProvider>
+          </AgoraRTCProvider>
         </PrimeReactProvider>
       </SignOutProvider>
     </UserProvider>
