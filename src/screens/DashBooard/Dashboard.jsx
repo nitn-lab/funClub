@@ -114,11 +114,11 @@ const Dashboard = React.memo(({ socket }) => {
   }, [isSidebarExpanded, leftSidebarCollapsed]);
 
   const rightSidebarClass = useMemo(() => {
-    return `relative ${isSidebarExpanded ? "w-[250px]" : "w-[70px]"} bg-black h-[100vh] md:hidden p-2 transition-width duration-300 ease-in-out`;
+    return `relative ${isSidebarExpanded ? "w-[250px]" : "w-[70px]"} bg-black h-[100vh] md:hidden p-2 transition-width duration-100 ease-in-out`;
   }, [isSidebarExpanded]);
 
   const chatContainerClass = useMemo(() => {
-    return `fixed bottom-0 ${isSidebarExpanded ? "right-2" : "right-0"} md:hidden w-[728px] h-[calc(100vh-12vh)] rounded-t-lg transition-transform duration-500 ease-in-out ${
+    return `fixed bottom-0 ${isSidebarExpanded ? "right-2" : "right-0"} md:hidden w-[728px] h-[calc(100vh-12vh)] rounded-t-lg transition-transform duration-100 ease-in-out ${
       isChatOpen
         ? isChatClosing
           ? "translate-y-full"

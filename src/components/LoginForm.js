@@ -34,6 +34,7 @@ export default function LoginForm({onForgotPassword}) {
         password
       });
       setLoading(false);
+      console.log(response)
       if (response.status === 200) {
         localStorage.setItem('jwtToken', response.data.jwtToken);
         toast.success("Successfully logged in!!");

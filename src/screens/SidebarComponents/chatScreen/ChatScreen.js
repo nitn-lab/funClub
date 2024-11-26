@@ -157,21 +157,12 @@ const ChatScreen = ({ showChatScreen, socket, location  }) => {
                         )}
                       </div>
                       {isTyping && <h4>Typing...</h4>}
-                      <div className="flex items-start gap-1">
-                        <h3 className=" text-lg xs:text-base truncate">
-                          {receiver.username}
-                        </h3>
-                        {receiver.role === "creator" && (
-                          <img src={tick} className="h-5" />
-                        )}
-                        {receiver.role === "vip creator" && (
-                          <img src={crown} className="h-5" />
-                        )}
-                      </div>
-                      {isTyping && <h4>Typing...</h4>}
+                     
+                
                     </div>
                   </div>
-                  <div className="flex gap-3">
+                  <div className={`flex ${
+                  !showChatScreen ? "gap-3" : "gap-8 xs:gap-3"}`}>
                     <IoMdCall
                       className="text-white text-2xl hover:scale-125 transition-all cursor-pointer"
                       onClick={() => alert("Voice call not implemented yet")}

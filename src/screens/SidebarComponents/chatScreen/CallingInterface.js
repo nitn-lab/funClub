@@ -295,11 +295,12 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
           <button onClick={rejectCall}>Reject</button>
         </div>
       )}
+      <span className="text-lg text-center z-20 w-full pt-5 absolute">In Call...<span className=""></span></span>
       {/* Display Local Video */}
-      <div className="flex justify-center">
-        <div className="w-80 h-80 bg-gray-900" ref={localContainer}>
+      <div className="flex justify-center relative w-full h-[100vh]">
+        <div className=" flex justify-center absolute items-center w-full h-[100vh]" ref={localContainer}>
           {!localTracks.video && (
-            <p className="text-center text-white mt-32">Loading video...</p>
+            <p className="loading loading-spinner loading-md mx-auto"></p>
           )}
         </div>
       </div>
@@ -307,7 +308,6 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
         <button onClick={initiateCall}>Initiate Call</button>
         {/* Additional UI for call controls */}
       {/* </div> */}
-      <p className="text-lg text-center pt-10">In Call...</p>
 
       {/* Control Buttons */}
       <div className="flex justify-center">
@@ -321,7 +321,7 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
 
           <button
             onClick={endCall}
-            className="bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600"
+            className="bg-red-600 text-white py-2 px-4 rounded-full hover:bg-red-500"
           >
             End Call
           </button>
