@@ -132,7 +132,7 @@ export const SidebarHeader = ({ children, rtl, ...rest }) => {
 
         
 
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <Tooltip
             title={
               <Box className='scrollable-div pr-4 font-gotham ' sx={{ width: '300px', height: '360px', overflowY: 'auto' }}>

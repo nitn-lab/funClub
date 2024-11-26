@@ -72,8 +72,9 @@ const VideoCarousel = ({ videos, onSlideChange }) => {
   return (
     <div className="video-carousel relative flex justify-center items-center mx-auto transition-all">
       <Slider ref={sliderRef} {...settings} className="w-full h-full transition-all">
-        {videos.map((video, index) => (
+        {videos && videos.length > 0 && videos.map((video, index) => (
           <div key={index} className="relative w-full h-full transition-all">
+          {console.log("videos..........")}
             <video
               src={video.src}
               controls

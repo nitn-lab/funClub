@@ -10,7 +10,7 @@ const Live = () => {
   const renderContent = () => {
     if (activeTab === "popular") {
       return (
-        <div className="grid grid-cols-4 md:grid-cols-2 xs:grid-cols-1 gap-2  w-full ">
+        <div className="grid grid-cols-4 xs:grid-cols-1 md:grid-cols-2  gap-2  w-full ">
           {/* First User: Live Ended Overlay */}
           <div className="relative p-4 md:p-2 rounded-md bg-black h-[23rem]">
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#292929] bg-opacity-70 text-white rounded-md xs:rounded-none">

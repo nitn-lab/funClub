@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from 'react-router-dom';
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import PhoneIcon from "@mui/icons-material/Phone";
 import ForumIcon from "@mui/icons-material/Forum";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import axios from 'axios';
-import { toast } from "react-toastify";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -35,7 +34,7 @@ const Callers = () => {
   const [followedUsers, setFollowedUsers] = useState([]);
   const token = localStorage.getItem("jwtToken");
   const loggedInUserId = localStorage.getItem("id");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const size = useWindowSize();
 
   useEffect(() => {
@@ -52,25 +51,26 @@ const Callers = () => {
           },
         });
         const followedUsersList = userRes.data.data.following;
-        const filteredData = res.data.data
-          .filter(user => user._id !== loggedInUserId && user.role === 'user')
-          .slice().reverse().map(user => ({
-            ...user,
-            isFollowing: followedUsersList.includes(user._id),
-          }));
-        setCallers(filteredData);
+        
+        setCallers(res.data.data);
         setFollowedUsers(followedUsersList);
       } catch (error) {
         console.error("Error fetching users or followed list:", error);
-        // if (error.response.status === 403) {
-        //   toast.error('Session expired. Please login again!')
-        //   localStorage.removeItem("jwtToken")
-        //   navigate('/')
-        // }
       }
     };
+
     fetchUsersAndFollowedList();
   }, [loggedInUserId, token]);
+
+  // Memoize the callers data to optimize re-renders
+  const memoizedCallers = useMemo(() => {
+    return callers
+      .filter(user => user._id !== loggedInUserId && user.role === 'user')
+      .slice().reverse().map(user => ({
+        ...user,
+        isFollowing: followedUsers.includes(user._id),
+      }));
+  }, [callers, followedUsers, loggedInUserId]);
 
   const toggleFollow = async (id, isFollowing) => {
     try {
@@ -99,23 +99,26 @@ const Callers = () => {
       console.error("Error updating follow status:", error);
     }
   };
-  const displayedCallers = size.width < 1200 ? callers.slice(-3) : callers.slice(-4);
+
+  const displayedCallers = size.width < 1200 ? memoizedCallers.slice(-3) : memoizedCallers.slice(-4);
+
   const handleCallerClick = (caller) => {
-    navigate(`/dashboard/user/${caller._id}`)
+    navigate(`/dashboard/user/${caller._id}`);
   };
 
   return (
     <div className="caller-container grid grid-cols-4 lg:grid-cols-3 gap-x-2 items-center">
-      {displayedCallers.map((caller) => {
+      {displayedCallers && displayedCallers.length > 0 ? displayedCallers.map((caller) => {
         return (
           <div
-            key={caller.id} 
+            key={caller._id} 
             className="caller-profile rounded-md md:rounded-none h-48 md:h-52 cursor-pointer relative overflow-hidden group"
           >
             <img
               src={caller.profileImage}
-              className="h-full w-full object-cover rounded-md"
+              className="h-full w-full object-cover rounded-md "
               alt={caller.username}
+              loading="lazy"
               onClick={() => handleCallerClick(caller)}
             />
             <div
@@ -150,7 +153,9 @@ const Callers = () => {
             </div>
           </div>
         );
-      })}
+      }) : (
+        <div ></div>
+      )}
     </div>
   );
 };

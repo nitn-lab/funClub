@@ -239,8 +239,8 @@ const Feeds = ({ socket }) => {
           <div className="mx-2  mb-2">
           <FeedsModal />
           </div>
-          <div className="mx-2 bg-black mb-2 rounded-md text-white p-3"><p>Stories</p>
-          <div className="mt-3 flex gap-3">
+          <div className="mx-2 bg-black mb-2 rounded-md sm:rounded-none text-white p-3"><p>Stories</p>
+          <div className="mt-3 flex flex-wrap gap-3">
             <div>
             <img src="https://gratisography.com/wp-content/uploads/2023/03/gratisography-dog-in-winter-hat-stock-photo-800x525.jpg"  className="h-16 w-16 rounded-full border-2 border-[#9c8fd0] p-1 object-cover"/>
             <p className="text-sm text-center mt-1 truncate">Jack</p>
@@ -268,7 +268,7 @@ const Feeds = ({ socket }) => {
 
             <div className="scrollable-div text-white overflow-y-auto h-[100vh] flex-grow mx-2 sm:mx-0 pb-32 xs:pb-48 grid">
               {loading ? <div>
-                <div className="bg-black rounded-md  h-full shadow-lg p-6 mb-5">
+                <div className="bg-black rounded-md sm:rounded-none h-full shadow-lg p-6 mb-5">
                   <div className="flex gap-3 items-center mb-5">
                     <Skeleton variant="circular" width={50} height={50} sx={{ bgcolor: 'grey.900' }} animation="wave" />
                     <Skeleton variant="text" width={150} height={25} sx={{ bgcolor: 'grey.900' }} animation="wave" />
@@ -439,7 +439,7 @@ const Feeds = ({ socket }) => {
 </div> */}
           </div>
         </div>
-        <div className="w-[305px] ">
+        <div className="w-[305px] sm:hidden">
           <Chats className="w-[305px]" socket={socket}
             showChatScreen={false}
             shouldNavigate={true} />
