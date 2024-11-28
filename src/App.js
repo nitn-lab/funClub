@@ -1,4 +1,4 @@
-import React , {useEffect} from 'react';
+import React , {useEffect, useState} from 'react';
 import "./App.css";
 import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
 import Login from "./screens/Auth/Login";
@@ -25,6 +25,7 @@ import { useWebSocket } from "../src/components/context/WebSocketContext";
 import { useCallContext } from "../src/components/context/CallContext";
 import IncomingCallModal from "../src/components/IncomingCallModal";
 import {CreateWebSocketConnection, sendMessage} from "../src/services/websocket"
+import CallingInterface from "../src/screens/SidebarComponents/chatScreen/CallingInterface"
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -118,7 +119,7 @@ import {CreateWebSocketConnection, sendMessage} from "../src/services/websocket"
 const App = () => {
   // const navigate = useNavigate();
   const socket = useWebSocket(); // get socket from WebSocketContext
-  const { incomingCall, acceptCall, rejectCall, callState, setIncomingCall, setCallState } = useCallContext();
+  const { incomingCall, acceptCall, rejectCall, callState, setIncomingCall, setCallState, showInterface, setShowInterface } = useCallContext();
 console.log("dddd", socket);
   useEffect(() => {
     const socket = CreateWebSocketConnection();
@@ -263,9 +264,16 @@ const router = createBrowserRouter([
           element: <BecomeCreator />,
           errorElement: <NotFound />,
         },
+        // {
+        //   path: "calling",
+        //   element: <CallingInterface />,
+        //   errorElement: <NotFound />,
+        // },
       ],
     },
   ]);
+
+  
   return(
     <>
     {/* Render the incoming call modal globally */}
@@ -278,9 +286,10 @@ const router = createBrowserRouter([
     >
       Trigger Modal
     </button> */}
-    {callState === "incoming" && incomingCall && (
+    {console.log(incomingCall, "dshfhsiiiiiiiiiiiiiiu")}
+    {showInterface === true ? <CallingInterface socket={socket} channelName="abcd" endVideoCall={() => setShowInterface(false)}/> : callState === "incoming" && incomingCall && (
       <IncomingCallModal
-        // callerId={incomingCall.callerId}
+        // callerId={incomingCall}
         onAccept={() => {
           onAcceptCall();
           // Add logic to navigate to the relevant chat/call screen

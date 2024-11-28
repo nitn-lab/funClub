@@ -3,7 +3,7 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { SidebarHeader } from "../../components/SideBarHeader";
 import { NavLink } from "react-router-dom";
-import home from '../Global/icons/home.png';
+import home from '../Global/icons/home.png'; 
 import live from '../Global/icons/vdo.png';
 import nearby from '../Global/icons/route.png';
 import { useSignOut } from "../../components/context/SignOutContext";

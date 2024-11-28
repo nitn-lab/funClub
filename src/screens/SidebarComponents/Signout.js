@@ -8,7 +8,6 @@ import {useDispatch} from 'react-redux';
 const Signout = () => {
   const {isSignOutPopupOpen, closeSignOutPopup} = useSignOut();
   const navigate = useNavigate();
-console.log(isSignOutPopupOpen)
   if(!isSignOutPopupOpen){
     return null;
   }

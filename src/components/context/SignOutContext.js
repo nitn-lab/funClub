@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext } from "react";
 
 
 const SignOutContext = createContext();
-
+ 
 export const SignOutProvider = ({ children }) => {
   const [isSignOutPopupOpen, setIsSignOutPopupOpen] = useState(false);
 

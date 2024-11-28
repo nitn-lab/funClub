@@ -1,6 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { FaPhoneAlt } from "react-icons/fa";
+import { ImPhoneHangUp } from "react-icons/im";
+import axios from 'axios';
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const IncomingCallModal = ({ callerId, onAccept, onReject }) => {
+
+  // const [user, setUser] = useState({})
+  // const token = localStorage.getItem('jwtToken');
+  // useEffect( async () => {
+  //   try {
+  //     const response = await axios.get(`${BASE_URL}/api/v1/userById/${callerId.from}`, {
+  //       headers: { Authorization: `${token}` },
+  //     });
+  //     setUser(response.data.data);
+  //   } catch (error) {
+  //     console.error('Failed to fetch user data', error);
+  //   }
+  // }, [])
+
   return (
     <div
     style={{
@@ -8,32 +26,31 @@ const IncomingCallModal = ({ callerId, onAccept, onReject }) => {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        backgroundColor: "white",
+        backgroundColor: "black",
+        text : "white",
         padding: "20px",
         borderRadius: "8px",
         boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
         zIndex: 1000,
+        height: "fit-content",
+        width: "fit-content",
       }}
       className="incoming-call-modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 "
     >
-      <div className="bg-white p-6 rounded-lg text-center">
-        <h3 className="text-lg font-bold">Incoming Call</h3>
-        <p>
-          Call from:
-          {/* {caller} */}
-        </p>
-        <div className="flex justify-center gap-4 mt-4">
-          <button
+      <div className="bg-black p-3 rounded-lg text-center text-white opacity-75">
+        <h3 className="text-lg font-medium">Incoming Call</h3>
+        <div className="flex justify-center gap-12 mt-4">
+          <button 
             onClick={onAccept}
-            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+            className="bg-green-500 text-white p-2  hover:bg-green-600 rounded-full"
           >
-            Accept
+            <FaPhoneAlt />
           </button>
           <button
             onClick={onReject}
-            className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+            className="bg-red-500 text-white p-2 hover:bg-red-600 rounded-full"
           >
-            Reject
+            <ImPhoneHangUp />
           </button>
         </div>
       </div>

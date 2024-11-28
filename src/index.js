@@ -29,7 +29,7 @@ root.render(
                     <App />
 
                   <ToastContainer
-                    autoClose={3000}
+                    autoClose={1000}
                     position="bottom-right"
                     theme="dark"
                     hideProgressBar={true}
