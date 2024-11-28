@@ -8,7 +8,8 @@ const IncomingCallModal = ({ callerId, onAccept, onReject }) => {
 
   const [user, setUser] = useState({})
   const token = localStorage.getItem('jwtToken');
-  useEffect( async () => {
+
+  const fetchCaller = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/v1/userById/${callerId.from}`, {
         headers: { Authorization: `${token}` },
@@ -17,6 +18,9 @@ const IncomingCallModal = ({ callerId, onAccept, onReject }) => {
     } catch (error) {
       console.error('Failed to fetch user data', error);
     }
+  }
+  useEffect(() => {
+    fetchCaller();
   }, [])
 
   return (
