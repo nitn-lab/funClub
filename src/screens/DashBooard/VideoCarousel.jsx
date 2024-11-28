@@ -74,7 +74,6 @@ const VideoCarousel = ({ videos, onSlideChange }) => {
       <Slider ref={sliderRef} {...settings} className="w-full h-full transition-all">
         {videos && videos.length > 0 && videos.map((video, index) => (
           <div key={index} className="relative w-full h-full transition-all">
-          {console.log("videos..........")}
             <video
               src={video.src}
               controls

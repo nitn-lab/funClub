@@ -5,7 +5,7 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import axios from "axios";
-import {
+import { 
   CreateWebSocketConnection,
   sendMessage,
 } from "../../../services/websocket";
@@ -287,7 +287,7 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
   };
 
   return (
-    <div className="relative w-full h-[100vh] bg-black text-white mx-auto bg-opacity-75">
+    <div className="relative w-full h-[100vh] bg-black text-white mx-auto bg-opacity-75 z-20">
       {incomingCall && (
         <div className="incoming-call">
           <p>Incoming call from {incomingCall.from}</p>

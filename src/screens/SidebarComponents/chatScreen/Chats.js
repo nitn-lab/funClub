@@ -95,7 +95,7 @@ const Chats = ({ showChatScreen, socket }) => {
               />
             </div>
           ) : (
-            showChatScreen && (<div className="sm:hidden w-full text-black"></div>)
+            showChatScreen && (<div className="sm:hidden w-full text-black h-[95vh] text-3xl font-gotham font-medium flex justify-center items-center">Tap to start conversation!!</div>)
           )}
         </div>
         <div

@@ -136,11 +136,9 @@ const Dashboard = React.memo(({ socket }) => {
 
   return (
     <div className="w-full flex justify-between items-start md:justify-normal md:gap-x-2 md:block font-gotham font-light bg-main-gradient">
-     {console.log("heya")}
       <div className={mainContentClass}>
         <div>
           <Suspense fallback={videoCarouselFallback}>
-          {console.log("videos")}
             <VideoCarousel 
               videos={videos} 
               onSlideChange={handleSlideChange} 

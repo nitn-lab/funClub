@@ -46,14 +46,17 @@ export const useCallContext = () => useContext(CallContext);
 export const CallProvider = ({ children }) => {
   const [incomingCall, setIncomingCall] = useState(null);
   const [callState, setCallState] = useState("idle");
+  const [showInterface, setShowInterface] = useState(false);
 
   const acceptCall = () => {
     setCallState("active");
+    setShowInterface(true);
   };
 
   const rejectCall = () => {
     setCallState("idle");
-    setIncomingCall(null);
+    // localStorage.setItem("interface", false)
+    setShowInterface(false);
   };
 
   return (
@@ -65,6 +68,8 @@ export const CallProvider = ({ children }) => {
         setCallState,
         acceptCall,
         rejectCall,
+        showInterface,
+        setShowInterface, // Added showInterface and setShowInterface state hooks to manage the video call interface visibility
       }}
     >
       {children}
