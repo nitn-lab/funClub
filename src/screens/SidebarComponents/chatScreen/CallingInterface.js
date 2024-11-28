@@ -5,7 +5,7 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import axios from "axios";
-import { 
+import {
   CreateWebSocketConnection,
   sendMessage,
 } from "../../../services/websocket";
@@ -59,106 +59,46 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
     }
   };
 
-  // Initialize Agora
-  const initAgora = async () => {
-    const appId = "d284507a049d47c39044f072f77f8d5b";
-    const channelName = "abcd";
-    const token = await generateAgoraToken();
+  
 
-    if (!token) {
-      console.error("Token is not available.");
-      return;
-    }
+  // useEffect(() => {
+  //   const sound = new Audio("/ring-tone-68676.mp3");
+  //   sound.loop = true;
+  //   sound.volume = 1.0;
 
-    try {
-      await client.join(appId, channelName, token);
+  //   sound
+  //     .play()
+  //     .then(() => {
+  //       console.log("Audio is playing");
+  //       initiateCall(true);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error playing audio:", error);
+  //     });
 
-      const [audioTrack, videoTrack] = await setupAudioVideoTracks();
-      if (audioTrack && videoTrack) {
-        await client.publish([audioTrack, videoTrack]);
-      }
-    } catch (error) {
-      console.error("Failed to join channel or create tracks:", error);
-    }
-  };
-
-  useEffect(() => {
-    // const sound = new Audio('C:\Users\Granth\Desktop\FUNCLUB\FRONTEND\funClub\src\screens\SidebarComponents\chatScreen\ring-tone-68676.mp3'); // Path to your calling sound file
-    //   const sound = new Audio();
-    // sound.src = './ring-tone-68676.mp3'; // Path to .mp3 file
-    // sound.type = 'audio/mpeg';
-      
-    //   setCallingSound(sound);
-
-    //   console.log("socket", socket);
-
-    const sound = new Audio("/ring-tone-68676.mp3");
-    sound.loop = true;
-    sound.volume = 1.0;
-
-    sound
-      .play()
-      .then(() => {
-        console.log("Audio is playing");
-        initiateCall();
-      })
-      .catch((error) => {
-        console.error("Error playing audio:", error);
-      });
-      
-    return () => {
-      sound.pause();
-      sound.currentTime = 0;
-    };
-   
-    //  // Initialize WebSocket connection with onMessage handler
-    //  const websocket = CreateWebSocketConnection((messageData) => {
-    //   // Handle incoming messages based on their type
-    //   console.log("messsggg", messageData);
-    //   switch (messageData.type) {
-    //     case "incomingCall":
-    //       // Show incoming call UI, etc.
-    //       break;
-    //     case "callAccepted":
-    //       // Start Agora setup
-    //       break;
-    //     case "callEnded":
-    //       // Handle end call
-    //       endVideoCall();
-    //       break;
-    //     default:
-    //       console.log("Unhandled WebSocket message type:", messageData.type);
-    //   }
-    // });
-    // socket.current.onmessage = (event) => {
-    //   const message = JSON.parse(event.data);
-    //   console.log("message", message);
-    // };
-
-    // return () => {
-    //   // Clean up tracks and leave the channel on component unmount
-    //   if (localTracks.audio) localTracks.audio.close();
-    //   if (localTracks.video) localTracks.video.close();
-
-    //   client
-    //     .leave()
-    //     .then(() => console.log("Left the channel successfully"))
-    //     .catch((error) => console.error("Failed to leave the channel:", error));
-    // };
-  }, []);
+  //   return () => {
+  //     sound.pause();
+  //     sound.currentTime = 0;
+  //   };
+  // }, []);
 
   useEffect(() => {
     // Listen for incoming call messages
+    
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log("Received message:", message);
+      console.log("Received message:", message, message.type);
 
       if (message.type === "incomingCall" && message.from) {
         // Display incoming call UI
         setIncomingCall(message);
-      } else if (message.type === "callEnded") {
+        initAgora(false);
+      }  else if (message.type === "callEnded") {
         endVideoCall();
-      }
+      } else (
+        // initiateCall(),
+        console.log("initial caller")
+      )
     };
 
     return () => {
@@ -168,6 +108,34 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
     };
   }, [hasEnded, socket]);
 
+  const startRingtone = () => {
+    const sound = new Audio("/ring-tone-68676.mp3");
+    sound.loop = true;
+    sound.volume = 1.0;
+
+    sound
+      .play()
+      .then(() => {
+        console.log("Audio is playing");
+        initiateCall(true);
+      })
+      .catch((error) => {
+        console.error("Error playing audio:", error);
+      });
+
+    return () => {
+      sound.pause();
+      sound.currentTime = 0;
+    };
+  }
+
+  const stopRingtone = () => {
+    if (callingSound) {
+      callingSound.pause();
+      callingSound.currentTime = 0;
+    }
+  };
+
   const initiateCall = () => {
     if (isCalling) {
       console.log(
@@ -175,7 +143,7 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
       );
       return; // Prevent multiple calls
     }
-
+    // startRingtone();
     setIsCalling(true); // Mark as calling
 
     if (callingSound) {
@@ -195,9 +163,59 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
     console.log("Initiating call with message:", message);
     sendMessage(socket, message); // Send call initiation message
 
-    initAgora();
+    initAgora(true);
   };
 
+  // Initialize Agora
+  const initAgora = async (isInitiator) => {
+    const appId = "d284507a049d47c39044f072f77f8d5b";
+    const channelName = "abcd";
+    const token = await generateAgoraToken();
+
+    if (!token) {
+      console.error("Token is not available.");
+      return;
+    }
+
+    try {
+      await client.join(appId, channelName, token);
+
+      if (isInitiator) {
+        // Step 2: If the user is the caller, publish their tracks
+        const [audioTrack, videoTrack] = await setupAudioVideoTracks();
+        if (audioTrack && videoTrack) {
+          await client.publish([audioTrack, videoTrack]);
+          console.log("Published local tracks as initiator.");
+          setCallingSound(false);
+          stopRingtone()
+        }
+      } else {
+        // Step 2: If the user is the receiver, subscribe to the caller's tracks
+        client.on("user-published", async (user, mediaType) => {
+          await client.subscribe(user, mediaType); // Subscribe to the caller's tracks
+          console.log(`Subscribed to user ${user.uid}'s ${mediaType} track`);
+
+          if (mediaType === "video") {
+            const remoteContainer = document.createElement("div");
+            remoteContainer.id = user.uid.toString();
+            remoteContainer.style.width = "100%";
+            remoteContainer.style.height = "100%";
+            localContainer.current.appendChild(remoteContainer);
+            user.videoTrack.play(remoteContainer); // Play remote video
+          }
+          setCallingSound(false);
+          stopRingtone();
+          if (mediaType === "audio") {
+            user.audioTrack.play(); // Play remote audio
+          }
+        });
+
+        console.log("Receiver is ready to subscribe to tracks.");
+      }
+    } catch (error) {
+      console.error("Failed to join channel or create tracks:", error);
+    }
+  };
   const endCall = () => {
     if (hasEnded) {
       console.log("Call already ended. Ignoring further end requests.");
@@ -246,9 +264,10 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
         from: senderId,
         to: incomingCall.from,
       });
-      initAgora(incomingCall.channelName);
-      setIncomingCall(null); // Reset incoming call state
+      // initAgora(incomingCall.channelName, true);
+      initAgora(false);
 
+      setIncomingCall(null); // Reset incoming call state
       if (callingSound) {
         callingSound.stop();
       }
@@ -267,6 +286,22 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
       if (callingSound) {
         callingSound.stop();
       }
+      // Close tracks and leave channel
+    if (localTracks.audio) {
+      localTracks.audio.stop();
+      localTracks.audio.close();
+      setLocalTracks((prev) => ({ ...prev, audio: null }));
+    }
+    if (localTracks.video) {
+      localTracks.video.stop();
+      localTracks.video.close();
+      setLocalTracks((prev) => ({ ...prev, video: null }));
+    }
+
+    client
+      .leave()
+      .then(() => console.log("Left the Agora channel successfully"))
+      .catch((error) => console.error("Failed to leave the channel:", error));
     }
   };
 
@@ -295,10 +330,15 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
           <button onClick={rejectCall}>Reject</button>
         </div>
       )}
-      <span className="text-lg text-center z-20 w-full pt-5 absolute">In Call...<span className=""></span></span>
+      <span className="text-lg text-center z-20 w-full pt-5 absolute">
+        In Call...<span className=""></span>
+      </span>
       {/* Display Local Video */}
       <div className="flex justify-center relative w-full h-[100vh]">
-        <div className=" flex justify-center absolute items-center w-full h-[100vh]" ref={localContainer}>
+        <div
+          className=" flex justify-center absolute items-center w-full h-[100vh]"
+          ref={localContainer}
+        >
           {!localTracks.video && (
             <p className="loading loading-spinner loading-md mx-auto"></p>
           )}
