@@ -76,7 +76,7 @@ const UserProfile = () => {
   if (!user) {
     return <div>Loading...</div>;
   }
-{console.log(posts)}
+
   return (
     <div className="flex-col items-center w-full mx-auto h-[100vh] scrollable-div overflow-y-auto font-gotham font-light bg-black md:pb-32 xs:overflow-x-hidden">
       {user && (

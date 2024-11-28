@@ -286,10 +286,9 @@ const router = createBrowserRouter([
     >
       Trigger Modal
     </button> */}
-    {console.log(incomingCall, "dshfhsiiiiiiiiiiiiiiu")}
     {showInterface === true ? <CallingInterface socket={socket} channelName="abcd" endVideoCall={() => setShowInterface(false)}/> : callState === "incoming" && incomingCall && (
       <IncomingCallModal
-        // callerId={incomingCall}
+        callerId={incomingCall}
         onAccept={() => {
           onAcceptCall();
           // Add logic to navigate to the relevant chat/call screen

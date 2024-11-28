@@ -271,8 +271,8 @@ const Profile = () => {
                   </div>
 
 
-                  {postImage && <div className="flex items-start text-white gap-1"><img src={URL.createObjectURL(postImage)} /><div onClick={() => setPostImage("")}>&times;</div></div>}
-                  {postVideo && <div className="flex items-start text-white gap-1"><video src={URL.createObjectURL(postVideo)} autoPlay loop /><div onClick={() => setPostVideo("")}>&times;</div></div>}
+                  {postImage && <div className="flex items-start text-white gap-1"><img src={URL.createObjectURL(postImage)} /><div className="cursor-pointer" onClick={() => setPostImage("")}>&times;</div></div>}
+                  {postVideo && <div className="flex items-start text-white gap-1"><video src={URL.createObjectURL(postVideo)} autoPlay loop /><div  className="cursor-pointer" onClick={() => setPostVideo("")}>&times;</div></div>}
                   <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center gap-2">
                       <input

@@ -6,18 +6,18 @@ import axios from 'axios';
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const IncomingCallModal = ({ callerId, onAccept, onReject }) => {
 
-  // const [user, setUser] = useState({})
-  // const token = localStorage.getItem('jwtToken');
-  // useEffect( async () => {
-  //   try {
-  //     const response = await axios.get(`${BASE_URL}/api/v1/userById/${callerId.from}`, {
-  //       headers: { Authorization: `${token}` },
-  //     });
-  //     setUser(response.data.data);
-  //   } catch (error) {
-  //     console.error('Failed to fetch user data', error);
-  //   }
-  // }, [])
+  const [user, setUser] = useState({})
+  const token = localStorage.getItem('jwtToken');
+  useEffect( async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/v1/userById/${callerId.from}`, {
+        headers: { Authorization: `${token}` },
+      });
+      setUser(response.data.data);
+    } catch (error) {
+      console.error('Failed to fetch user data', error);
+    }
+  }, [])
 
   return (
     <div
@@ -38,7 +38,7 @@ const IncomingCallModal = ({ callerId, onAccept, onReject }) => {
       className="incoming-call-modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 "
     >
       <div className="bg-black p-3 rounded-lg text-center text-white opacity-75">
-        <h3 className="text-lg font-medium">Incoming Call</h3>
+        <h3 className="text-lg font-medium">Incoming Call from {user.username}</h3>
         <div className="flex justify-center gap-12 mt-4">
           <button 
             onClick={onAccept}

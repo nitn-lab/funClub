@@ -266,9 +266,9 @@ const Feeds = ({ socket }) => {
           </div>
           <div className="flex w-full">
 
-            <div className="scrollable-div text-white overflow-y-auto h-[100vh] flex-grow mx-2 sm:mx-0 pb-32 xs:pb-48 grid">
+            <div className="scrollable-div text-white overflow-y-auto h-[55vh] flex-grow mx-2 sm:mx-0">
               {loading ? <div>
-                <div className="bg-black rounded-md sm:rounded-none h-full shadow-lg p-6 mb-5">
+                <div className="bg-black rounded-md sm:rounded-none h-full shadow-lg p-6 mb-3">
                   <div className="flex gap-3 items-center mb-5">
                     <Skeleton variant="circular" width={50} height={50} sx={{ bgcolor: 'grey.900' }} animation="wave" />
                     <Skeleton variant="text" width={150} height={25} sx={{ bgcolor: 'grey.900' }} animation="wave" />
@@ -276,7 +276,7 @@ const Feeds = ({ socket }) => {
                   <Skeleton variant="rectangular" width="100%" height="65%" sx={{ bgcolor: 'grey.900', borderRadius: "5px" }} animation="wave" />
                   <Skeleton variant="text" width={150} height={25} sx={{ bgcolor: 'grey.900', marginTop: "20px", marginBottom: "10px" }} animation="wave" />
                   <Skeleton variant="text" width="50%" height={25} sx={{ bgcolor: 'grey.900' }} animation="wave" />
-                </div> <div className="bg-black rounded-md w-[60vw] h-full shadow-lg p-6">
+                </div> <div className="bg-black rounded-md sm:rounded-none h-full shadow-lg p-6 mb-3">
                   <div className="flex gap-3 items-center mb-5">
                     <Skeleton variant="circular" width={50} height={50} sx={{ bgcolor: 'grey.900' }} animation="wave" />
                     <Skeleton variant="text" width={150} height={25} sx={{ bgcolor: 'grey.900' }} animation="wave" />
