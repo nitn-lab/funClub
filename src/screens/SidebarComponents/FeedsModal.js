@@ -80,7 +80,7 @@ const FeedsModal = () => {
         <div>
             <div>
                 <div
-                    className="relative h-auto w-full  bg-black rounded-md sm:rounded-none text-white  p-5">
+                    className="relative h-auto w-full  bg-black rounded-md sm:rounded-none text-white py-2 px-5">
                     <div>
                         <p>Want to share something?</p>
                         <div className="flex items-start mt-1 mb-3 bg-gray-900 px-2 pt-3 rounded-md">
