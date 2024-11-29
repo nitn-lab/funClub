@@ -10,7 +10,15 @@ import {
   sendMessage,
 } from "../../../services/websocket";
 
-const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
+const CallingInterface = ({
+  appId,
+  channelName,
+  endVideoCall,
+  socket,
+  data,
+  callType,
+  user,
+}) => {
   const [audioMuted, setAudioMuted] = useState(false);
   const [videoMuted, setVideoMuted] = useState(false);
   const [localTracks, setLocalTracks] = useState({ audio: null, video: null });
@@ -25,8 +33,24 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
   const [hasEnded, setHasEnded] = useState(false);
   const [initiatedEndCall, setInitiatedEndCall] = useState(false);
   const [callingSound, setCallingSound] = useState(null);
-  console.log("chl", channelName);
+  let ringtoneRef = useRef(null);
+  console.log("socket from callng interfae", socket);
   // Function to fetch Agora token
+
+  useEffect(() => {
+    return () => {
+      // stopRingtone();
+      if (localTracks.audio) localTracks.audio.close();
+      if (localTracks.video) localTracks.video.close();
+      client
+        .leave()
+        .then(() => console.log("Cleanup: Left the Agora channel"))
+        .catch((error) =>
+          console.error("Cleanup: Error leaving the channel", error)
+        );
+    };
+  }, []);
+
   const generateAgoraToken = async () => {
     try {
       const response = await axios.get(
@@ -59,46 +83,56 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
     }
   };
 
-  
+  useEffect(() => {
+    // startRingtone();
+    if (user === "caller") {
+      // const sound = new Audio("/ring-tone-68676.mp3");
+      // sound.loop = true;
+      // sound.volume = 1.0;
+      startRingtone()
+      initiateCall();
+      // return () => {
+      //   // Clean up the ringtone when the component unmounts
+      //   stopRingtone();
+      // };
+      // sound
+      //   .play()
+      //   .then(() => {
+      //     console.log("Audio is playing");
+      //     setCallingSound(sound);
+      //     initiateCall();
 
-  // useEffect(() => {
-  //   const sound = new Audio("/ring-tone-68676.mp3");
-  //   sound.loop = true;
-  //   sound.volume = 1.0;
-
-  //   sound
-  //     .play()
-  //     .then(() => {
-  //       console.log("Audio is playing");
-  //       initiateCall(true);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error playing audio:", error);
-  //     });
-
-  //   return () => {
-  //     sound.pause();
-  //     sound.currentTime = 0;
-  //   };
-  // }, []);
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error playing audio:", error);
+      //     setCallingSound(sound);
+      //   });
+      //   setCallingSound(sound);
+      // return () => {
+      //   stopRingtone();
+      // }
+    } else {
+      ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
+      acceptCall(socket);
+    }
+  }, []);
 
   useEffect(() => {
     // Listen for incoming call messages
-    
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log("Received message:", message, message.type);
+      console.log("Received message: calinginter", message, message.type);
 
       if (message.type === "incomingCall" && message.from) {
         // Display incoming call UI
         setIncomingCall(message);
-        initAgora(false);
-      }  else if (message.type === "callEnded") {
-        endVideoCall();
-      } else (
-        // initiateCall(),
-        console.log("initial caller")
-      )
+        // initAgora(false);
+      } else if (message.type === "callEnded") {
+        stopRingtone()
+        endCall();
+      } else if (message.type === "callAccepted"){
+        stopRingtone();
+      }
     };
 
     return () => {
@@ -106,35 +140,35 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
       if (localTracks.video) localTracks.video.close();
       client.leave();
     };
-  }, [hasEnded, socket]);
+  }, [hasEnded]);
 
   const startRingtone = () => {
-    const sound = new Audio("/ring-tone-68676.mp3");
-    sound.loop = true;
-    sound.volume = 1.0;
-
-    sound
-      .play()
-      .then(() => {
-        console.log("Audio is playing");
-        initiateCall(true);
-      })
-      .catch((error) => {
-        console.error("Error playing audio:", error);
-      });
-
-    return () => {
-      sound.pause();
-      sound.currentTime = 0;
-    };
-  }
+    // const sound = new Audio("/ring-tone-68676.mp3");
+    // sound.loop = true;
+    // sound.volume = 1.0;
+    // sound
+    //   .play()
+    //   .then(() => console.log("Ringtone started"))
+    //   .catch((error) => console.error("Error playing ringtone:", error));
+    // setCallingSound(sound);
+    ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
+    ringtoneRef.current.loop = true;
+    ringtoneRef.current.play();
+  };
 
   const stopRingtone = () => {
-    if (callingSound) {
-      callingSound.pause();
-      callingSound.currentTime = 0;
+    console.log("ringtoneRef.current", ringtoneRef.current);
+    if (ringtoneRef.current) {
+      ringtoneRef.current?.pause();
+      ringtoneRef.current.currentTime = 0; // Reset audio playback to the start
+      ringtoneRef.current = null;
     }
+    console.log("Ringtone stopped.");
   };
+
+  // useEffect(() => {
+  //   return () => stopRingtone();
+  // }, []);
 
   const initiateCall = () => {
     if (isCalling) {
@@ -143,16 +177,17 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
       );
       return; // Prevent multiple calls
     }
+
     // startRingtone();
     setIsCalling(true); // Mark as calling
 
-    if (callingSound) {
-      callingSound.loop = true; // Set loop for continuous play
-      callingSound.volume = 1.0;
-      callingSound
-        .play()
-        .catch((error) => console.error("Error playing calling sound:", error));
-    }
+    // if (callingSound) {
+    //   callingSound.loop = true; // Set loop for continuous play
+    //   callingSound.volume = 1.0;
+    //   callingSound
+    //     .play()
+    //     .catch((error) => console.error("Error playing calling sound:", error));
+    // }
 
     const userId = localStorage.getItem("id");
     const message = {
@@ -171,7 +206,6 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
     const appId = "d284507a049d47c39044f072f77f8d5b";
     const channelName = "abcd";
     const token = await generateAgoraToken();
-
     if (!token) {
       console.error("Token is not available.");
       return;
@@ -187,14 +221,13 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
           await client.publish([audioTrack, videoTrack]);
           console.log("Published local tracks as initiator.");
           setCallingSound(false);
-          stopRingtone()
         }
       } else {
         // Step 2: If the user is the receiver, subscribe to the caller's tracks
         client.on("user-published", async (user, mediaType) => {
           await client.subscribe(user, mediaType); // Subscribe to the caller's tracks
           console.log(`Subscribed to user ${user.uid}'s ${mediaType} track`);
-
+          
           if (mediaType === "video") {
             const remoteContainer = document.createElement("div");
             remoteContainer.id = user.uid.toString();
@@ -204,38 +237,74 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
             user.videoTrack.play(remoteContainer); // Play remote video
           }
           setCallingSound(false);
-          stopRingtone();
+          // stopRingtone();
+         
           if (mediaType === "audio") {
             user.audioTrack.play(); // Play remote audio
           }
         });
-
+        // stopRingtone();
         console.log("Receiver is ready to subscribe to tracks.");
       }
     } catch (error) {
       console.error("Failed to join channel or create tracks:", error);
     }
   };
-  const endCall = () => {
-    if (hasEnded) {
-      console.log("Call already ended. Ignoring further end requests.");
-      return;
-    } // Exit if the call has already ended
+  // const endCall = () => {
+  //   if (hasEnded) {
+  //     console.log("Call already ended. Ignoring further end requests.");
+  //     return;
+  //   } // Exit if the call has already ended
+
+  //   setHasEnded(true);
+  //   if (!initiatedEndCall) {
+  //     const userId = localStorage.getItem("id");
+  //     const message = {
+  //       type: "endCall",
+  //       from: userId,
+  //       to: receiver._id,
+  //     };
+  //     console.log("Ending call with message:", message);
+  //     sendMessage(socket, message);
+  //     setInitiatedEndCall(true);
+  //   }
+  //   // Close tracks and leave channel
+  //   if (localTracks.audio) {
+  //     localTracks.audio.stop();
+  //     localTracks.audio.close();
+  //     setLocalTracks((prev) => ({ ...prev, audio: null }));
+  //   }
+  //   if (localTracks.video) {
+  //     localTracks.video.stop();
+  //     localTracks.video.close();
+  //     setLocalTracks((prev) => ({ ...prev, video: null }));
+  //   }
+
+  //   client
+  //     .leave()
+  //     .then(() => console.log("Left the Agora channel successfully"))
+  //     .catch((error) => console.error("Failed to leave the channel:", error));
+
+  //   setIsCalling(false);
+
+  //   endVideoCall();
+  // };
+  const endCall = async () => {
+    if (hasEnded) return; // Prevent duplicate end calls
 
     setHasEnded(true);
+
     if (!initiatedEndCall) {
-      const userId = localStorage.getItem("id");
       const message = {
         type: "endCall",
-        from: userId,
+        from: senderId,
         to: receiver._id,
       };
-      console.log("Ending call with message:", message);
       sendMessage(socket, message);
       setInitiatedEndCall(true);
     }
 
-    // Close tracks and leave channel
+    // Stop and close tracks
     if (localTracks.audio) {
       localTracks.audio.stop();
       localTracks.audio.close();
@@ -247,30 +316,48 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
       setLocalTracks((prev) => ({ ...prev, video: null }));
     }
 
-    client
-      .leave()
-      .then(() => console.log("Left the Agora channel successfully"))
-      .catch((error) => console.error("Failed to leave the channel:", error));
+    // Leave the Agora channel
+    try {
+      await client.leave();
+      console.log("Successfully left the Agora channel.");
+    } catch (error) {
+      console.error("Error leaving the Agora channel:", error);
+    }
 
     setIsCalling(false);
-
     endVideoCall();
   };
 
-  const acceptCall = () => {
-    if (incomingCall) {
-      sendMessage(socket, {
-        type: "callAccepted",
-        from: senderId,
-        to: incomingCall.from,
-      });
-      // initAgora(incomingCall.channelName, true);
-      initAgora(false);
+  // const acceptCall = () => {
+  //   if (incomingCall) {
+  //     sendMessage(socket, {
+  //       type: "callAccepted",
+  //       from: senderId,
+  //       to: incomingCall.from,
+  //     });
+  //     // initAgora(incomingCall.channelName, true);
+  //     stopRingtone();
+  //     initAgora(false);
 
-      setIncomingCall(null); // Reset incoming call state
-      if (callingSound) {
-        callingSound.stop();
-      }
+  //     setIncomingCall(null); // Reset incoming call state
+  //     if (callingSound) {
+  //       callingSound.stop();
+  //     }
+  //   }
+  // };
+  const acceptCall = (socket, sound) => {
+    if (data) {
+    sendMessage(socket, {
+      type: "acceptCall",
+      from: senderId,
+      to: data?.from,
+    });
+    // stopRingtone()
+    console.log("calllllllllllllinnnnnnng acceptCall", data, socket);
+    
+    initAgora(false);
+
+    setIncomingCall(null); // Reset incoming call state
     }
   };
 
@@ -287,21 +374,21 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
         callingSound.stop();
       }
       // Close tracks and leave channel
-    if (localTracks.audio) {
-      localTracks.audio.stop();
-      localTracks.audio.close();
-      setLocalTracks((prev) => ({ ...prev, audio: null }));
-    }
-    if (localTracks.video) {
-      localTracks.video.stop();
-      localTracks.video.close();
-      setLocalTracks((prev) => ({ ...prev, video: null }));
-    }
+      if (localTracks.audio) {
+        localTracks.audio.stop();
+        localTracks.audio.close();
+        setLocalTracks((prev) => ({ ...prev, audio: null }));
+      }
+      if (localTracks.video) {
+        localTracks.video.stop();
+        localTracks.video.close();
+        setLocalTracks((prev) => ({ ...prev, video: null }));
+      }
 
-    client
-      .leave()
-      .then(() => console.log("Left the Agora channel successfully"))
-      .catch((error) => console.error("Failed to leave the channel:", error));
+      client
+        .leave()
+        .then(() => console.log("Left the Agora channel successfully"))
+        .catch((error) => console.error("Failed to leave the channel:", error));
     }
   };
 
@@ -380,55 +467,4 @@ const CallingInterface = ({ appId, channelName, endVideoCall, socket }) => {
 
 export default CallingInterface;
 
-// import React, { useState, useRef } from "react";
-// import MicIcon from "@mui/icons-material/Mic";
-// import MicOffIcon from "@mui/icons-material/MicOff";
-// import VideocamIcon from "@mui/icons-material/Videocam";
-// import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 
-// const CallingInterface = ({ endVideoCall }) => {
-//   const [audioMuted, setAudioMuted] = useState(false);
-//   const [videoMuted, setVideoMuted] = useState(false);
-//   const [isInCall, setIsInCall] = useState(false);
-
-//   const localContainer = useRef(null);
-
-//   const toggleMuteAudio = () => {
-//     setAudioMuted(!audioMuted);
-//   };
-
-//   const toggleMuteVideo = () => {
-//     setVideoMuted(!videoMuted);
-//   };
-
-//   return (
-//     <div className="relative w-full h-[100vh] bg-black text-white mx-auto bg-opacity-75">
-//       <p className="text-lg text-center pt-10">Calling...</p>
-//       <div className="flex justify-center">
-//         <div className="flex gap-10 justify-between absolute  bottom-28">
-//           <button
-//             onClick={toggleMuteAudio}
-//             className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200"
-//           >
-//             {audioMuted ? <MicOffIcon /> : <MicIcon />}
-//           </button>
-
-//           <button
-//             onClick={endVideoCall}
-//             className="bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600"
-//           >
-//             End Call
-//           </button>
-//           <button
-//             onClick={toggleMuteVideo}
-//             className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200"
-//           >
-//             {videoMuted ? <VideocamOffIcon /> : <VideocamIcon />}
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CallingInterface;

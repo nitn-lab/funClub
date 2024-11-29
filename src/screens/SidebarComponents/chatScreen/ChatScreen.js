@@ -321,6 +321,8 @@ const ChatScreen = ({ showChatScreen, socket, location  }) => {
               token="asdfghj"
               endVideoCall={() => setCallActive(false)}
               socket={socket}
+              callType={"Video"}
+              user="caller"
             />
           )}
         </div>

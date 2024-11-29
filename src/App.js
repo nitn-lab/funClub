@@ -1,6 +1,10 @@
-import React , {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useNavigate,
+} from "react-router-dom";
 import Login from "./screens/Auth/Login";
 import Register from "./screens/Auth/SignUp";
 import NotFound from "./screens/Error/NotFound";
@@ -24,106 +28,30 @@ import BecomeCreator from "./screens/SidebarComponents/BecomeCreator";
 import { useWebSocket } from "../src/components/context/WebSocketContext";
 import { useCallContext } from "../src/components/context/CallContext";
 import IncomingCallModal from "../src/components/IncomingCallModal";
-import {CreateWebSocketConnection, sendMessage} from "../src/services/websocket"
-import CallingInterface from "../src/screens/SidebarComponents/chatScreen/CallingInterface"
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <Login />,
-//     errorElement: <NotFound />,
-//   },
-//   {
-//     path: "/register",
-//     element: <Register />,
-//     errorElement: <NotFound />,
-//   },
-//   {
-//     path: "/forget-password",
-//     element: <ForgetPassword />,
-//     errorElement: <NotFound />,
-//   },
-//   {
-//     path: "/dashboard",
-//     element: <MainLayout />,
-//     children: [
-//       {
-//         path: "/dashboard",
-//         element: <Dashboard />,
-//       },
-//       {
-//         path: "chats",
-//         element: <Chats showChatScreen={true} shouldNavigate={false} />,
-//       },
-//       {
-//         path: "chat/:id",
-//         element: <ChatScreen showChatScreen={true} />,
-//       },
-//       {
-//         path: "nearby",
-//         element: <Nearby />,
-//       },
-//       {
-//         path: "feeds",
-//         element: <Feeds />,
-//       },
-//       {
-//         path: "live",
-//         element: <Live />,
-//       },
-//       {
-//         path: "profile",
-//         element: <Profile />,
-//       },
-//       {
-//         path: "suggestions",
-//         element: <Suggestions />,
-//       },
-//       {
-//         path: "subscription",
-//         element: <SubscriptionDetails />,
-//       },
-//       {
-//         path: "user/:id",
-//         element: <UserProfile />,
-//         errorElement: <NotFound />,
-//       },
-//       {
-//         path: "update",
-//         element: <UpdateProfile />,
-//         errorElement: <NotFound />,
-//       },
-//       {
-//         path: "privacy-policy",
-//         element: <PrivacyPolicy />,
-//         errorElement: <NotFound />,
-//       },
-//       {
-//         path: "terms",
-//         element: <TermsAndConditions />,
-//         errorElement: <NotFound />,
-//       },
-//       {
-//         path: "settings",
-//         element: <Settings />,
-//         errorElement: <NotFound />,
-//       },
-//       {
-//         path: "creator",
-//         element: <BecomeCreator />,
-//         errorElement: <NotFound />,
-//       },
-//     ],
-//   },
-// ]);
+import {
+  CreateWebSocketConnection,
+  sendMessage,
+} from "../src/services/websocket";
+import CallingInterface from "../src/screens/SidebarComponents/chatScreen/CallingInterface";
 
 const App = () => {
   // const navigate = useNavigate();
   const socket = useWebSocket(); // get socket from WebSocketContext
-  const { incomingCall, acceptCall, rejectCall, callState, setIncomingCall, setCallState, showInterface, setShowInterface } = useCallContext();
-console.log("dddd", socket);
+  const [passSocket, setPassSocket] = useState();
+  const {
+    incomingCall,
+    acceptCall,
+    rejectCall,
+    callState,
+    setIncomingCall,
+    setCallState,
+    showInterface,
+    setShowInterface,
+  } = useCallContext();
+  console.log("dddd", socket);
   useEffect(() => {
     const socket = CreateWebSocketConnection();
-
+    setPassSocket(socket);
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       console.log("Received message fro AAApppp:", message);
@@ -138,14 +66,14 @@ console.log("dddd", socket);
       }
     };
 
-    return () => socket.close();
+    // return () => socket.close();
   }, [setIncomingCall]);
 
   const onAcceptCall = () => {
     acceptCall(); // Change global state to reflect the call has been accepted.
     // navigate(`/dashboard/chats/${incomingCall.callerId}`, { state: { showCallingInterface: true } }); // Navigate to ChatScreen with calling interface flipped.
   };
-  
+
   const onRejectCall = () => {
     // const socket = CreateWebSocketConnection();
     rejectCall(); // End the call on this user's end.
@@ -166,7 +94,7 @@ console.log("dddd", socket);
     //   })
     // );
   };
-const router = createBrowserRouter([
+  const router = createBrowserRouter([
     {
       path: "/",
       element: <Login />,
@@ -216,7 +144,7 @@ const router = createBrowserRouter([
         },
         {
           path: "feeds",
-          element: <Feeds socket={socket}/>,
+          element: <Feeds socket={socket} />,
         },
         {
           path: "live",
@@ -273,34 +201,37 @@ const router = createBrowserRouter([
     },
   ]);
 
-  
-  return(
+  return (
     <>
-    {/* Render the incoming call modal globally */}
-    {/* <button
-      style={{ position: "fixed", top: "10px", left: "10px", zIndex: 1000 }}
-      onClick={() => {
-        setCallState("incoming");
-        setIncomingCall({ callerId: "User123" });
-      }}
-    >
-      Trigger Modal
-    </button> */}
-    {showInterface === true ? <CallingInterface socket={socket} channelName="abcd" endVideoCall={() => setShowInterface(false)}/> : callState === "incoming" && incomingCall && (
-      <IncomingCallModal
-        callerId={incomingCall}
-        onAccept={() => {
-          onAcceptCall();
-          // Add logic to navigate to the relevant chat/call screen
-        }}
-        onReject={() => onRejectCall()}
-      />
-     )}
+      {/* Render the incoming call modal globally */}
+  
+      {showInterface === true ? (
+        console.log("socket", passSocket),
+        <CallingInterface
+          socket={passSocket}
+          data={incomingCall}
+          channelName="abcd"
+          user="recevier"
+          endVideoCall={() => setShowInterface(false)}
+        />
+      ) : (
+        callState === "incoming" &&
+        incomingCall && (
+          <IncomingCallModal
+            callerId={incomingCall}
+            onAccept={() => {
+              onAcceptCall();
+              // Add logic to navigate to the relevant chat/call screen
+            }}
+            onReject={() => onRejectCall()}
+          />
+        )
+      )}
 
-    {/* Provide the router */}
-    <RouterProvider router={router} />
-  </>
-  )
+      {/* Provide the router */}
+      <RouterProvider router={router} />
+    </>
+  );
 };
 
 export default App;
