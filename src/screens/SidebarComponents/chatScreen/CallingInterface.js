@@ -33,6 +33,7 @@ const CallingInterface = ({
   const [hasEnded, setHasEnded] = useState(false);
   const [initiatedEndCall, setInitiatedEndCall] = useState(false);
   const [callingSound, setCallingSound] = useState(null);
+  const [ringtone, setRingtone] = useState(false);
   let ringtoneRef = useRef(null);
   console.log("socket from callng interfae", socket);
   // Function to fetch Agora token
@@ -62,7 +63,6 @@ const CallingInterface = ({
       return null;
     }
   };
-
   // Function to set up audio and video tracks
   const setupAudioVideoTracks = async () => {
     try {
@@ -86,31 +86,8 @@ const CallingInterface = ({
   useEffect(() => {
     // startRingtone();
     if (user === "caller") {
-      // const sound = new Audio("/ring-tone-68676.mp3");
-      // sound.loop = true;
-      // sound.volume = 1.0;
-      startRingtone()
+      // startRingtone()
       initiateCall();
-      // return () => {
-      //   // Clean up the ringtone when the component unmounts
-      //   stopRingtone();
-      // };
-      // sound
-      //   .play()
-      //   .then(() => {
-      //     console.log("Audio is playing");
-      //     setCallingSound(sound);
-      //     initiateCall();
-
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error playing audio:", error);
-      //     setCallingSound(sound);
-      //   });
-      //   setCallingSound(sound);
-      // return () => {
-      //   stopRingtone();
-      // }
     } else {
       ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
       acceptCall(socket);
@@ -143,32 +120,22 @@ const CallingInterface = ({
   }, [hasEnded]);
 
   const startRingtone = () => {
-    // const sound = new Audio("/ring-tone-68676.mp3");
-    // sound.loop = true;
-    // sound.volume = 1.0;
-    // sound
-    //   .play()
-    //   .then(() => console.log("Ringtone started"))
-    //   .catch((error) => console.error("Error playing ringtone:", error));
-    // setCallingSound(sound);
-    ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
+    if(!ringtoneRef.current)
+    {ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
     ringtoneRef.current.loop = true;
+    }
     ringtoneRef.current.play();
   };
 
   const stopRingtone = () => {
     console.log("ringtoneRef.current", ringtoneRef.current);
     if (ringtoneRef.current) {
-      ringtoneRef.current?.pause();
+      ringtoneRef.current.pause();
       ringtoneRef.current.currentTime = 0; // Reset audio playback to the start
       ringtoneRef.current = null;
     }
     console.log("Ringtone stopped.");
   };
-
-  // useEffect(() => {
-  //   return () => stopRingtone();
-  // }, []);
 
   const initiateCall = () => {
     if (isCalling) {
@@ -178,17 +145,8 @@ const CallingInterface = ({
       return; // Prevent multiple calls
     }
 
-    // startRingtone();
+     startRingtone();
     setIsCalling(true); // Mark as calling
-
-    // if (callingSound) {
-    //   callingSound.loop = true; // Set loop for continuous play
-    //   callingSound.volume = 1.0;
-    //   callingSound
-    //     .play()
-    //     .catch((error) => console.error("Error playing calling sound:", error));
-    // }
-
     const userId = localStorage.getItem("id");
     const message = {
       type: "call",
@@ -197,7 +155,7 @@ const CallingInterface = ({
     };
     console.log("Initiating call with message:", message);
     sendMessage(socket, message); // Send call initiation message
-
+    // stopRingtone()
     initAgora(true);
   };
 
@@ -250,50 +208,11 @@ const CallingInterface = ({
       console.error("Failed to join channel or create tracks:", error);
     }
   };
-  // const endCall = () => {
-  //   if (hasEnded) {
-  //     console.log("Call already ended. Ignoring further end requests.");
-  //     return;
-  //   } // Exit if the call has already ended
-
-  //   setHasEnded(true);
-  //   if (!initiatedEndCall) {
-  //     const userId = localStorage.getItem("id");
-  //     const message = {
-  //       type: "endCall",
-  //       from: userId,
-  //       to: receiver._id,
-  //     };
-  //     console.log("Ending call with message:", message);
-  //     sendMessage(socket, message);
-  //     setInitiatedEndCall(true);
-  //   }
-  //   // Close tracks and leave channel
-  //   if (localTracks.audio) {
-  //     localTracks.audio.stop();
-  //     localTracks.audio.close();
-  //     setLocalTracks((prev) => ({ ...prev, audio: null }));
-  //   }
-  //   if (localTracks.video) {
-  //     localTracks.video.stop();
-  //     localTracks.video.close();
-  //     setLocalTracks((prev) => ({ ...prev, video: null }));
-  //   }
-
-  //   client
-  //     .leave()
-  //     .then(() => console.log("Left the Agora channel successfully"))
-  //     .catch((error) => console.error("Failed to leave the channel:", error));
-
-  //   setIsCalling(false);
-
-  //   endVideoCall();
-  // };
   const endCall = async () => {
     if (hasEnded) return; // Prevent duplicate end calls
 
     setHasEnded(true);
-
+    stopRingtone()
     if (!initiatedEndCall) {
       const message = {
         type: "endCall",
@@ -328,23 +247,6 @@ const CallingInterface = ({
     endVideoCall();
   };
 
-  // const acceptCall = () => {
-  //   if (incomingCall) {
-  //     sendMessage(socket, {
-  //       type: "callAccepted",
-  //       from: senderId,
-  //       to: incomingCall.from,
-  //     });
-  //     // initAgora(incomingCall.channelName, true);
-  //     stopRingtone();
-  //     initAgora(false);
-
-  //     setIncomingCall(null); // Reset incoming call state
-  //     if (callingSound) {
-  //       callingSound.stop();
-  //     }
-  //   }
-  // };
   const acceptCall = (socket, sound) => {
     if (data) {
     sendMessage(socket, {
@@ -352,7 +254,7 @@ const CallingInterface = ({
       from: senderId,
       to: data?.from,
     });
-    // stopRingtone()
+     stopRingtone();
     console.log("calllllllllllllinnnnnnng acceptCall", data, socket);
     
     initAgora(false);
@@ -369,7 +271,7 @@ const CallingInterface = ({
         to: incomingCall.from,
       });
       setIncomingCall(null); // Reset incoming call state
-
+      stopRingtone()
       if (callingSound) {
         callingSound.stop();
       }
@@ -431,12 +333,6 @@ const CallingInterface = ({
           )}
         </div>
       </div>
-      {/* <div>
-        <button onClick={initiateCall}>Initiate Call</button>
-        {/* Additional UI for call controls */}
-      {/* </div> */}
-
-      {/* Control Buttons */}
       <div className="flex justify-center">
         <div className="flex gap-10 justify-between absolute bottom-28">
           <button
