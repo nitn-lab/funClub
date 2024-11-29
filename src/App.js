@@ -48,7 +48,6 @@ const App = () => {
     showInterface,
     setShowInterface,
   } = useCallContext();
-  console.log("dddd", socket);
   useEffect(() => {
     const socket = CreateWebSocketConnection();
     setPassSocket(socket);
@@ -71,7 +70,6 @@ const App = () => {
 
   const onAcceptCall = () => {
     acceptCall(); // Change global state to reflect the call has been accepted.
-    // navigate(`/dashboard/chats/${incomingCall.callerId}`, { state: { showCallingInterface: true } }); // Navigate to ChatScreen with calling interface flipped.
   };
 
   const onRejectCall = () => {
@@ -204,29 +202,29 @@ const App = () => {
   return (
     <>
       {/* Render the incoming call modal globally */}
-  
-      {showInterface === true ? (
-        console.log("socket", passSocket),
-        <CallingInterface
-          socket={passSocket}
-          data={incomingCall}
-          channelName="abcd"
-          user="recevier"
-          endVideoCall={() => setShowInterface(false)}
-        />
-      ) : (
-        callState === "incoming" &&
-        incomingCall && (
-          <IncomingCallModal
-            callerId={incomingCall}
-            onAccept={() => {
-              onAcceptCall();
-              // Add logic to navigate to the relevant chat/call screen
-            }}
-            onReject={() => onRejectCall()}
-          />
-        )
-      )}
+
+      {showInterface === true
+        ? (console.log("socket", passSocket),
+          (
+            <CallingInterface
+              socket={passSocket}
+              data={incomingCall}
+              channelName="abcd"
+              user="recevier"
+              endVideoCall={() => setShowInterface(false)}
+            />
+          ))
+        : callState === "incoming" &&
+          incomingCall && (
+            <IncomingCallModal
+              callerId={incomingCall}
+              onAccept={() => {
+                onAcceptCall();
+                // Add logic to navigate to the relevant chat/call screen
+              }}
+              onReject={() => onRejectCall()}
+            />
+          )}
 
       {/* Provide the router */}
       <RouterProvider router={router} />

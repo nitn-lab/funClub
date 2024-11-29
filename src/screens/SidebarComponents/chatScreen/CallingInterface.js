@@ -9,6 +9,7 @@ import {
   CreateWebSocketConnection,
   sendMessage,
 } from "../../../services/websocket";
+import { useCallContext } from "../../../components/context/CallContext";
 
 const CallingInterface = ({
   appId,
@@ -34,9 +35,8 @@ const CallingInterface = ({
   const [initiatedEndCall, setInitiatedEndCall] = useState(false);
   const [callingSound, setCallingSound] = useState(null);
   const [ringtone, setRingtone] = useState(false);
+  const { callState, setCallState } = useCallContext();
   let ringtoneRef = useRef(null);
-  console.log("socket from callng interfae", socket);
-  // Function to fetch Agora token
 
   useEffect(() => {
     return () => {
@@ -52,6 +52,7 @@ const CallingInterface = ({
     };
   }, []);
 
+  // Function to fetch Agora token
   const generateAgoraToken = async () => {
     try {
       const response = await axios.get(
@@ -63,6 +64,7 @@ const CallingInterface = ({
       return null;
     }
   };
+
   // Function to set up audio and video tracks
   const setupAudioVideoTracks = async () => {
     try {
@@ -84,12 +86,9 @@ const CallingInterface = ({
   };
 
   useEffect(() => {
-    // startRingtone();
     if (user === "caller") {
-      // startRingtone()
       initiateCall();
     } else {
-      ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
       acceptCall(socket);
     }
   }, []);
@@ -105,9 +104,10 @@ const CallingInterface = ({
         setIncomingCall(message);
         // initAgora(false);
       } else if (message.type === "callEnded") {
-        stopRingtone()
+        stopRingtone();
         endCall();
-      } else if (message.type === "callAccepted"){
+      } else if (message.type === "callAccepted") {
+        setCallState(true);
         stopRingtone();
       }
     };
@@ -120,9 +120,9 @@ const CallingInterface = ({
   }, [hasEnded]);
 
   const startRingtone = () => {
-    if(!ringtoneRef.current)
-    {ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
-    ringtoneRef.current.loop = true;
+    if (!ringtoneRef.current) {
+      ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
+      ringtoneRef.current.loop = true;
     }
     ringtoneRef.current.play();
   };
@@ -145,7 +145,7 @@ const CallingInterface = ({
       return; // Prevent multiple calls
     }
 
-     startRingtone();
+    startRingtone();
     setIsCalling(true); // Mark as calling
     const userId = localStorage.getItem("id");
     const message = {
@@ -170,49 +170,90 @@ const CallingInterface = ({
     }
 
     try {
+      // Step 1: Join the channel
       await client.join(appId, channelName, token);
 
-      if (isInitiator) {
-        // Step 2: If the user is the caller, publish their tracks
-        const [audioTrack, videoTrack] = await setupAudioVideoTracks();
-        if (audioTrack && videoTrack) {
-          await client.publish([audioTrack, videoTrack]);
-          console.log("Published local tracks as initiator.");
-          setCallingSound(false);
+      // Step 2: Create local audio and video tracks
+      const [audioTrack, videoTrack] = await setupAudioVideoTracks();
+
+      // Step 3: Display local video in bottom-right corner
+      if (videoTrack) {
+        const localVideoContainer = document.getElementById("local-video");
+        if (!localVideoContainer) {
+          const newLocalVideoContainer = document.createElement("div");
+          newLocalVideoContainer.id = "local-video";
+          newLocalVideoContainer.style.width = "25%";
+          newLocalVideoContainer.style.height = "25%";
+          newLocalVideoContainer.style.position = "absolute";
+          newLocalVideoContainer.style.bottom = "10px";
+          newLocalVideoContainer.style.right = "10px";
+          newLocalVideoContainer.style.zIndex = "10";
+          localContainer.current.appendChild(newLocalVideoContainer);
+          videoTrack.play(newLocalVideoContainer); // Play local video
+        } else {
+          videoTrack.play(localVideoContainer);
         }
-      } else {
-        // Step 2: If the user is the receiver, subscribe to the caller's tracks
-        client.on("user-published", async (user, mediaType) => {
-          await client.subscribe(user, mediaType); // Subscribe to the caller's tracks
-          console.log(`Subscribed to user ${user.uid}'s ${mediaType} track`);
-          
-          if (mediaType === "video") {
-            const remoteContainer = document.createElement("div");
-            remoteContainer.id = user.uid.toString();
-            remoteContainer.style.width = "100%";
-            remoteContainer.style.height = "100%";
-            localContainer.current.appendChild(remoteContainer);
-            user.videoTrack.play(remoteContainer); // Play remote video
-          }
-          setCallingSound(false);
-          // stopRingtone();
-         
-          if (mediaType === "audio") {
-            user.audioTrack.play(); // Play remote audio
-          }
-        });
-        // stopRingtone();
-        console.log("Receiver is ready to subscribe to tracks.");
       }
+
+      // Step 4: Publish local tracks
+      if (audioTrack && videoTrack) {
+        await client.publish([audioTrack, videoTrack]);
+        console.log(
+          `${isInitiator ? "Initiator" : "Receiver"} published local tracks.`
+        );
+      }
+
+      // Step 5: Handle remote user tracks
+      client.on("user-published", async (user, mediaType) => {
+        console.log(`User ${user.uid} published ${mediaType} track.`);
+        await client.subscribe(user, mediaType); // Subscribe to the remote user
+        console.log(`Subscribed to user ${user.uid}'s ${mediaType} track.`);
+
+        if (mediaType === "video") {
+          const remoteVideoContainer = document.getElementById("remote-video");
+          if (!remoteVideoContainer) {
+            const newRemoteVideoContainer = document.createElement("div");
+            newRemoteVideoContainer.id = "remote-video";
+            newRemoteVideoContainer.style.width = "100%";
+            newRemoteVideoContainer.style.height = "100%";
+            localContainer.current.appendChild(newRemoteVideoContainer);
+            user.videoTrack.play(newRemoteVideoContainer); // Play remote video
+          } else {
+            user.videoTrack.play(remoteVideoContainer);
+          }
+        }
+
+        if (mediaType === "audio") {
+          user.audioTrack.play(); // Play remote audio
+        }
+      });
+
+      // Step 6: Handle remote user leaving
+      client.on("user-unpublished", (user) => {
+        console.log(`User ${user.uid} unpublished their track.`);
+        const remoteVideoContainer = document.getElementById("remote-video");
+        if (remoteVideoContainer) {
+          remoteVideoContainer.innerHTML = ""; // Clear remote video
+        }
+      });
+
+      client.on("user-left", (user) => {
+        console.log(`User ${user.uid} left the channel.`);
+        const remoteVideoContainer = document.getElementById("remote-video");
+        if (remoteVideoContainer) {
+          remoteVideoContainer.innerHTML = ""; // Clear remote video
+        }
+      });
     } catch (error) {
-      console.error("Failed to join channel or create tracks:", error);
+      console.error("Error in Agora setup:", error);
     }
   };
+
   const endCall = async () => {
     if (hasEnded) return; // Prevent duplicate end calls
 
     setHasEnded(true);
-    stopRingtone()
+    stopRingtone();
     if (!initiatedEndCall) {
       const message = {
         type: "endCall",
@@ -247,80 +288,57 @@ const CallingInterface = ({
     endVideoCall();
   };
 
-  const acceptCall = (socket, sound) => {
+  const acceptCall = (socket) => {
     if (data) {
-    sendMessage(socket, {
-      type: "acceptCall",
-      from: senderId,
-      to: data?.from,
-    });
-     stopRingtone();
-    console.log("calllllllllllllinnnnnnng acceptCall", data, socket);
-    
-    initAgora(false);
-
-    setIncomingCall(null); // Reset incoming call state
-    }
-  };
-
-  const rejectCall = () => {
-    if (incomingCall) {
       sendMessage(socket, {
-        type: "callRejected",
+        type: "acceptCall",
         from: senderId,
-        to: incomingCall.from,
+        to: data?.from,
+        channelName: data?.channelName,
       });
-      setIncomingCall(null); // Reset incoming call state
-      stopRingtone()
-      if (callingSound) {
-        callingSound.stop();
-      }
-      // Close tracks and leave channel
-      if (localTracks.audio) {
-        localTracks.audio.stop();
-        localTracks.audio.close();
-        setLocalTracks((prev) => ({ ...prev, audio: null }));
-      }
-      if (localTracks.video) {
-        localTracks.video.stop();
-        localTracks.video.close();
-        setLocalTracks((prev) => ({ ...prev, video: null }));
-      }
+      stopRingtone();
+      // console.log("calllllllllllllinnnnnnng acceptCall", data, socket);
 
-      client
-        .leave()
-        .then(() => console.log("Left the Agora channel successfully"))
-        .catch((error) => console.error("Failed to leave the channel:", error));
+      initAgora(false);
+
+      setIncomingCall(null); // Reset incoming call state
     }
   };
 
   const toggleMuteAudio = () => {
     if (localTracks.audio) {
       const newMuteState = !audioMuted;
-      localTracks.audio.setMuted(newMuteState);
-      setAudioMuted(newMuteState);
+      localTracks.audio.setMuted(newMuteState); // Mute or unmute only the local user's audio
+      setAudioMuted(newMuteState); // Update the local mute state in UI
+      console.log(`Audio muted: ${newMuteState}`);
+    } else {
+      console.error("No local audio track available to mute/unmute.");
     }
+    // if (localTracks.audio) {
+    //   const newMuteState = !audioMuted;
+    //   localTracks.audio.setMuted(newMuteState);
+    //   setAudioMuted(newMuteState);
+    // }
   };
 
-  const toggleMuteVideo = () => {
+  const toggleMuteVideo = async () => {
     if (localTracks.video) {
       const newMuteState = !videoMuted;
-      localTracks.video.setMuted(newMuteState);
+      localTracks.video.setEnabled(!newMuteState); // Enable or disable local user's video
       setVideoMuted(newMuteState);
+      console.log(`Video muted: ${newMuteState}`);
     }
+    // if (localTracks.video) {
+    //   const newMuteState = !videoMuted;
+    //   localTracks.video.setMuted(newMuteState);
+    //   setVideoMuted(!videoMuted);
+    // }
   };
 
   return (
     <div className="relative w-full h-[100vh] bg-black text-white mx-auto bg-opacity-75 z-20">
-      {incomingCall && (
-        <div className="incoming-call">
-          <p>Incoming call from {incomingCall.from}</p>
-          <button onClick={acceptCall}>Accept</button>
-          <button onClick={rejectCall}>Reject</button>
-        </div>
-      )}
       <span className="text-lg text-center z-20 w-full pt-5 absolute">
-        In Call...<span className=""></span>
+        {callState ? "Connected" : "Ringing...."}<span className=""></span>
       </span>
       {/* Display Local Video */}
       <div className="flex justify-center relative w-full h-[100vh]">
@@ -363,4 +381,150 @@ const CallingInterface = ({
 
 export default CallingInterface;
 
+// const initAgora = async (isInitiator) => {
+//   const appId = "d284507a049d47c39044f072f77f8d5b";
+//   const channelName = "abcd";
+//   const token = await generateAgoraToken();
+//   if (!token) {
+//     console.error("Token is not available.");
+//     return;
+//   }
 
+//   try {
+//     await client.join(appId, channelName, token);
+
+//     if (isInitiator) {
+//       // Step 2: If the user is the caller, publish their tracks
+//       const [audioTrack, videoTrack] = await setupAudioVideoTracks();
+//       if (audioTrack && videoTrack) {
+//         await client.publish([audioTrack, videoTrack]);
+//         console.log("Published local tracks as initiator.");
+//         setCallingSound(false);
+//       }
+//     } else {
+//       // Publish the receiver's local tracks
+//       const [audioTrack, videoTrack] = await setupAudioVideoTracks();
+//       await client.publish([audioTrack, videoTrack]);
+
+//       // Step 2: If the user is the receiver, subscribe to the caller's tracks
+//       client.on("user-published", async (user, mediaType) => {
+//         await client.subscribe(user, mediaType); // Subscribe to the caller's tracks
+//         console.log(`Subscribed to user ${user.uid}'s ${mediaType} track`);
+
+//         if (mediaType === "video") {
+//           const remoteContainer = document.createElement("div");
+//           remoteContainer.id = user.uid.toString();
+//           remoteContainer.style.width = "100%";
+//           remoteContainer.style.height = "100%";
+//           localContainer.current.appendChild(remoteContainer);
+//           user.videoTrack.play(remoteContainer); // Play remote video
+//         }
+//         setCallingSound(false);
+//         // stopRingtone();
+
+//         if (mediaType === "audio") {
+//           user.audioTrack.play(); // Play remote audio
+//         }
+//       });
+//       // stopRingtone();
+//       console.log("Receiver is ready to subscribe to tracks.");
+//     }
+//   } catch (error) {
+//     console.error("Failed to join channel or create tracks:", error);
+//   }
+// };
+
+// const initAgora = async (isInitiator) => {
+//   const appId = "d284507a049d47c39044f072f77f8d5b";
+//   const channelName = "abcd";
+//   const token = await generateAgoraToken();
+//   if (!token) {
+//     console.error("Token is not available.");
+//     return;
+//   }
+
+//   try {
+//     await client.join(appId, channelName, token);
+
+//     // Step 1: Create and play local video/audio tracks
+//     const [audioTrack, videoTrack] = await setupAudioVideoTracks();
+//     if (videoTrack) {
+//       const localVideoContainer = document.createElement("div");
+//       localVideoContainer.id = "local-video";
+//       localVideoContainer.style.width = "25%";
+//       localVideoContainer.style.height = "25%";
+//       localVideoContainer.style.position = "absolute";
+//       localVideoContainer.style.bottom = "10px";
+//       localVideoContainer.style.right = "10px";
+//       localContainer.current.appendChild(localVideoContainer);
+//       videoTrack.play(localVideoContainer); // Play local video
+//     }
+
+//     if (isInitiator) {
+//       // Step 2: Publish caller's tracks
+//       if (audioTrack && videoTrack) {
+//         await client.publish([audioTrack, videoTrack]);
+//         console.log("Published local tracks as initiator.");
+//         setCallingSound(false);
+//       }
+//     } else {
+//       // Step 2: Publish receiver's tracks and subscribe to remote tracks
+//       if (audioTrack && videoTrack) {
+//         await client.publish([audioTrack, videoTrack]);
+//         console.log("Published local tracks as receiver.");
+//       }
+
+//       client.on("user-published", async (user, mediaType) => {
+//         await client.subscribe(user, mediaType); // Subscribe to remote tracks
+//         console.log(`Subscribed to user ${user.uid}'s ${mediaType} track`);
+
+//         if (mediaType === "video") {
+//           const remoteContainer = document.createElement("div");
+//           remoteContainer.id = user.uid.toString();
+//           remoteContainer.style.width = "100%";
+//           remoteContainer.style.height = "100%";
+//           localContainer.current.appendChild(remoteContainer);
+
+//           user.videoTrack.play(remoteContainer); // Play remote video
+//         }
+
+//         if (mediaType === "audio") {
+//           user.audioTrack.play(); // Play remote audio
+//         }
+//       });
+//     }
+//   } catch (error) {
+//     console.error("Failed to join channel or create tracks:", error);
+//   }
+// };
+
+// const rejectCall = () => {
+//   if (incomingCall) {
+//     sendMessage(socket, {
+//       type: "callRejected",
+//       from: senderId,
+//       to: incomingCall.from,
+//     });
+//     setIncomingCall(null); // Reset incoming call state
+//     stopRingtone();
+//     if (callingSound) {
+//       callingSound.stop();
+//     }
+//     // Close tracks and leave channel
+//     if (localTracks.audio) {
+//       localTracks.audio.stop();
+//       localTracks.audio.close();
+//       setLocalTracks((prev) => ({ ...prev, audio: null }));
+//     }
+//     if (localTracks.video) {
+//       localTracks.video.stop();
+//       localTracks.video.close();
+//       setLocalTracks((prev) => ({ ...prev, video: null }));
+//     }
+
+//     client
+//       .leave()
+//       .then(() => console.log("Left the Agora channel successfully"))
+//       .catch((error) => console.error("Failed to leave the channel:", error));
+//   }
+// };

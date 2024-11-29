@@ -173,7 +173,18 @@ const ChatScreen = ({ showChatScreen, socket, location  }) => {
                   </div>
                 </div>
               </div>
-
+              {/* Setting flex-direction: column-reverse ensures the bottom messages are rendered first, making it look like the chat is loading from the bottom.
+Only the last N messages are shown using messages.slice(-MAX_MESSAGES).
+spmething like this */}
+{/* .chat-container {
+  height: 400px;
+  display: flex;
+  flex-direction: column-reverse; 
+  justify-content: flex-start;
+  overflow: hidden; 
+  border: 1px solid #ccc;
+  padding: 10px;
+} */}
               <ScrollToBottom
                 ScrollToBottom={false}
                 className={`chat-body px-2 ${
