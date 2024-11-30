@@ -45,8 +45,13 @@ export const CallProvider = ({ children }) => {
   const [incomingCall, setIncomingCall] = useState(null);
   const [callState, setCallState] = useState("idle");
   const [showInterface, setShowInterface] = useState(false);
+<<<<<<< Updated upstream
   const [callStatus, setCallStatus] = useState(false);
   const [callType, setCallType] = useState("default");
+=======
+  const [callStatus, setCallStatus] = useState(false)
+  const [callType, setCallType] = useState("")
+>>>>>>> Stashed changes
 
   const acceptCall = () => {
     setCallState("active");
@@ -71,9 +76,13 @@ export const CallProvider = ({ children }) => {
         showInterface,
         setShowInterface, // Added showInterface and setShowInterface state hooks to manage the video call interface visibility
         setCallStatus,
+<<<<<<< Updated upstream
         callStatus,
         callType,
         setCallType,
+=======
+        callType, setCallType
+>>>>>>> Stashed changes
       }}
     >
       {children}
