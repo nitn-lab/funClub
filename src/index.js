@@ -25,6 +25,7 @@ root.render(
           <AgoraRTCProvider client={client}>
             <CallProvider>
               <WebSocketProvider>
+             
                 <GoogleOAuthProvider clientId="403139165421-duq9a81purrj9ibcpuejji90v5qopcmj.apps.googleusercontent.com">
                     <App />
 
@@ -39,7 +40,9 @@ root.render(
                     draggable
                     pauseOnHover
                   />
+
                 </GoogleOAuthProvider>
+            
               </WebSocketProvider>
             </CallProvider>
           </AgoraRTCProvider>

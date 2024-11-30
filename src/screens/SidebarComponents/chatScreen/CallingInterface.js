@@ -9,6 +9,7 @@ import {
   CreateWebSocketConnection,
   sendMessage,
 } from "../../../services/websocket";
+import { useCallContext } from "../../../components/context/CallContext";
 
 const CallingInterface = ({
   appId,
@@ -29,18 +30,21 @@ const CallingInterface = ({
   const receiver = JSON.parse(localStorage.getItem("receiver"));
   const senderId = localStorage.getItem("id");
   const [isCalling, setIsCalling] = useState(false); // Track if currently in a call
-  const [incomingCall, setIncomingCall] = useState(null);
+  // const [incomingCall, setIncomingCall] = useState(null);
   const [hasEnded, setHasEnded] = useState(false);
   const [initiatedEndCall, setInitiatedEndCall] = useState(false);
   const [callingSound, setCallingSound] = useState(null);
-  const [ringtone, setRingtone] = useState(false);
+  const [remoteVideo, setRemoteVideo] = useState(false);
+  // const {callStatus, setCallStatus} = useCallStatus()
   let ringtoneRef = useRef(null);
   console.log("socket from callng interfae", socket);
+  const [ringtone, setRingtone] = useState(false)
   // Function to fetch Agora token
-
+  const {incomingCall, setIncomingCall, callStatus, setCallStatus} = useCallContext();
+  console.log(incomingCall, "ppppppppppppppppppppppppppppppppppppppppppppppppppppppp")
   useEffect(() => {
     return () => {
-      // stopRingtone();
+   
       if (localTracks.audio) localTracks.audio.close();
       if (localTracks.video) localTracks.video.close();
       client
@@ -89,7 +93,7 @@ const CallingInterface = ({
       // startRingtone()
       initiateCall();
     } else {
-      ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
+      // ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
       acceptCall(socket);
     }
   }, []);
@@ -105,10 +109,12 @@ const CallingInterface = ({
         setIncomingCall(message);
         // initAgora(false);
       } else if (message.type === "callEnded") {
-        stopRingtone()
+        // stopRingtone()
         endCall();
       } else if (message.type === "callAccepted"){
-        stopRingtone();
+         setCallStatus(true)
+        // stopRingtone();
+         
       }
     };
 
@@ -119,17 +125,17 @@ const CallingInterface = ({
     };
   }, [hasEnded]);
 
-  const startRingtone = () => {
+   const startRingtone = () => {
     if(!ringtoneRef.current)
-    {ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
-    ringtoneRef.current.loop = true;
-    }
-    ringtoneRef.current.play();
-  };
+     {ringtoneRef.current = new Audio("/ring-tone-68676.mp3");
+     ringtoneRef.current.loop = true;
+     }
+     ringtoneRef.current.play();
+   };
 
-  const stopRingtone = () => {
-    console.log("ringtoneRef.current", ringtoneRef.current);
-    if (ringtoneRef.current) {
+   const stopRingtone = () => {
+      if (ringtoneRef.current) {
+        console.log(ringtoneRef.current, "ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt")
       ringtoneRef.current.pause();
       ringtoneRef.current.currentTime = 0; // Reset audio playback to the start
       ringtoneRef.current = null;
@@ -138,6 +144,9 @@ const CallingInterface = ({
   };
 
   const initiateCall = () => {
+    setRingtone(true)
+     startRingtone();
+   
     if (isCalling) {
       console.log(
         "Call is already initiated. Ignoring duplicate call request."
@@ -145,7 +154,7 @@ const CallingInterface = ({
       return; // Prevent multiple calls
     }
 
-     startRingtone();
+    //  startRingtone();
     setIsCalling(true); // Mark as calling
     const userId = localStorage.getItem("id");
     const message = {
@@ -193,6 +202,8 @@ const CallingInterface = ({
             remoteContainer.style.height = "100%";
             localContainer.current.appendChild(remoteContainer);
             user.videoTrack.play(remoteContainer); // Play remote video
+            setRemoteVideo(true);
+            console.log(remoteContainer, "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
           }
           setCallingSound(false);
           // stopRingtone();
@@ -212,6 +223,7 @@ const CallingInterface = ({
     if (hasEnded) return; // Prevent duplicate end calls
 
     setHasEnded(true);
+    setRingtone(false)
     stopRingtone()
     if (!initiatedEndCall) {
       const message = {
@@ -248,15 +260,16 @@ const CallingInterface = ({
   };
 
   const acceptCall = (socket, sound) => {
+    setCallStatus(true)
     if (data) {
     sendMessage(socket, {
       type: "acceptCall",
       from: senderId,
       to: data?.from,
-    });
+    })
+    setRingtone(false)
      stopRingtone();
-    console.log("calllllllllllllinnnnnnng acceptCall", data, socket);
-    
+  
     initAgora(false);
 
     setIncomingCall(null); // Reset incoming call state
@@ -271,7 +284,7 @@ const CallingInterface = ({
         to: incomingCall.from,
       });
       setIncomingCall(null); // Reset incoming call state
-      stopRingtone()
+      // stopRingtone()
       if (callingSound) {
         callingSound.stop();
       }
@@ -295,6 +308,7 @@ const CallingInterface = ({
   };
 
   const toggleMuteAudio = () => {
+    console.log(localTracks.audio, "audioooooooooooooooooooooooooooooooo")
     if (localTracks.audio) {
       const newMuteState = !audioMuted;
       localTracks.audio.setMuted(newMuteState);
@@ -303,6 +317,7 @@ const CallingInterface = ({
   };
 
   const toggleMuteVideo = () => {
+    console.log(localTracks.video, "videooooooooooooooooooooooooooooooooooo")
     if (localTracks.video) {
       const newMuteState = !videoMuted;
       localTracks.video.setMuted(newMuteState);
@@ -319,18 +334,20 @@ const CallingInterface = ({
           <button onClick={rejectCall}>Reject</button>
         </div>
       )}
-      <span className="text-lg text-center z-20 w-full pt-5 absolute">
-        In Call...<span className=""></span>
+      <span className="text-lg text-center z-20 w-full pt-5 absolute">{
+
+      }
+        {callStatus ? "Connected" : "Calling..."}<span className=""></span>
       </span>
-      {/* Display Local Video */}
+      
       <div className="flex justify-center relative w-full h-[100vh]">
         <div
           className=" flex justify-center absolute items-center w-full h-[100vh]"
           ref={localContainer}
         >
-          {!localTracks.video && (
+          {(!localTracks.video && remoteVideo === false) && 
             <p className="loading loading-spinner loading-md mx-auto"></p>
-          )}
+          }
         </div>
       </div>
       <div className="flex justify-center">
