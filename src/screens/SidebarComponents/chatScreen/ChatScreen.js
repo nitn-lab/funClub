@@ -11,6 +11,7 @@ import tick from "../../Global/icons/tick.png";
 import crown from "../../Global/icons/crown.png";
 import { SignalCellularConnectedNoInternet1BarOutlined } from "@mui/icons-material";
 import axios from "axios";
+import { useCallContext } from "../../../components/context/CallContext";
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const ChatScreen = ({ showChatScreen, socket, location  }) => {
@@ -22,6 +23,7 @@ const ChatScreen = ({ showChatScreen, socket, location  }) => {
   const senderId = localStorage.getItem("id");
   const token = localStorage.getItem("jwtToken");
   const [agoraToken, setAgoraToken] = useState();
+  const {callType, setCallType} = useCallContext();
 
   const fetchChatHistory = async () => {
     try {
@@ -165,9 +167,9 @@ const ChatScreen = ({ showChatScreen, socket, location  }) => {
                   !showChatScreen ? "gap-3" : "gap-8 xs:gap-3"}`}>
                     <IoMdCall
                       className="text-white text-2xl hover:scale-125 transition-all cursor-pointer"
-                      onClick={() => alert("Voice call not implemented yet")}
+                      onClick={() => {setCallActive(true); setCallType("audio")}}
                     />
-                    <button onClick={() => setCallActive(true)}>
+                    <button onClick={() => {setCallActive(true); setCallType("video")}}>
                       <FaVideo className="text-white text-2xl hover:scale-125 transition-all" />
                     </button>
                   </div>
@@ -332,7 +334,7 @@ spmething like this */}
               token="asdfghj"
               endVideoCall={() => setCallActive(false)}
               socket={socket}
-              callType={"Video"}
+              callerCallType={callType}
               user="caller"
             />
           )}

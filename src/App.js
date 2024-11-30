@@ -47,6 +47,7 @@ const App = () => {
     setCallState,
     showInterface,
     setShowInterface,
+    setCallType
   } = useCallContext();
   useEffect(() => {
     const socket = CreateWebSocketConnection();
@@ -55,6 +56,7 @@ const App = () => {
       const message = JSON.parse(event.data);
       console.log("Received message fro AAApppp:", message);
       if (message.type === "incomingCall") {
+        setCallType(message.callType)
         setIncomingCall(message); // Set incoming call globally
         setCallState("incoming");
         console.log("Incoming call set:", message);
@@ -209,6 +211,7 @@ const App = () => {
             <CallingInterface
               socket={passSocket}
               data={incomingCall}
+              callerCallType={incomingCall.callType}
               channelName="abcd"
               user="recevier"
               endVideoCall={() => setShowInterface(false)}
