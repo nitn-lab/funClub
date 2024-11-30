@@ -28,8 +28,6 @@
 
 // export const useCall = () => useContext(CallContext);
 
-
-
 import React, { createContext, useContext, useState } from "react";
 
 const CallContext = createContext({
@@ -47,7 +45,8 @@ export const CallProvider = ({ children }) => {
   const [incomingCall, setIncomingCall] = useState(null);
   const [callState, setCallState] = useState("idle");
   const [showInterface, setShowInterface] = useState(false);
-  const [callStatus, setCallStatus] = useState(false)
+  const [callStatus, setCallStatus] = useState(false);
+  const [callType, setCallType] = useState("default");
 
   const acceptCall = () => {
     setCallState("active");
@@ -70,13 +69,14 @@ export const CallProvider = ({ children }) => {
         acceptCall,
         rejectCall,
         showInterface,
-        setShowInterface,
-        callStatus,
+        setShowInterface, // Added showInterface and setShowInterface state hooks to manage the video call interface visibility
         setCallStatus,
+        callStatus,
+        callType,
+        setCallType,
       }}
     >
       {children}
     </CallContext.Provider>
   );
 };
-

@@ -47,8 +47,8 @@ const App = () => {
     setCallState,
     showInterface,
     setShowInterface,
+    setCallType
   } = useCallContext();
-  console.log("dddd", socket);
   useEffect(() => {
     const socket = CreateWebSocketConnection();
     setPassSocket(socket);
@@ -56,12 +56,14 @@ const App = () => {
       const message = JSON.parse(event.data);
       console.log("Received message fro AAApppp:", message);
       if (message.type === "incomingCall") {
+        setCallType(message.callType)
         setIncomingCall(message); // Set incoming call globally
         setCallState("incoming");
         console.log("Incoming call set:", message);
       } else if (message.type === "callEnded") {
         setIncomingCall(null); // Reset state if the call ends
         setCallState(null);
+        setCallType("default")
         console.log("Call ended");
       }
     };
@@ -71,7 +73,6 @@ const App = () => {
 
   const onAcceptCall = () => {
     acceptCall(); // Change global state to reflect the call has been accepted.
-    // navigate(`/dashboard/chats/${incomingCall.callerId}`, { state: { showCallingInterface: true } }); // Navigate to ChatScreen with calling interface flipped.
   };
 
   const onRejectCall = () => {
@@ -204,29 +205,30 @@ const App = () => {
   return (
     <>
       {/* Render the incoming call modal globally */}
-  
-      {showInterface === true ? (
-        console.log("socket", passSocket),
-        <CallingInterface
-          socket={passSocket}
-          data={incomingCall}
-          channelName="abcd"
-          user="recevier"
-          endVideoCall={() => setShowInterface(false)}
-        />
-      ) : (
-        callState === "incoming" &&
-        incomingCall && (
-          <IncomingCallModal
-            callerId={incomingCall}
-            onAccept={() => {
-              onAcceptCall();
-              // Add logic to navigate to the relevant chat/call screen
-            }}
-            onReject={() => onRejectCall()}
-          />
-        )
-      )}
+
+      {showInterface === true
+        ? (console.log("socket", passSocket),
+          (
+            <CallingInterface
+              socket={passSocket}
+              data={incomingCall}
+              callerCallType={incomingCall?.callType}
+              channelName="abcd"
+              user="recevier"
+              endVideoCall={() => setShowInterface(false)}
+            />
+          ))
+        : callState === "incoming" &&
+          incomingCall && (
+            <IncomingCallModal
+              callerId={incomingCall}
+              onAccept={() => {
+                onAcceptCall();
+                // Add logic to navigate to the relevant chat/call screen
+              }}
+              onReject={() => onRejectCall()}
+            />
+          )}
 
       {/* Provide the router */}
       <RouterProvider router={router} />
