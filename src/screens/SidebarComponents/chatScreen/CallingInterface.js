@@ -35,7 +35,7 @@ const CallingInterface = ({
   const [initiatedEndCall, setInitiatedEndCall] = useState(false);
   const [callingSound, setCallingSound] = useState(null);
   const [ringtone, setRingtone] = useState(false);
-  const { callState, setCallState } = useCallContext();
+  const { callStatus, setCallStatus } = useCallContext();
   let ringtoneRef = useRef(null);
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const CallingInterface = ({
         stopRingtone();
         endCall();
       } else if (message.type === "callAccepted") {
-        setCallState(true);
+        setCallStatus(true);
         stopRingtone();
       }
     };
@@ -338,7 +338,7 @@ const CallingInterface = ({
   return (
     <div className="relative w-full h-[100vh] bg-black text-white mx-auto bg-opacity-75 z-20">
       <span className="text-lg text-center z-20 w-full pt-5 absolute">
-        {callState ? "Connected" : "Ringing...."}<span className=""></span>
+        {callStatus ? "Connected" : "Ringing...."}<span className=""></span>
       </span>
       {/* Display Local Video */}
       <div className="flex justify-center relative w-full h-[100vh]">

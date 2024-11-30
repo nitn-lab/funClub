@@ -47,7 +47,7 @@ export const CallProvider = ({ children }) => {
   const [incomingCall, setIncomingCall] = useState(null);
   const [callState, setCallState] = useState("idle");
   const [showInterface, setShowInterface] = useState(false);
-  const [callStatus, setCallStatus] = useStatus(false);
+  const [callStatus, setCallStatus] = useState(false);
 
   const acceptCall = () => {
     setCallState("active");
