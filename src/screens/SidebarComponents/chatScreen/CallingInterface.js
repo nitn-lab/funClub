@@ -17,7 +17,7 @@ const CallingInterface = ({
   endVideoCall,
   socket,
   data,
-  callType,
+ callerCallType,
   user,
 }) => {
   const [audioMuted, setAudioMuted] = useState(false);
@@ -35,7 +35,7 @@ const CallingInterface = ({
   const [initiatedEndCall, setInitiatedEndCall] = useState(false);
   const [callingSound, setCallingSound] = useState(null);
   const [ringtone, setRingtone] = useState(false);
-  const { callStatus, setCallStatus } = useCallContext();
+  const { callStatus, setCallStatus, callType, setCallType } = useCallContext();
   let ringtoneRef = useRef(null);
 
   useEffect(() => {
@@ -73,9 +73,12 @@ const CallingInterface = ({
         ANS: true, // Automatic Noise Suppression
         AGC: true, // Automatic Gain Control
       });
+
+
       const videoTrack = await AgoraRTC.createCameraVideoTrack();
 
       audioTrack.setVolume(100); // Ensure audio volume is set
+
       videoTrack.play(localContainer.current); // Play local video
 
       setLocalTracks({ audio: audioTrack, video: videoTrack });
@@ -104,6 +107,8 @@ const CallingInterface = ({
         setIncomingCall(message);
         // initAgora(false);
       } else if (message.type === "callEnded") {
+        setCallType("")
+        setCallStatus(false);
         stopRingtone();
         endCall();
       } else if (message.type === "callAccepted") {
@@ -138,6 +143,7 @@ const CallingInterface = ({
   };
 
   const initiateCall = () => {
+
     if (isCalling) {
       console.log(
         "Call is already initiated. Ignoring duplicate call request."
@@ -152,6 +158,7 @@ const CallingInterface = ({
       type: "call",
       from: userId,
       to: receiver._id,
+      callType : callerCallType
     };
     console.log("Initiating call with message:", message);
     sendMessage(socket, message); // Send call initiation message
@@ -338,18 +345,18 @@ const CallingInterface = ({
   return (
     <div className="relative w-full h-[100vh] bg-black text-white mx-auto bg-opacity-75 z-20">
       <span className="text-lg text-center z-20 w-full pt-5 absolute">
-        {callStatus ? "Connected" : "Ringing...."}<span className=""></span>
+        {callStatus ? "Connected" : "Ringing...."}
       </span>
       {/* Display Local Video */}
       <div className="flex justify-center relative w-full h-[100vh]">
-        <div
+         <div
           className=" flex justify-center absolute items-center w-full h-[100vh]"
           ref={localContainer}
         >
-          {!localTracks.video && (
-            <p className="loading loading-spinner loading-md mx-auto"></p>
-          )}
         </div>
+        {!localTracks.video && (
+          <p className={`loading loading-spinner loading-md mx-auto ${callType === "audio" ? "hidden" : "block"}`}></p>
+        )}
       </div>
       <div className="flex justify-center">
         <div className="flex gap-10 justify-between absolute bottom-28">
@@ -366,13 +373,13 @@ const CallingInterface = ({
           >
             End Call
           </button>
-
-          <button
+          {console.log(callType, "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")}
+          {callType === "video" ? <button
             onClick={toggleMuteVideo}
             className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200"
           >
             {videoMuted ? <VideocamOffIcon /> : <VideocamIcon />}
-          </button>
+          </button> : <p></p>}
         </div>
       </div>
     </div>
