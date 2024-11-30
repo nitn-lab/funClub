@@ -17,7 +17,7 @@ const CallingInterface = ({
   endVideoCall,
   socket,
   data,
- callerCallType,
+  callerCallType,
   user,
 }) => {
   const [audioMuted, setAudioMuted] = useState(false);
@@ -74,15 +74,24 @@ const CallingInterface = ({
         AGC: true, // Automatic Gain Control
       });
 
-
-      const videoTrack = await AgoraRTC.createCameraVideoTrack();
+      // const videoTrack = await AgoraRTC.createCameraVideoTrack();
 
       audioTrack.setVolume(100); // Ensure audio volume is set
 
-      videoTrack.play(localContainer.current); // Play local video
+      // videoTrack.play(localContainer.current); // Play local video
 
-      setLocalTracks({ audio: audioTrack, video: videoTrack });
-      return [audioTrack, videoTrack];
+      // setLocalTracks({ audio: audioTrack, video: videoTrack });
+      // return [audioTrack, videoTrack];
+
+      if (callType === "video") {
+        const videoTrack = await AgoraRTC.createCameraVideoTrack();
+        videoTrack.play(localContainer.current); // Play local video
+        setLocalTracks({ audio: audioTrack, video: videoTrack });
+        return [audioTrack, videoTrack];
+      } else {
+        setLocalTracks({ audio: audioTrack, video: null });
+        return [audioTrack];
+      }
     } catch (error) {
       console.error("Error setting up audio/video tracks:", error);
     }
@@ -107,7 +116,7 @@ const CallingInterface = ({
         setIncomingCall(message);
         // initAgora(false);
       } else if (message.type === "callEnded") {
-        setCallType("")
+        setCallType("default");
         setCallStatus(false);
         stopRingtone();
         endCall();
@@ -143,7 +152,6 @@ const CallingInterface = ({
   };
 
   const initiateCall = () => {
-
     if (isCalling) {
       console.log(
         "Call is already initiated. Ignoring duplicate call request."
@@ -158,7 +166,7 @@ const CallingInterface = ({
       type: "call",
       from: userId,
       to: receiver._id,
-      callType : callerCallType
+      callType: callerCallType,
     };
     console.log("Initiating call with message:", message);
     sendMessage(socket, message); // Send call initiation message
@@ -331,7 +339,7 @@ const CallingInterface = ({
   const toggleMuteVideo = async () => {
     if (localTracks.video) {
       const newMuteState = !videoMuted;
-      localTracks.video.setEnabled(!newMuteState); // Enable or disable local user's video
+      localTracks.video.setEnabled(newMuteState); // Enable or disable local user's video
       setVideoMuted(newMuteState);
       console.log(`Video muted: ${newMuteState}`);
     }
@@ -348,16 +356,22 @@ const CallingInterface = ({
         {callStatus ? "Connected" : "Ringing...."}
       </span>
       {/* Display Local Video */}
+
       <div className="flex justify-center relative w-full h-[100vh]">
-         <div
-          className=" flex justify-center absolute items-center w-full h-[100vh]"
-          ref={localContainer}
-        >
-        </div>
-        {!localTracks.video && (
-          <p className={`loading loading-spinner loading-md mx-auto ${callType === "audio" ? "hidden" : "block"}`}></p>
+        {callType === "video" ? (
+          <div
+            className="flex justify-center absolute items-center w-full h-[100vh]"
+            ref={localContainer}
+          >
+            {!localTracks.video && (
+              <p className="loading loading-spinner loading-md mx-auto"></p>
+            )}
+          </div>
+        ) : (
+          <p className="text-white text-center">Audio Call in Progress</p>
         )}
       </div>
+
       <div className="flex justify-center">
         <div className="flex gap-10 justify-between absolute bottom-28">
           <button
@@ -373,13 +387,17 @@ const CallingInterface = ({
           >
             End Call
           </button>
-          {console.log(callType, "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")}
-          {callType === "video" ? <button
-            onClick={toggleMuteVideo}
-            className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200"
-          >
-            {videoMuted ? <VideocamOffIcon /> : <VideocamIcon />}
-          </button> : <p></p>}
+         
+          {callType === "video" ? (
+            <button
+              onClick={toggleMuteVideo}
+              className="bg-white text-black py-2 px-4 rounded-full hover:bg-gray-200"
+            >
+              {videoMuted ? <VideocamOffIcon /> : <VideocamIcon />}
+            </button>
+          ) : (
+            <p></p>
+          )}
         </div>
       </div>
     </div>

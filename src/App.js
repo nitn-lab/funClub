@@ -63,6 +63,7 @@ const App = () => {
       } else if (message.type === "callEnded") {
         setIncomingCall(null); // Reset state if the call ends
         setCallState(null);
+        setCallType("default")
         console.log("Call ended");
       }
     };
@@ -211,7 +212,7 @@ const App = () => {
             <CallingInterface
               socket={passSocket}
               data={incomingCall}
-              callerCallType={incomingCall.callType}
+              callerCallType={incomingCall?.callType}
               channelName="abcd"
               user="recevier"
               endVideoCall={() => setShowInterface(false)}
